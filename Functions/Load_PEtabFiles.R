@@ -3,13 +3,13 @@ library(dplyr)
 library(tidyr)
 library(dMod)
 
-#### 2. Set working directory and load files ####
-setwd('/Benchmark-Models/Boehm_JProteomeRes2014')
+#### 2. Set model path and load files ####
+modelpath <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
 
-data_file <- "measurementData_Boehm_JProteomeRes2014.tsv"
-condi_file <- "experimentalCondition_Boehm_JProteomeRes2014.tsv"
-obs_file <- "observables_Boehm_JProteomeRes2014.tsv"
-pars_file <- "parameters_Boehm_JProteomeRes2014.tsv"
+data_file <- paste0(modelpath,"measurementData_Boehm_JProteomeRes2014.tsv")
+condi_file <- paste0(modelpath,"experimentalCondition_Boehm_JProteomeRes2014.tsv")
+obs_file <- paste0(modelpath,"observables_Boehm_JProteomeRes2014.tsv")
+pars_file <- paste0(modelpath,"parameters_Boehm_JProteomeRes2014.tsv")
 
 loadPEtab <- function(data, conditions, observables, parameters){
   
