@@ -5,6 +5,12 @@ library(dMod)
 
 #### 2. Set model path and load files ####
 modelpath <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
+modelpath2 <- 'BenchmarkModels/Fujita_SciSignal2010/'
+modelpath3 <- 'BenchmarkModels/Zheng_PNAS2012/'
+
+mymodel <- paste0(modelpath,"model_Boehm_JProteomeRes2014.xml")
+mymodel2 <- paste0(modelpath2,"model_Fujita_SciSignal2010.xml")
+mymodel3 <- paste0(modelpath3,"model_Zheng_PNAS2012.xml")
 
 data_file <- paste0(modelpath,"measurementData_Boehm_JProteomeRes2014.tsv")
 condi_file <- paste0(modelpath,"experimentalCondition_Boehm_JProteomeRes2014.tsv")
