@@ -4,7 +4,7 @@ library(tidyr)
 library(dMod)
 
 #### 2. Set working directory and load files ####
-setwd('/home/svenja/Documents/work/Projects/PEtab/Benchmark-Models/hackathon_contributions_new_data_format/Boehm_JProteomeRes2014')
+setwd('/Benchmark-Models/Boehm_JProteomeRes2014')
 
 data_file <- "measurementData_Boehm_JProteomeRes2014.tsv"
 condi_file <- "experimentalCondition_Boehm_JProteomeRes2014.tsv"
