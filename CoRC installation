@@ -1,0 +1,3 @@
+install.packages("remotes")
+remotes::install_github("jpahle/CoRC")
+CoRC::getCopasi()
