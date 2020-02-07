@@ -61,7 +61,7 @@ condition.grid <- data.frame(MGE = c(0),
                        row.names = c("seir"))
 
 ## Get Data ------------
-data <- as.datalist(
+my <- as.datalist(
   rbind(
   data.frame(name="Iobs", time=c(3,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33, 34, 35, 36),
              value=c(45,62,121,198,278,440,573,834,1294,1982,2757,4530, 5989, 7801, 9692, 11791, 14380, 17205, 20438, 24324, 28018),
@@ -102,6 +102,14 @@ obj <- normL2(data, g*x*p0) + constraintL2(prior, sigma=16)
 
 sigma <- rep(3, length(outerpars)); names(sigma) <- outerpars
 times <- 0:100
+
+# Error model
+which_err <- c(1:length(observables))
+errors <- paste("sigma_rel", names(observables)[which_err], sep = "_")
+names(errors) <- names(observables[which_err])
+
+err <- Y(errors, f = c(as.eqnvec(reactions), observables), states = names(observables), 
+         attach.input = FALSE, compile = F, modelname = "errfn")
 
 
 ## Perform some fits and plot result of best fit

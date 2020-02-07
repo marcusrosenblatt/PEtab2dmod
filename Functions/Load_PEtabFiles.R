@@ -4,37 +4,31 @@ library(tidyr)
 library(dMod)
 
 #### 2. Set model path and load files ####
-modelpath <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
+modelpath1 <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
 modelpath2 <- 'BenchmarkModels/Fujita_SciSignal2010/'
 modelpath3 <- 'BenchmarkModels/Zheng_PNAS2012/'
 
-mymodel <- paste0(modelpath,"model_Boehm_JProteomeRes2014.xml")
+mymodel <- paste0(modelpath1,"model_Boehm_JProteomeRes2014.xml")
 mymodel2 <- paste0(modelpath2,"model_Fujita_SciSignal2010.xml")
 mymodel3 <- paste0(modelpath3,"model_Zheng_PNAS2012_original.xml")
 
-myobservables <- paste0(modelpath,"observables_Boehm_JProteomeRes2014.tsv")
+myobservables1 <- paste0(modelpath1,"observables_Boehm_JProteomeRes2014.tsv")
 myobservables2 <- paste0(modelpath2,"observables_Fujita_SciSignal2010.tsv")
 myobservables3 <- paste0(modelpath3,"observables_Zheng_PNAS2012.tsv")
 
-data_file <- paste0(modelpath,"measurementData_Boehm_JProteomeRes2014.tsv")
-condi_file <- paste0(modelpath,"experimentalCondition_Boehm_JProteomeRes2014.tsv")
+myconditions1 <- paste0(modelpath1,"experimentalCondition_Boehm_JProteomeRes2014.tsv")
+myconditions2 <- paste0(modelpath2,"experimentalCondition_Fujita_SciSignal2010.tsv")
+myconditions3 <- paste0(modelpath3,"experimentalCondition_Zheng_PNAS2012.tsv")
+
+mydata1 <- paste0(modelpath1,"measurementData_Boehm_JProteomeRes2014.tsv")
+mydata2 <- paste0(modelpath2,"measurementData_Fujita_SciSignal2010.tsv")
+mydata3 <- paste0(modelpath3,"measurementData_Zheng_PNAS2012.tsv")
+
 
 
 pars_file <- paste0(modelpath,"parameters_Boehm_JProteomeRes2014.tsv")
-
-loadPEtab <- function(data, conditions, observables, parameters){
-
-  ## Load condition.grid
-  myconditions <- read.csv(file = condi_file, sep = "\t") 
+mypars <- read.csv(file = pars_file, sep = "\t") 
   
-  ## Load data
-  mydata <- read.csv(file = data_file, sep = "\t") 
-  
-  ## Load pars
-  mypars <- read.csv(file = pars_file, sep = "\t") 
-  
-  return(xy)
-}
 
 
 ### Model import
