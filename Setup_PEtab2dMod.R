@@ -12,27 +12,47 @@ library(cowplot)
 library(magrittr)
 library(tidyr)
 
+## Load SBML and PEtab files
+
+modelpath1 <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
+modelpath2 <- 'BenchmarkModels/Fujita_SciSignal2010/'
+modelpath3 <- 'BenchmarkModels/Zheng_PNAS2012/'
+
+mymodel1 <- paste0(modelpath1,"model_Boehm_JProteomeRes2014.xml")
+mymodel2 <- paste0(modelpath2,"model_Fujita_SciSignal2010.xml")
+mymodel3 <- paste0(modelpath3,"model_Zheng_PNAS2012_original.xml")
+
+myobservables1 <- paste0(modelpath1,"observables_Boehm_JProteomeRes2014.tsv")
+myobservables2 <- paste0(modelpath2,"observables_Fujita_SciSignal2010.tsv")
+myobservables3 <- paste0(modelpath3,"observables_Zheng_PNAS2012.tsv")
+
+myconditions1 <- paste0(modelpath1,"experimentalCondition_Boehm_JProteomeRes2014.tsv")
+myconditions2 <- paste0(modelpath2,"experimentalCondition_Fujita_SciSignal2010.tsv")
+myconditions3 <- paste0(modelpath3,"experimentalCondition_Zheng_PNAS2012.tsv")
+
+mydata1 <- paste0(modelpath1,"measurementData_Boehm_JProteomeRes2014.tsv")
+mydata2 <- paste0(modelpath2,"measurementData_Fujita_SciSignal2010.tsv")
+mydata3 <- paste0(modelpath3,"measurementData_Zheng_PNAS2012.tsv")
+
+myparameters1 <- paste0(modelpath1,"parameters_Boehm_JProteomeRes2014.tsv")
+myparameters2 <- paste0(modelpath2,"parameters_Fujita_SciSignal2010.tsv")
+myparameters3 <- paste0(modelpath3,"parameters_Zheng_PNAS2012.tsv")
+
+mypars <- read.csv(file = myparameters1, sep = "\t") 
+
 ## Model Definition - Equations --------------------
 
-model_name <- "corona_27_01"
-flist <- NULL %>% addReaction("S", "E", "R0*gam*S*I/N0") %>%
-  addReaction("E", "I", "1/t_inc*E") %>%
-  addReaction("", "Iacc", "1/t_inc*E") %>%
-  addReaction("I", "Q", "gam*I/(1+ratio)") %>%
-  addReaction("Q", "R", "Q*k0") %>%
-  addReaction("I", "D", "gam*ratio*I/(1+ratio)") 
-
+model_name <- "test"
+reactions <- getReactionsSBML(mymodel1)$reactions
+events <- getReactionsSBML(mymodel1)$events
 
 ## Model Definition - Observables --------------------
 
-observables <- eqnvec(#Iobs = "Iacc*scale/(1+scale)+Ioffset")
-                      Iobs = "Iacc*scale+Ioffset",
-                      Robs = "R*scale+Roffset",
-                      Dobs = "D")
+observables <- getObservablesSBML(myobservables1)
 
 ## Model Generation ---------------------
 
-modelCorona <- odemodel(flist, forcings = NULL,
+modelCorona <- odemodel(reactions, forcings = NULL,
                      events = NULL,
                      fixed=NULL, modelname = paste0("odemodel_", model_name),
                      jacobian = "inz.lsodes", compile = TRUE)

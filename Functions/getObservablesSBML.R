@@ -2,7 +2,7 @@
 #' 
 #' @description This function imports observables from the PEtab observable file.
 #'  
-#' @param model PEtab observable file as .tsv
+#' @param observables PEtab observable file as .tsv
 #'   
 #' @return Eqnvec of observables.
 #'   
