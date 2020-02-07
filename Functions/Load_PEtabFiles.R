@@ -24,10 +24,10 @@ mydata1 <- paste0(modelpath1,"measurementData_Boehm_JProteomeRes2014.tsv")
 mydata2 <- paste0(modelpath2,"measurementData_Fujita_SciSignal2010.tsv")
 mydata3 <- paste0(modelpath3,"measurementData_Zheng_PNAS2012.tsv")
 
-
-
-pars_file <- paste0(modelpath,"parameters_Boehm_JProteomeRes2014.tsv")
-mypars <- read.csv(file = pars_file, sep = "\t") 
+myparameters1 <- paste0(modelpath1,"parameters_Boehm_JProteomeRes2014.tsv")
+myparameters2 <- paste0(modelpath2,"parameters_Fujita_SciSignal2010.tsv")
+myparameters3 <- paste0(modelpath3,"parameters_Zheng_PNAS2012.tsv")
+mypars <- read.csv(file = myparameters1, sep = "\t") 
   
 
 
