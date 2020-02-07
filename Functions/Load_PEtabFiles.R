@@ -5,21 +5,25 @@ library(dMod)
 
 #### 2. Set model path and load files ####
 modelpath <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
+modelpath2 <- 'BenchmarkModels/Fujita_SciSignal2010/'
+modelpath3 <- 'BenchmarkModels/Zheng_PNAS2012/'
+
+mymodel <- paste0(modelpath,"model_Boehm_JProteomeRes2014.xml")
+mymodel2 <- paste0(modelpath2,"model_Fujita_SciSignal2010.xml")
+mymodel3 <- paste0(modelpath3,"model_Zheng_PNAS2012_original.xml")
+
+myobservables <- paste0(modelpath,"observables_Boehm_JProteomeRes2014.tsv")
+myobservables2 <- paste0(modelpath2,"observables_Fujita_SciSignal2010.tsv")
+myobservables3 <- paste0(modelpath3,"observables_Zheng_PNAS2012.tsv")
 
 data_file <- paste0(modelpath,"measurementData_Boehm_JProteomeRes2014.tsv")
 condi_file <- paste0(modelpath,"experimentalCondition_Boehm_JProteomeRes2014.tsv")
-obs_file <- paste0(modelpath,"observables_Boehm_JProteomeRes2014.tsv")
+
+
 pars_file <- paste0(modelpath,"parameters_Boehm_JProteomeRes2014.tsv")
 
 loadPEtab <- function(data, conditions, observables, parameters){
-  
-  ## Load observables
-  myobs <- read.csv(file = obs_file, sep = "\t") %>% as.data.frame()
-  obsNames <- myobs$observableId %>% as.character()
-  obsFormula <- myobs$observableFormula %>% as.character()
-  names(obsFormula) <- obsNames
-  observables <- obsFormula %>% as.eqnvec()
-  
+
   ## Load condition.grid
   myconditions <- read.csv(file = condi_file, sep = "\t") 
   
