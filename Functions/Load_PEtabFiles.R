@@ -35,8 +35,8 @@ loadPEtab <- function(data, conditions, observables, parameters){
 
 ### Model import
 
-model_file <- "model_Boehm_JProteomeRes2014.xml" #args <- commandArgs(trailingOnly = TRUE) #
-m = readSBML(model_file)$getModel()
+model <- paste0(modelpath,"model_Boehm_JProteomeRes2014.xml") #args <- commandArgs(trailingOnly = TRUE) #
+m = readSBML(model)$getModel()
 N_reactions <- m$getNumReactions()
 reactions <- NULL
 for (r in 0:(N_reactions-1)){
