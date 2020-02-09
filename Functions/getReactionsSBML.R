@@ -49,13 +49,20 @@ getReactionsSBML <- function(model){
   
   
   for(fun in c("piecewise")){
-    split <- str_split(test, fun)[[1]][2]
-    pos <- which(strsplit(str_split(test, fun)[[1]][2], "")[[1]]==")")[2]
-    event <- paste0(fun, substr(split, 1, pos))
-    events <- c(events, event)
+    for(reaction in reactions$rates){
+      if(str_detect(reaction, fun)){
+        split <- str_split(reaction, fun)[[1]][2]
+        pos <- which(strsplit(split, "")[[1]]==")")[2]
+        event <- paste0(fun, substr(split, 1, pos))
+        events <- c(events, event)
+      }
+    }
   }
-  for(i in 1:length(events)){
-    reactions$rates <- str_replace(events[i], paste0("event", i), reactions$rates)
+  events <- unique(events)
+  if(!is.null(events)) for(i in 1:length(events)){
+    replace <- gsub("\\(", "\\\\\\(", events[i])
+    #replace <- gsub("\\)", "\\\\\\)", replace)
+    reactions$rates <- gsub(replace, paste0("event", i), reactions$rates)
   }
   
   return(list(reactions=reactions, events=events))

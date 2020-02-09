@@ -2,13 +2,14 @@ library(libSBML)
 library(dplyr)
 library(tidyr)
 library(dMod)
+library(stringr)
 
 #### 2. Set model path and load files ####
 modelpath1 <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
 modelpath2 <- 'BenchmarkModels/Fujita_SciSignal2010/'
 modelpath3 <- 'BenchmarkModels/Zheng_PNAS2012/'
 
-mymodel <- paste0(modelpath1,"model_Boehm_JProteomeRes2014.xml")
+mymodel1 <- paste0(modelpath1,"model_Boehm_JProteomeRes2014.xml")
 mymodel2 <- paste0(modelpath2,"model_Fujita_SciSignal2010.xml")
 mymodel3 <- paste0(modelpath3,"model_Zheng_PNAS2012_original.xml")
 
