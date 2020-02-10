@@ -43,8 +43,8 @@ mypars <- read.csv(file = myparameters1, sep = "\t")
 ## Model Definition - Equations --------------------
 
 model_name <- "test"
-reactions <- getReactionsSBML(mymodel1)$reactions
-events <- getReactionsSBML(mymodel1)$events
+reactions <- getReactionsSBML(mymodel2)$reactions
+myevents <- getReactionsSBML(mymodel2)$events
 
 ## Model Definition - Observables --------------------
 
@@ -52,8 +52,8 @@ observables <- getObservablesSBML(myobservables1)
 
 ## Model Generation ---------------------
 
-modelCorona <- odemodel(reactions, forcings = NULL,
-                     events = NULL,
+model_test <- odemodel(reactions, forcings = NULL,
+                     events = myevents,
                      fixed=NULL, modelname = paste0("odemodel_", model_name),
                      jacobian = "inz.lsodes", compile = TRUE)
 
