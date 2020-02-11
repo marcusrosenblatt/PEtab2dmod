@@ -1,16 +1,12 @@
 ## Loading Libraries --------------------
 
-library(deSolve)
-library(trust)
-library(parallel)
-library(ggplot2)
-library(ggthemes)
-library(cOde)
+library(libSBML)
+library(tidyverse)
 library(dMod)
-library(blotIt)
-library(cowplot)
-library(magrittr)
-library(tidyr)
+library(stringr)
+source("Functions/getReactionsSBML.R")
+source("Functions/getObservablesSBML.R")
+source("Functions/getParametersSBML.R")
 
 ## Load SBML and PEtab files
 
@@ -38,13 +34,11 @@ myparameters1 <- paste0(modelpath1,"parameters_Boehm_JProteomeRes2014.tsv")
 myparameters2 <- paste0(modelpath2,"parameters_Fujita_SciSignal2010.tsv")
 myparameters3 <- paste0(modelpath3,"parameters_Zheng_PNAS2012.tsv")
 
-mypars <- read.csv(file = myparameters1, sep = "\t") 
-
 ## Model Definition - Equations --------------------
 
 model_name <- "test"
-reactions <- getReactionsSBML(mymodel2)$reactions
-myevents <- getReactionsSBML(mymodel2)$events
+reactions <- getReactionsSBML(mymodel1)$reactions
+events <- getReactionsSBML(mymodel3)$events
 
 ## Model Definition - Observables --------------------
 
@@ -52,23 +46,14 @@ observables <- getObservablesSBML(myobservables1)
 
 ## Model Generation ---------------------
 
-model_test <- odemodel(reactions, forcings = NULL,
-                     events = myevents,
+modeltest <- odemodel(reactions, forcings = NULL,
+                     events = events,
                      fixed=NULL, modelname = paste0("odemodel_", model_name),
                      jacobian = "inz.lsodes", compile = TRUE)
 
 
 ## Define parameters, initial parameter trafo and steady-state transformations --------------
-constraints <- resolveRecurrence(c(S = "1e9",
-                                   t_inc = "14",
-                                   #scale = 0.01,
-                                   N0 = "S",
-                                   Iacc = "0",
-                                   E = "0",
-                                   #I = "1",
-                                   Q = "0",
-                                   R = "0",
-                                   D = "0"))
+constraints <- getParametersSBML(myparameters1)$constraints
 
 innerpars <- unique(c(getParameters(modelCorona), getSymbols(observables)))
 names(innerpars) <- innerpars
