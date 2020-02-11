@@ -63,7 +63,28 @@ getReactionsSBML <- function(model){
     replace <- gsub("\\(", "\\\\\\(", events[i])
     #replace <- gsub("\\)", "\\\\\\)", replace)
     reactions$rates <- gsub(replace, paste0("event", i), reactions$rates)
+    reactions <- reactions %>% addReaction("", paste0("event", i), "0")
   }
+  
+  TransformEvents <- function(events){
+    if(!is.null(events)){
+      do.call(rbind, lapply(1:length(events), function(i){
+        myevent <- events[i]
+        if(str_detect(myevent, "piecewise") & (str_detect(myevent, "leq") | str_detect(myevent, "lt"))){
+          timepoint <- strsplit(strsplit(myevent, ",")[[1]][3], ")")[[1]][1]
+          first <- strsplit(strsplit(myevent, "\\(")[[1]][2], ",")[[1]][1]
+          second <- strsplit(strsplit(myevent, ",")[[1]][4], ")")[[1]][1]
+          if(!is.na(as.numeric(timepoint))) timepoint <- as.numeric(timepoint)
+          if(!is.na(as.numeric(first))) first <- as.numeric(first)
+          if(!is.na(as.numeric(second))) second <- as.numeric(second)
+          return(data.frame(var=paste0("event",i), time=c(0,timepoint), value=c(first, second), method="replace"))
+        } else {print("Warning. Event not yet supported"); return(myevent)}
+      }))
+    } else return(NULL)
+  }
+  events <- TransformEvents(events)
   
   return(list(reactions=reactions, events=events))
 }
+
+

@@ -7,11 +7,14 @@ https://github.com/ICB-DCM/PEtab/blob/master/doc/documentation_data_format.md
 Benchmark PEtabs:
 https://github.com/LeonardSchmiester/Benchmark-Models/tree/hackathon/hackathon_contributions_new_data_format
 
-AmiciSBML
+AmiciSBML:
 https://github.com/ICB-DCM/AMICI/blob/a0407673453d6e18a9abec5b6f73758dd09f7aaf/python/amici/sbml_import.py#L485
 
-General SBML Documentation
+General SBML Documentation:
 http://sbml.org/Software/libSBML/5.17.0/docs//python-api/classlibsbml_1_1_model.html
 
-Contact SBML - Frank Bergmann
+Contact SBML - Frank Bergmann:
 https://www.cos.uni-heidelberg.de/index.php/f.bergmann?l=_e
+
+Download libSBML package for R:
+https://sourceforge.net/projects/sbml/files/libsbml/5.18.0/stable/R%20interface/
