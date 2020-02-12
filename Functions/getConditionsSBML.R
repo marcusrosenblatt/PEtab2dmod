@@ -10,5 +10,7 @@
 #'   
 getConditionsSBML <- function(conditions){
   condition.grid <- read.csv(file = conditions, sep = "\t")
+  rownames(condition.grid) <- condition.grid$conditionId
+  condition.grid$conditionId <- NULL
   return(condition.grid)
 }
