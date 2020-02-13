@@ -59,7 +59,7 @@ data <- getDataSBML(mymodel$data,observables)$data
 
 modeltest <- odemodel(reactions, forcings = NULL,
                      events = events,
-                     fixed=c("t","time"), modelname = paste0("odemodel_", model_name),
+                     fixed=NULL, modelname = paste0("odemodel_", model_name),
                      jacobian = "inz.lsodes", compile = TRUE)
 
 

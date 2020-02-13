@@ -19,14 +19,15 @@ getReactionsSBML <- function(model){
   
   # import compartments
   N_species <- m$getNumSpecies()
-  compartments <- do.call(rbind, lapply(0:(N_species-1), function(i){
-    data.frame(name = m$getSpecies(i)$getId(), compartment = m$getSpecies(i)$getCompartment())
-  }))
+  compartments <- do.call(c, lapply(0:(N_species-1), function(i){ m$getSpecies(i)$getCompartment()}))
+  names_compartments <- do.call(c, lapply(0:(N_species-1), function(i){ m$getSpecies(i)$getId() }))
+  names(compartments) <- names_compartments
+  
+  if(unique(compartments)[1]=="default") compartments <- NULL
   
   # import reactions and adjust by means of compartments
   N_reactions <- m$getNumReactions()
   for (reaction in 0:(N_reactions-1)){
-    print(reaction)
     Reactantstring <- ""
     Productstring <- ""
     eq <- m$getModel()$getReaction(reaction)
@@ -44,32 +45,38 @@ getReactionsSBML <- function(model){
     }
     rate <- sub("pow", "", sub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked
     #rate <- replaceOperation("pow", "**", eq$getKineticLaw()$getFormula())
-    if(Reactantnr > 0) ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
-      else ReactantCompartment <- "1"
-    if(Productnr > 0) ProductCompartment <- compartments$compartment[which(compartments$name==eq$getProduct(0)$getSpecies())]
-      else ProductCompartment <- "1"
-    if(ReactantCompartment==ProductCompartment) 
-      reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
-    else if(ReactantCompartment=="1"){
-      reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ProductCompartment))
-      } else if (ProductCompartment=="1"){
+    if(FALSE){
+      if(Reactantnr > 0) ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
+        else ReactantCompartment <- "1"
+      if(Productnr > 0) ProductCompartment <- compartments$compartment[which(compartments$name==eq$getProduct(0)$getSpecies())]
+        else ProductCompartment <- "1"
+      if(ReactantCompartment==ProductCompartment) 
         reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
-        } else reactions <- reactions %>% 
-                addReaction(Reactantstring, "", paste0("(",rate, ")/", ReactantCompartment)) %>% 
-                addReaction("", Productstring, paste0("(",rate, ")/", ProductCompartment))
+      else if(ReactantCompartment=="1"){
+        reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ProductCompartment))
+        } else if (ProductCompartment=="1"){
+          reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
+          } else reactions <- reactions %>% 
+                  addReaction(Reactantstring, "", paste0("(",rate, ")/", ReactantCompartment)) %>% 
+                  addReaction("", Productstring, paste0("(",rate, ")/", ProductCompartment))
+    } else {
+      if(!is.null(compartments)){
+        pos <- which(strsplit(rate, "")[[1]]=="*")[1]
+        rate <- substr(rate,pos+1,length(strsplit(rate, "")[[1]]=="*"))
+      } 
+      reactions <- reactions %>% addReaction(Reactantstring, Productstring, rate)
+    }
   }
-  
-  # import inputs and replace inputs by events (done in reactions
+  # import inputs
   N_rules <- m$getNumRules()
   if (N_rules > 0){
-    reactions <- reactions %>% addReaction("", "t", "1")
-    reactions <- reactions %>% addReaction("", "time", "1")
     for (rule in 0:(N_rules-1)){
       reactions$rates <- replaceSymbols(m$getRule(rule)$getVariable(),
                                         paste0("(",m$getRule(rule)$getFormula(), ")"), reactions$rates)  # substitute m$getRule(0)$getVariable() by m$getRule(0)$getFormula()
     }
   }
   
+  # replace function based inputs by events (done in reactions)
   for(fun in c("piecewise")){
     for(reaction in reactions$rates){
       if(str_detect(reaction, fun)){
@@ -106,7 +113,12 @@ getReactionsSBML <- function(model){
   }
   events <- TransformEvents(events)
   
-  return(list(reactions=reactions, events=events, compartments=compartments))
+  reactions$rates <- replaceSymbols(c("t", "TIME", "T"), "time", reactions$rates)
+  
+  mydata <- as.data.frame(reactions)
+  reactions <- as.eqnlist(mydata, compartments)
+  
+  return(list(reactions=reactions, events=events))
 }
 
 
