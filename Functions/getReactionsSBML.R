@@ -12,16 +12,25 @@
 getReactionsSBML <- function(model){
   m = readSBML(model)$getModel()
   
+  # Initialization
   reactions <- NULL
   events <- NULL
+  compartments <- NULL
   
+  # import compartments
+  N_species <- m$getNumSpecies()
+  compartments <- do.call(rbind, lapply(0:(N_species-1), function(i){
+    data.frame(name = m$getSpecies(i)$getId(), compartment = m$getSpecies(i)$getCompartment())
+  }))
+  
+  # import reactions and adjust by means of compartments
   N_reactions <- m$getNumReactions()
   for (reaction in 0:(N_reactions-1)){
     Reactantstring <- ""
     Productstring <- ""
     eq <- m$getModel()$getReaction(reaction)
     Reactantnr <- eq$getNumReactants(reaction)
-    if(Reactantnr > 0)Reactantstring <- paste0( eq$getReactant(0)$getStoichiometry(), "*", eq$getReactant(0)$getSpecies())
+    if(Reactantnr > 0) Reactantstring <- paste0( eq$getReactant(0)$getStoichiometry(), "*", eq$getReactant(0)$getSpecies())
     if(Reactantnr > 1) for (s in 1:(Reactantnr-1)) {
       Reactantstring <- paste0(Reactantstring, " + ",
                                paste0(eq$getReactant(s)$getStoichiometry(), "*", eq$getReactant(s)$getSpecies()))
@@ -34,9 +43,16 @@ getReactionsSBML <- function(model){
     }
     rate <- sub("pow", "", sub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked
     #rate <- replaceOperation("pow", "**", eq$getKineticLaw()$getFormula())
-    reactions <- reactions %>% addReaction(Reactantstring, Productstring, rate) 
+    ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
+    ProductCompartment <- compartments$compartment[which(compartments$name==eq$getProduct(0)$getSpecies())]
+    if(ReactantCompartment==ProductCompartment) 
+      reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
+    else reactions <- reactions %>% 
+      addReaction(Reactantstring, "", paste0("(",rate, ")/", ReactantCompartment)) %>% 
+      addReaction("", Productstring, paste0("(",rate, ")/", ProductCompartment))
   }
   
+  # import inputs and replace inputs by events (done in reactions
   N_rules <- m$getNumRules()
   if (N_rules > 0){
     reactions <- reactions %>% addReaction("", "t", "1")
@@ -46,7 +62,6 @@ getReactionsSBML <- function(model){
                                         paste0("(",m$getRule(rule)$getFormula(), ")"), reactions$rates)  # substitute m$getRule(0)$getVariable() by m$getRule(0)$getFormula()
     }
   }
-  
   
   for(fun in c("piecewise")){
     for(reaction in reactions$rates){
@@ -84,7 +99,7 @@ getReactionsSBML <- function(model){
   }
   events <- TransformEvents(events)
   
-  return(list(reactions=reactions, events=events))
+  return(list(reactions=reactions, events=events, compartments=compartments))
 }
 
 
