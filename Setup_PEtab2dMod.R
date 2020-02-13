@@ -95,14 +95,17 @@ trafo <- replaceSymbols(c("t","time"), 0, trafo)
 trafo <- replaceSymbols(names(constraints), constraints, trafo)
 
 # Generate condition.grid
-condition.grid <- getConditionsSBML(mymodel$conditions)
+condition.grid <- getConditionsSBML(mymodel$conditions, mymodel$data)
+parameters <- names(condition.grid)[!names(condition.grid) %in% c("conditionName")]
 
 # branch trafo for different conditions
 trafoL <- branch(trafo, table=condition.grid) %>%
-  #   insert(x~y, x=c("MGE"), y=MGE) %>%
-  #   insert(x~y, x=c("scale_HBx"), y=c("scale_HBx_TC"), conditionMatch="infected") %>%
-  #   insert(x~1, x=c("scale_HBx")) %>%
-  insert("x~10**(x)", x = .currentSymbols) # has to be made specific!!
+  insert("x~10**(x)", x = .currentSymbols) 
+
+for (par in parameters) {
+  trafoL <- trafoL %>% 
+    insert(x~y, x=c(par), y=)
+}
 
 
 ## Specify prediction functions ------
