@@ -26,6 +26,7 @@ getReactionsSBML <- function(model){
   # import reactions and adjust by means of compartments
   N_reactions <- m$getNumReactions()
   for (reaction in 0:(N_reactions-1)){
+    print(reaction)
     Reactantstring <- ""
     Productstring <- ""
     eq <- m$getModel()$getReaction(reaction)
@@ -43,13 +44,19 @@ getReactionsSBML <- function(model){
     }
     rate <- sub("pow", "", sub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked
     #rate <- replaceOperation("pow", "**", eq$getKineticLaw()$getFormula())
-    ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
-    ProductCompartment <- compartments$compartment[which(compartments$name==eq$getProduct(0)$getSpecies())]
+    if(Reactantnr > 0) ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
+      else ReactantCompartment <- "1"
+    if(Productnr > 0) ProductCompartment <- compartments$compartment[which(compartments$name==eq$getProduct(0)$getSpecies())]
+      else ProductCompartment <- "1"
     if(ReactantCompartment==ProductCompartment) 
       reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
-    else reactions <- reactions %>% 
-      addReaction(Reactantstring, "", paste0("(",rate, ")/", ReactantCompartment)) %>% 
-      addReaction("", Productstring, paste0("(",rate, ")/", ProductCompartment))
+    else if(ReactantCompartment=="1"){
+      reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ProductCompartment))
+      } else if (ProductCompartment=="1"){
+        reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
+        } else reactions <- reactions %>% 
+                addReaction(Reactantstring, "", paste0("(",rate, ")/", ReactantCompartment)) %>% 
+                addReaction("", Productstring, paste0("(",rate, ")/", ProductCompartment))
   }
   
   # import inputs and replace inputs by events (done in reactions

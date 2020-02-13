@@ -38,7 +38,7 @@ model_Zheng <- list(model = paste0(modelpath3,"model_Zheng_PNAS2012_original.xml
 
 ## Model Definition - Equations --------------------
 
-mymodel <- model_Boehm
+mymodel <- model_Fujita
 model_name <- "test"
 reactions <- getReactionsSBML(mymodel$model)$reactions
 events <- getReactionsSBML(mymodel$model)$events
