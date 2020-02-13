@@ -37,7 +37,7 @@ getConditionsSBML <- function(conditions,data){
   }
   
   # generate columns for noiseParameters
-  if(!mydata$noiseParameters %>% is.numeric  & !Reduce("&",is.na(mydata$observableParameters))) 
+  if(!mydata$noiseParameters %>% is.numeric  & !Reduce("&",is.na(mydata$noiseParameters))) 
   {
     condition.grid_noise <- data.frame(conditionId = condis_obs)
     for (obs in observables) 
