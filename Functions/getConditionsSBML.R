@@ -9,7 +9,7 @@
 #' @author Marcus Rosenblatt and Svenja Kemmer
 #'   
 getConditionsSBML <- function(conditions,data){
-  condition.grid <- read.csv(file = conditions, sep = "\t")
+  condition.grid_orig <- read.csv(file = conditions, sep = "\t")
   mydata <- read.csv(file = data, sep = "\t")
   
   # check which conditions are observed
@@ -33,7 +33,7 @@ getConditionsSBML <- function(conditions,data){
       col_name <- paste0("observableParameter1_",obs)
       condition.grid_obs[col_name] <- col_par
     }
-    condition.grid <- left_join(condition.grid,condition.grid_obs, by = "conditionId")
+    condition.grid <- inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId")
   }
   
   # generate columns for noiseParameters
@@ -52,10 +52,14 @@ getConditionsSBML <- function(conditions,data){
       col_name <- paste0("noiseParameter1_",obs)
       condition.grid_noise[col_name] <- col_par
     }
-    condition.grid <- left_join(condition.grid,condition.grid_noise, by = "conditionId")
+    condition.grid <- inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")
   }
   
   rownames(condition.grid) <- condition.grid$conditionId
   condition.grid$conditionId <- NULL
+  
+  # check if all conditions are observed
+  if(nrow(condition.grid) < nrow(condition.grid_orig)) print("There exist non-observed conditions!")
+
   return(condition.grid)
 }
