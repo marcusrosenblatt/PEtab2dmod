@@ -29,7 +29,7 @@ model_Fujita <- list(model = paste0(modelpath2,"model_Fujita_SciSignal2010.xml")
                      data = paste0(modelpath2,"measurementData_Fujita_SciSignal2010.tsv"),
                      parameters = paste0(modelpath2,"parameters_Fujita_SciSignal2010.tsv"))
 
-model_Zheng <- list(model = paste0(modelpath3,"model_Zheng_PNAS2012_original.xml"), 
+model_Zheng <- list(model = paste0(modelpath3,"model_Zheng_PNAS2012.xml"), 
                      observables = paste0(modelpath3,"observables_Zheng_PNAS2012.tsv"),
                      conditions = paste0(modelpath3,"experimentalCondition_Zheng_PNAS2012.tsv"),
                      data = paste0(modelpath3,"measurementData_Zheng_PNAS2012.tsv"),
@@ -39,7 +39,7 @@ model_Zheng <- list(model = paste0(modelpath3,"model_Zheng_PNAS2012_original.xml
 ## Model Definition - Equations --------------------
 
 mymodel <- model_Zheng
-model_name <- "test"
+model_name <- "Zheng"
 reactions <- getReactionsSBML(mymodel$model)$reactions
 events <- getReactionsSBML(mymodel$model)$events
 
@@ -74,11 +74,10 @@ fit_values <- getParametersSBML(mymodel$parameters)$pouter
 
 # check whether errors are estimated
 errors <- getDataSBML(mymodel$data,observables)$errors
-if(!is.null(errors))
-{
+if(!is.null(errors)){
   # gernerate error function
   err <- Y(errors, f = c(as.eqnvec(reactions), observables), states = names(observables), 
-           attach.input = FALSE, compile = F, modelname = "errfn")
+           attach.input = FALSE, compile = T, modelname = "errfn")
 }
 
 ## Define inner parameters ----------
@@ -166,6 +165,8 @@ times <- 0:max(data[[1]]$time)
 
 prediction <- (g*x*p0)(times, pouter)
 plotCombined(prediction, data) 
+
+plotPrediction(prediction)
 
 
 
