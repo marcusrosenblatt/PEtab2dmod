@@ -91,22 +91,28 @@ names(innerpars) <- innerpars
 trafo <- as.eqnvec(innerpars, names = innerpars)#replaceSymbols(names(observables), observables, innerpars)
 trafo <- replaceSymbols(names(initials), initials, trafo)
 trafo <- replaceSymbols(names(compartments), compartments, trafo)
-trafo <- replaceSymbols(c("t","time"), 0, trafo)
+#trafo <- replaceSymbols(c("t","time"), 0, trafo)
 trafo <- replaceSymbols(names(constraints), constraints, trafo)
 
 # Generate condition.grid
 condition.grid <- getConditionsSBML(mymodel$conditions, mymodel$data)
+# remove NAs
+vec <- NULL
+for (i in 1:nrow(condition.grid)) {if(Reduce("&",!is.na(condition.grid[i,]))) vec <- c(vec, i)}
+condition.grid <- condition.grid[vec,]
+
 parameters <- names(condition.grid)[!names(condition.grid) %in% c("conditionName")]
 
 # branch trafo for different conditions
 trafoL <- branch(trafo, table=condition.grid) %>%
+  insert("x~0", x = unique(events$var)) %>%
   insert("x~10**(x)", x = .currentSymbols) 
-
-for (par in parameters) {
-  trafoL <- trafoL %>% 
-    insert(x~y, x=c(par), y=)
+  
+for (j in 1:length(names(trafoL))) {
+  for (i in 1:length(parameters)) {
+    trafoL[[j]] <- repar(x~y, trafoL[[j]], x=parameters[i], y=condition.grid[j,i+1])
+  }
 }
-
 
 ## Specify prediction functions ------
 tolerances <- 1e-7
