@@ -38,7 +38,7 @@ model_Zheng <- list(model = paste0(modelpath3,"model_Zheng_PNAS2012_original.xml
 
 ## Model Definition - Equations --------------------
 
-mymodel <- model_Fujita
+mymodel <- model_Zheng
 model_name <- "test"
 reactions <- getReactionsSBML(mymodel$model)$reactions
 events <- getReactionsSBML(mymodel$model)$events
@@ -95,24 +95,33 @@ trafo <- replaceSymbols(names(compartments), compartments, trafo)
 trafo <- replaceSymbols(names(constraints), constraints, trafo)
 
 # Generate condition.grid
-condition.grid <- getConditionsSBML(mymodel$conditions, mymodel$data)
-# remove NAs
-vec <- NULL
-for (i in 1:nrow(condition.grid)) {if(Reduce("&",!is.na(condition.grid[i,]))) vec <- c(vec, i)}
-condition.grid <- condition.grid[vec,]
+condition.grid <- getConditionsSBML(mymodel$conditions, mymodel$data) #still with warning
 
 parameters <- names(condition.grid)[!names(condition.grid) %in% c("conditionName")]
 
 # branch trafo for different conditions
 trafoL <- branch(trafo, table=condition.grid) %>%
-  insert("x~0", x = unique(events$var)) %>%
-  insert("x~10**(x)", x = .currentSymbols) 
+  insert("x~0", x = unique(events$var))  
   
 for (j in 1:length(names(trafoL))) {
   for (i in 1:length(parameters)) {
     trafoL[[j]] <- repar(x~y, trafoL[[j]], x=parameters[i], y=condition.grid[j,i+1])
   }
 }
+
+# transform parameters according to scale defined in the parameter PEtab file
+parscales <- attr(fit_values,"parscale")
+names <- names(parscales)
+for(i in 1:length(parscales))
+{
+  par <- parscales[i]
+  par[par=="lin"] <- ""
+  par[par=="log10"] <- "10**"
+  par[par=="log"] <- "exp"
+  parameter <- names[i]
+  trafoL <- trafoL %>% insert(paste0("x~",par,"(x)"), x = parameter)
+}
+
 
 ## Specify prediction functions ------
 tolerances <- 1e-7
@@ -136,8 +145,7 @@ pouter[common] <- fit_values[common]
 
 ## Define objective function -------
 
-if(!is.null(errors))
-  {
+if(!is.null(errors)){
   obj <- normL2(data, g*x*p0, err) #+ constraintL2(prior, sigma=16)
 } else obj <- normL2(data, g*x*p0)
 

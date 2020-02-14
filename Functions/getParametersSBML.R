@@ -23,6 +23,10 @@ getParametersSBML <- function(parameters){
       else paste("This type of parameterScale is not supported.")
       names(constraints)[i] <- par
     } 
+    parscales <- fixed$parameterScale %>% as.character()
+    pars <- fixed$parameterId %>% as.character()
+    names(parscales) <- pars
+    attr(constraints,"parscale") <- parscales
   }
   estimated <- mypars %>% filter(estimate == 1)
   pouter <- NULL
@@ -37,6 +41,10 @@ getParametersSBML <- function(parameters){
       else paste("This type of parameterScale is not supported.")
       names(pouter)[i] <- par
     } 
+    parscales <- estimated$parameterScale %>% as.character()
+    pars <- estimated$parameterId %>% as.character()
+    names(parscales) <- pars
+    attr(pouter,"parscale") <- parscales
   }
   return(list(constraints=constraints,pouter=pouter))
 }
