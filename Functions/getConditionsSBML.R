@@ -33,7 +33,8 @@ getConditionsSBML <- function(conditions,data){
       col_name <- paste0("observableParameter1_",obs)
       condition.grid_obs[col_name] <- col_par
     }
-    condition.grid <- inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId")
+    condition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId"))
+    # avoid warning if not all conditions are observed
   }
   
   # generate columns for noiseParameters
@@ -52,7 +53,8 @@ getConditionsSBML <- function(conditions,data){
       col_name <- paste0("noiseParameter1_",obs)
       condition.grid_noise[col_name] <- col_par
     }
-    condition.grid <- inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")
+    condition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")) 
+    # avoid warning if not all conditions are observed
   }
   
   rownames(condition.grid) <- condition.grid$conditionId

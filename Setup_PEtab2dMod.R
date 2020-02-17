@@ -94,8 +94,7 @@ trafo <- replaceSymbols(names(compartments), compartments, trafo)
 trafo <- replaceSymbols(names(constraints), constraints, trafo)
 
 # Generate condition.grid
-condition.grid <- getConditionsSBML(mymodel$conditions, mymodel$data) #still with warning
-
+condition.grid <- getConditionsSBML(mymodel$conditions, mymodel$data) 
 parameters <- names(condition.grid)[!names(condition.grid) %in% c("conditionName")]
 
 # branch trafo for different conditions
@@ -163,8 +162,8 @@ times <- 0:max(data[[1]]$time)
 # 
 # bestfit <- unlist(fitlist[1,-c(1:4)])
 
-prediction <- (g*x*p0)(times, pouter)
-plotCombined(prediction, data) 
+prediction <- (g*x*p)(times, pouter)
+plotCombined(prediction, mydata) 
 
 plotPrediction(prediction)
 

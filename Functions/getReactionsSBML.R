@@ -103,9 +103,9 @@ getReactionsSBML <- function(model){
           timepoint <- strsplit(strsplit(myevent, ",")[[1]][3], ")")[[1]][1]
           first <- strsplit(strsplit(myevent, "\\(")[[1]][2], ",")[[1]][1]
           second <- strsplit(strsplit(myevent, ",")[[1]][4], ")")[[1]][1]
-          if(!is.na(as.numeric(timepoint))) timepoint <- as.numeric(timepoint)
-          if(!is.na(as.numeric(first))) first <- as.numeric(first)
-          if(!is.na(as.numeric(second))) second <- as.numeric(second)
+          if(!is.na(suppressWarnings(as.numeric(timepoint)))) timepoint <- as.numeric(timepoint) # avoid warning if variable is not numeric
+          if(!is.na(suppressWarnings(as.numeric(first)))) first <- as.numeric(first)
+          if(!is.na(suppressWarnings(as.numeric(second)))) second <- as.numeric(second)
           return(data.frame(var=paste0("event",i), time=c(0,timepoint), value=c(first, second), method="replace"))
         } else {print("Warning. Event not yet supported"); return(myevent)}
       }))

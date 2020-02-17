@@ -1,0 +1,22 @@
+## Loading Libraries --------------------
+
+library(libSBML)
+library(tidyverse)
+library(dMod)
+library(stringr)
+source("Functions/getReactionsSBML.R")
+source("Functions/getObservablesSBML.R")
+source("Functions/getParametersSBML.R")
+source("Functions/getConditionsSBML.R")
+source("Functions/getDataSBML.R")
+source("Functions/getInitialsSBML.R")
+source("importPEtabSBML.R")
+source("plotPEtabSBML.R")
+
+## Import model--------------------
+#1 Boehm_JProteomeRes2014 
+#2 Fujita_SciSignal2010 
+#3 Zheng_PNAS2012
+
+importPEtabSBML(modelname = "Zheng_PNAS2012") 
+plotPEtabSBML()
