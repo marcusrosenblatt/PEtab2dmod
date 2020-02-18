@@ -23,45 +23,54 @@ getConditionsSBML <- function(conditions,data){
     condition.grid_obs <- data.frame(conditionId = condis_obs)
     for (obs in observables) 
       {
-      col_par <- NULL
+      col_pars <- NULL
       data_obs <- subset(mydata, observableId == obs)
       for (condition in condis_obs) 
         {
         obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
-        col_par <- c(col_par, obs_par)
+        # one or more observable parameters?
+        if(str_detect(obs_par,";")){
+          myobspars <- strsplit(obs_par,";")[[1]]
+          for(i in 1:length(myobspars)) {
+            col_pars <- c(col_pars, myobspars[i])
+          }
+        } else col_pars <- c(col_pars, obs_par)
       } 
-      col_name <- paste0("observableParameter1_",obs)
-      condition.grid_obs[col_name] <- col_par
+      for (par in 1:length(col_pars)) {
+        col_name <- paste0("observableParameter",par,"_",obs)
+        condition.grid_obs[col_name] <- col_pars[par]
+      }
     }
-    condition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId"))
+    mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId"))
     # avoid warning if not all conditions are observed
   }
   
   # generate columns for noiseParameters
   if(!mydata$noiseParameters %>% is.numeric  & !Reduce("&",is.na(mydata$noiseParameters))) 
   {
+    if(exists("mycondition.grid")) {condition.grid_orig <- mycondition.grid}
     condition.grid_noise <- data.frame(conditionId = condis_obs)
     for (obs in observables) 
     {
-      col_par <- NULL
+      col_pars <- NULL
       data_obs <- subset(mydata, observableId == obs)
       for (condition in condis_obs) 
       {
         noise_par <- subset(data_obs, simulationConditionId == condition)$noiseParameters %>% unique() %>% as.character()
-        col_par <- c(col_par, noise_par)
+        col_pars <- c(col_pars, noise_par)
       } 
       col_name <- paste0("noiseParameter1_",obs)
-      condition.grid_noise[col_name] <- col_par
+      condition.grid_noise[col_name] <- col_pars
     }
-    condition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")) 
+    mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")) 
     # avoid warning if not all conditions are observed
   }
   
-  rownames(condition.grid) <- condition.grid$conditionId
-  condition.grid$conditionId <- NULL
+  rownames(mycondition.grid) <- mycondition.grid$conditionId
+  mycondition.grid$conditionId <- NULL
   
   # check if all conditions are observed
-  if(nrow(condition.grid) < nrow(condition.grid_orig)) print("There exist non-observed conditions!")
+  if(nrow(mycondition.grid) < nrow(condition.grid_orig)) print("There exist non-observed conditions!")
 
-  return(condition.grid)
+  return(mycondition.grid)
 }

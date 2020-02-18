@@ -43,7 +43,7 @@ getReactionsSBML <- function(model){
       Productstring <- paste0(Productstring, " + ",
                               paste0(eq$getProduct(s)$getStoichiometry(), "*", eq$getProduct(s)$getSpecies()))
     }
-    rate <- sub("pow", "", sub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked
+    rate <- gsub("pow", "", gsub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked  # works for Borghans now
     #rate <- replaceOperation("pow", "**", eq$getKineticLaw()$getFormula())
     if(FALSE){
       if(Reactantnr > 0) ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
@@ -113,7 +113,18 @@ getReactionsSBML <- function(model){
   }
   events <- TransformEvents(events)
   
+  # replace mathematical expressions 
   reactions$rates <- replaceSymbols(c("t", "TIME", "T"), "time", reactions$rates)
+
+  # for(i in 1:length(reactions$rates)){
+  #   reaction <- reactions$rates[i]
+  #   if(str_detect(reaction, "pow")){
+  #     reaction_new <- gsub("pow", "", reaction)
+  #     # reaction_new <- gsub(", ", "**", reaction_new)
+  #     reaction_new <- gsub(",", "**", reaction_new)
+  #     reactions$rates[i] <- reaction_new
+  #   } else reactions$rates[i] <- reaction
+  # }
   
   mydata <- as.data.frame(reactions)
   reactions <- as.eqnlist(mydata, compartments)

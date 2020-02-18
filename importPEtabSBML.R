@@ -69,7 +69,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   ## Get Data ------------
   
   cat("Reading data file ...\n")
-  mydataSBML <- getDataSBML(data_file, myobservables)
+  mydataSBML <- getDataSBML(data_file, observable_file)
   mydata <- mydataSBML$data
   if(is.null(assign_data)){mydata <<- mydata} else {cat("Manual assignment not yet provided.")}
   

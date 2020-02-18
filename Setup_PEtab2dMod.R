@@ -16,6 +16,7 @@ source("Functions/getInitialsSBML.R")
 modelpath1 <- 'BenchmarkModels/Boehm_JProteomeRes2014/'
 modelpath2 <- 'BenchmarkModels/Fujita_SciSignal2010/'
 modelpath3 <- 'BenchmarkModels/Zheng_PNAS2012/'
+modelpath4 <- 'BenchmarkModels/Borghans_BiophysChem1997/'
 
 model_Boehm <- list(model = paste0(modelpath1,"model_Boehm_JProteomeRes2014.xml"), 
                     observables = paste0(modelpath1,"observables_Boehm_JProteomeRes2014.tsv"),
@@ -34,6 +35,12 @@ model_Zheng <- list(model = paste0(modelpath3,"model_Zheng_PNAS2012.xml"),
                      conditions = paste0(modelpath3,"experimentalCondition_Zheng_PNAS2012.tsv"),
                      data = paste0(modelpath3,"measurementData_Zheng_PNAS2012.tsv"),
                      parameters = paste0(modelpath3,"parameters_Zheng_PNAS2012.tsv"))
+
+model_Borghans <- list(model = paste0(modelpath4,"model_Borghans_BiophysChem1997.xml"), 
+                    observables = paste0(modelpath4,"observables_Borghans_BiophysChem1997.tsv"),
+                    conditions = paste0(modelpath4,"experimentalCondition_Borghans_BiophysChem1997.tsv"),
+                    data = paste0(modelpath4,"measurementData_Borghans_BiophysChem1997.tsv"),
+                    parameters = paste0(modelpath4,"parameters_Borghans_BiophysChem1997.tsv"))
 
 
 ## Model Definition - Equations --------------------
@@ -162,8 +169,8 @@ times <- 0:max(data[[1]]$time)
 # 
 # bestfit <- unlist(fitlist[1,-c(1:4)])
 
-prediction <- (g*x*p)(times, pouter)
-plotCombined(prediction, mydata) 
+prediction <- (g*x*p0)(times, pouter)
+plotCombined(prediction, data) 
 
 plotPrediction(prediction)
 

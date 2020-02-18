@@ -17,6 +17,9 @@ source("plotPEtabSBML.R")
 #1 Boehm_JProteomeRes2014 
 #2 Fujita_SciSignal2010 
 #3 Zheng_PNAS2012
+#4 Borghans_BiophysChem1997
+#5 Elowitz_Nature2000
+#6 Sneyd_PNAS2002
 
-importPEtabSBML(modelname = "Zheng_PNAS2012") 
+importPEtabSBML(modelname = "Elowitz_Nature2000") 
 plotPEtabSBML()

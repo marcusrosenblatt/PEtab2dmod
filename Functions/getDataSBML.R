@@ -11,10 +11,11 @@
 #'   
 getDataSBML <- function(data, observables){
   mydata <- read.csv(file = data, sep = "\t")
+  myobs <- read.csv(file = observables, sep = "\t") %>% as.data.frame()
+  obs <- myobs$observableId %>% as.character()
   errors <- NULL
   if(!mydata$noiseParameters %>% is.numeric) {
     # define errors
-    obs <- observables %>% names()
     errors <- mydata$noiseParameters %>% levels
     which_err <- c(1:length(obs))
     if(length(errors) != length(obs)) errors <- rep(errors,length(obs))
@@ -29,6 +30,9 @@ getDataSBML <- function(data, observables){
   # select necessary data columns
   data <- data.frame(name = mydata$observableId, time = mydata$time, 
                      value = mydata$measurement, sigma = mydata$noiseParameters,
-                     condition = mydata$simulationConditionId) %>% as.datalist()
+                     condition = mydata$simulationConditionId) 
+  if(unique(myobs$observableTransformation) == "log10") data$value <- log10(data$value)
+  data <- data %>% as.datalist()
+  
   return(list(data=data,errors=errors))
 }
