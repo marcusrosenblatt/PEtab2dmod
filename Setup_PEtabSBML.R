@@ -22,6 +22,7 @@ source("plotPEtabSBML.R")
 #6 Sneyd_PNAS2002
 #7 Lucarelli_CellSystems2018
 #8 Crauste_CellSystems2017
+#9 Schwen_PONE2014
 
 importPEtabSBML(modelname = "Schwen_PONE2014") 
 plotPEtabSBML()

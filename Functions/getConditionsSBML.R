@@ -27,14 +27,16 @@ getConditionsSBML <- function(conditions,data){
       data_obs <- subset(mydata, observableId == obs)
       for (condition in condis_obs) 
         {
-        obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
-        # one or more observable parameters?
-        if(str_detect(obs_par,";")){
-          myobspars <- strsplit(obs_par,";")[[1]]
-          for(i in 1:length(myobspars)) {
-            col_pars <- c(col_pars, myobspars[i])
-          }
-        } else col_pars <- c(col_pars, obs_par)
+        if(condition %in% data_obs$simulationConditionId){
+          obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
+          # one or more observable parameters?
+          if(str_detect(obs_par,";")){
+            myobspars <- strsplit(obs_par,";")[[1]]
+            for(i in 1:length(myobspars)) {
+              col_pars <- c(col_pars, myobspars[i])
+            }
+          } else col_pars <- c(col_pars, obs_par)
+        }
       } 
       for (par in 1:length(col_pars)) {
         col_name <- paste0("observableParameter",par,"_",obs)
@@ -56,11 +58,13 @@ getConditionsSBML <- function(conditions,data){
       data_obs <- subset(mydata, observableId == obs)
       for (condition in condis_obs) 
       {
-        noise_par <- subset(data_obs, simulationConditionId == condition)$noiseParameters %>% unique() %>% as.character()
-        col_pars <- c(col_pars, noise_par)
+        if(condition %in% data_obs$simulationConditionId){
+          noise_par <- subset(data_obs, simulationConditionId == condition)$noiseParameters %>% unique() %>% as.character()
+          col_pars <- c(col_pars, noise_par)
+        }
       } 
       col_name <- paste0("noiseParameter1_",obs)
-      condition.grid_noise[col_name] <- col_pars
+      condition.grid_noise[col_name] <- col_pars %>% unique()
     }
     mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")) 
     # avoid warning if not all conditions are observed
