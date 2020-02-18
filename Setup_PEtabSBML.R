@@ -20,6 +20,8 @@ source("plotPEtabSBML.R")
 #4 Borghans_BiophysChem1997
 #5 Elowitz_Nature2000
 #6 Sneyd_PNAS2002
+#7 Lucarelli_CellSystems2018
+#8 Crauste_CellSystems2017
 
-importPEtabSBML(modelname = "Elowitz_Nature2000") 
+importPEtabSBML(modelname = "Schwen_PONE2014") 
 plotPEtabSBML()

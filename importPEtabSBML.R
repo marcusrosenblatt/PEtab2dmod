@@ -122,11 +122,14 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   trafoL <- repar("x~0", trafoL , x = unique(myevents$var))  
   
   # condition-specific assignment of parameters from condition grid
-  for (j in 1:length(names(trafoL))) {
-    for (i in 1:length(condi_pars)) {
-      trafoL[[j]] <- repar(x~y, trafoL[[j]], x=condi_pars[i], y=condition.grid[j,i+1])
+  if(length(condi_pars) > 0){
+    for (j in 1:length(names(trafoL))) {
+      for (i in 1:length(condi_pars)) {
+        trafoL[[j]] <- repar(x~y, trafoL[[j]], x=condi_pars[i], y=condition.grid[j,i+1])
+      }
     }
   }
+  
   
   # transform parameters according to scale defined in the parameter PEtab file
   parscales <- attr(myfit_values,"parscale")

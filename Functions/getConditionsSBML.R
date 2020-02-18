@@ -66,6 +66,7 @@ getConditionsSBML <- function(conditions,data){
     # avoid warning if not all conditions are observed
   }
   
+  if(!exists("mycondition.grid")) mycondition.grid <- condition.grid_orig
   rownames(mycondition.grid) <- mycondition.grid$conditionId
   mycondition.grid$conditionId <- NULL
   
