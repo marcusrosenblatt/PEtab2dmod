@@ -45,8 +45,8 @@ model_Borghans <- list(model = paste0(modelpath4,"model_Borghans_BiophysChem1997
 
 ## Model Definition - Equations --------------------
 
-mymodel <- model_Zheng
-model_name <- "Zheng"
+mymodel <- model_Fujita
+model_name <- "Fujita"
 reactions <- getReactionsSBML(mymodel$model)$reactions
 events <- getReactionsSBML(mymodel$model)$events
 
