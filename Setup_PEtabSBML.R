@@ -8,7 +8,7 @@ source("Functions/getReactionsSBML.R")
 source("Functions/getObservablesSBML.R")
 source("Functions/getParametersSBML.R")
 source("Functions/getConditionsSBML.R")
-source("Functions/getDataSBML.R")
+source("Functions/getDataPEtabSBML.R")
 source("Functions/getInitialsSBML.R")
 source("Functions/importPEtabSBML.R")
 source("Functions/plotPEtabSBML.R")
@@ -24,5 +24,5 @@ source("Functions/plotPEtabSBML.R")
 #8 Crauste_CellSystems2017
 #9 Schwen_PONE2014
 
-importPEtabSBML(modelname = "Zheng_PNAS2012") 
+importPEtabSBML(modelname = "Elowitz_Nature2000") 
 plotPEtabSBML()

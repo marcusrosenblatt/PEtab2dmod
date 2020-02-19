@@ -8,7 +8,7 @@ source("Functions/getReactionsSBML.R")
 source("Functions/getObservablesSBML.R")
 source("Functions/getParametersSBML.R")
 source("Functions/getConditionsSBML.R")
-source("Functions/getDataSBML.R")
+source("Functions/getDataPEtabSBML.R")
 source("Functions/getInitialsSBML.R")
 
 ## Load SBML and PEtab files --------------------
@@ -59,7 +59,7 @@ g <- Y(observables, reactions, compile=TRUE, modelname=paste0("g_",model_name))
 
 
 ## Get Data ------------
-data <- getDataSBML(mymodel$data,observables)$data
+data <- getDataPEtabSBML(mymodel$data,observables)$data
 
 
 ## Model Generation ---------------------
@@ -80,7 +80,7 @@ fit_values <- getParametersSBML(mymodel$parameters)$pouter
 ## Define error model if applicable ------------
 
 # check whether errors are estimated
-errors <- getDataSBML(mymodel$data,observables)$errors
+errors <- getDataPEtabSBML(mymodel$data,observables)$errors
 if(!is.null(errors)){
   # gernerate error function
   err <- Y(errors, f = c(as.eqnvec(reactions), observables), states = names(observables), 

@@ -1,6 +1,6 @@
 #include <R.h>
  #include <math.h>
- void g_Fujita_SciSignal2010_deriv_h46207jk ( double * x, double * y, double * p, int * n, int * k, int * l ) {
+ void g_Fujita_SciSignal2010_deriv_1k4yg61t ( double * x, double * y, double * p, int * n, int * k, int * l ) {
  for(int i = 0; i< *n; i++) {
  y[0+i**l] = (p[0])*(x[16+i**k])+(p[0])*(x[18+i**k]) ;
 y[1+i**l] = (p[1])*(x[13+i**k])+(p[1])*(x[15+i**k]) ;

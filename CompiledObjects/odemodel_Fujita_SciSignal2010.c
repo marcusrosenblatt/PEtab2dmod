@@ -78,12 +78,12 @@ void odemodel_Fujita_SciSignal2010_myevent(int *n, double *t, double *y) {
 
 	 if(*t == 0 & eventcounter[0] == 0) {
 		y[9] = EGF_impulse;
-		eventcounter[0] = eventcounter[0] + 1.;
+		eventcounter[0] = 1.;
 	 }
 
 	 if(*t == 60.0 & eventcounter[1] == 0) {
 		y[9] = 0;
-		eventcounter[1] = eventcounter[1] + 1.;
+		eventcounter[1] = 1.;
 	 }
 
 
