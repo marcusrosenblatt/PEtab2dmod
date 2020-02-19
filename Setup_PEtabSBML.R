@@ -10,8 +10,8 @@ source("Functions/getParametersSBML.R")
 source("Functions/getConditionsSBML.R")
 source("Functions/getDataSBML.R")
 source("Functions/getInitialsSBML.R")
-source("importPEtabSBML.R")
-source("plotPEtabSBML.R")
+source("Functions/importPEtabSBML.R")
+source("Functions/plotPEtabSBML.R")
 
 ## Import model--------------------
 #1 Boehm_JProteomeRes2014 
