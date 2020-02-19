@@ -1,11 +1,3 @@
-source("Functions/getConditionsSBML.R")
-source("Functions/getDataSBML.R")
-source("Functions/getInitialsSBML.R")
-source("Functions/getObservablesSBML.R")
-source("Functions/getParametersSBML.R")
-source("Functions/getReactionsSBML.R")
-
-
 #' Import an SBML model and corresponding PEtab objects 
 #' 
 #' @description This function imports an SBML model and corresponding PEtab objects, e.g. from the Benchmark collection.
@@ -20,6 +12,7 @@ source("Functions/getReactionsSBML.R")
 #' @author Marcus Rosenblatt and Svenja Kemmer
 importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                             path2BC = "BenchmarkModels/",
+                            compile = FALSE,
                             SBML_file = NULL,
                             observable_file = NULL,
                             condition_file = NULL,
@@ -70,11 +63,22 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   myobservables <- getObservablesSBML(observable_file)
   if(is.null(assign_observables)){observables <<- myobservables} else {cat("Manual assignment not yet provided.")}
   
-  cat("Compiling observable function ...\n")
-  setwd(paste0(mywd,"/CompiledObjects"))
-  myg <- Y(myobservables, myreactions, compile=TRUE, modelname=paste0("g_",modelname))
-  if(is.null(assign_g)){g <<- myg} else {cat("Manual assignment not yet provided.")}
+  setwd(paste0(mywd,"/CompiledObjects/"))
+  files_loaded <- FALSE
+  if(compile == FALSE & file.exists(paste0(modelname,".RData"))){
+    load(paste0(modelname,".RData"))
+    files_loaded <- TRUE
+  } 
   setwd(mywd)
+  
+  cat("Compiling observable function ...\n")
+  if(!files_loaded) {
+    setwd(paste0(mywd,"/CompiledObjects/"))
+    g <- Y(myobservables, myreactions, compile=TRUE, modelname=paste0("g_",modelname))
+    setwd(mywd)
+  }
+  if(is.null(assign_g)){g <<- g} else {cat("Manual assignment not yet provided.")}
+  
   
   ## Get Data ------------
   
@@ -87,9 +91,14 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   ## Model Generation ---------------------
   
   cat("Compiling ODE model ...\n")
-  myodemodel <- odemodel(myreactions, forcings = NULL, events = myevents, fixed=NULL, modelname = paste0("odemodel_", modelname), jacobian = "inz.lsodes", compile = TRUE)
-  if(is.null(assign_odemodel)){myodemodel <<- myodemodel} else {cat("Manual assignment not yet provided.")}
   
+  if(!files_loaded) {
+    setwd(paste0(mywd,"/CompiledObjects/"))
+    myodemodel <- odemodel(myreactions, forcings = NULL, events = myevents, fixed=NULL, modelname = paste0("odemodel_", modelname), jacobian = "inz.lsodes", compile = TRUE)
+    setwd(mywd)
+  }
+  if(is.null(assign_odemodel)){myodemodel <<- myodemodel} else {cat("Manual assignment not yet provided.")}
+
   
   ## Define constraints, initials, parameters and compartments --------------
   
@@ -107,7 +116,16 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   cat("Check and compile error model ...\n")
   myerrors <- mydataSBML$errors
   if(!is.null(myerrors)){
+<<<<<<< HEAD
     myerr <- Y(myerrors, f = c(as.eqnvec(myreactions), myobservables), states = names(myobservables), attach.input = FALSE, compile = T, modelname = paste0("errfun_", modelname))
+=======
+    if(!files_loaded) {
+      setwd(paste0(mywd,"/CompiledObjects/"))
+      err <- Y(myerrors, f = c(as.eqnvec(myreactions), myobservables), states = names(myobservables), attach.input = FALSE, compile = TRUE, modelname = paste0("errfn_", modelname))
+      setwd(mywd)
+    }
+    if(is.null(assign_odemodel)){myodemodel <<- myodemodel} else {cat("Manual assignment not yet provided.")}
+>>>>>>> ef82fea655ae1b9e97c558c4b06a5c16a64dbc3c
   }
   if(is.null(assign_err)){err <<- myerr} else {cat("Manual assignment not yet provided.")}
   
@@ -189,6 +207,14 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   mytimes <- seq(0,max(mydata[[1]]$time), len=501)
   if(is.null(assign_times)){times <<- mytimes} else {cat("Manual assignment not yet provided.")}
+  
+  if(!files_loaded){
+    setwd(paste0(mywd,"/CompiledObjects/"))
+    if(!is.null(myerrors)){ 
+      save(list = c("g","myodemodel","err"),file = paste0(modelname,".RData"))
+    } else save(list = c("g","myodemodel"),file = paste0(modelname,".RData"))
+    setwd(mywd)
+  }
   
   endtime <- Sys.time()
   cat(paste0(modelname, " imported in ",as.character(format(as.numeric(endtime-starttime), digits=3)), " seconds.\n"))
