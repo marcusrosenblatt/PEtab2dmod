@@ -24,5 +24,5 @@ source("plotPEtabSBML.R")
 #8 Crauste_CellSystems2017
 #9 Schwen_PONE2014
 
-importPEtabSBML(modelname = "Elowitz_Nature2000") 
+importPEtabSBML(modelname = "Zheng_PNAS2012") 
 plotPEtabSBML()

@@ -24,9 +24,9 @@ getDataSBML <- function(data, observables){
     mydata$noiseParameters <- NA
   }
   #rename observables with _obs
-  obs <- mydata$observableId %>% as.character()
-  obs <- paste0(obs,"_obs")
+  obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
   mydata$observableId <- obs
+  names(errors) <- paste0(names(errors), "_obs")
   # select necessary data columns
   data <- data.frame(name = mydata$observableId, time = mydata$time, 
                      value = mydata$measurement, sigma = mydata$noiseParameters,

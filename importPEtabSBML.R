@@ -36,7 +36,8 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                             assign_x = NULL,
                             assign_pouter = NULL,
                             assign_obj = NULL,
-                            assign_times = NULL){
+                            assign_times = NULL,
+                            assign_err = NULL){
   
   ## Define path to SBML and PEtab files --------------------
   
@@ -106,9 +107,9 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   cat("Check and compile error model ...\n")
   myerrors <- mydataSBML$errors
   if(!is.null(myerrors)){
-    err <- Y(myerrors, f = c(as.eqnvec(myreactions), myobservables), states = names(myobservables), attach.input = FALSE, compile = F, modelname = "errfn")
+    myerr <- Y(myerrors, f = c(as.eqnvec(myreactions), myobservables), states = names(myobservables), attach.input = FALSE, compile = T, modelname = paste0("errfun_", modelname))
   }
-  
+  if(is.null(assign_err)){err <<- myerr} else {cat("Manual assignment not yet provided.")}
   
   ## Parameter transformations -----------
   
@@ -182,7 +183,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   cat("Generate objective function ...\n")
   if(!is.null(myerrors)){
-    myobj <- normL2(mydata, g*x*p0, err) #+ constraintL2(prior, sigma=16)
+    myobj <- normL2(mydata, g*x*p0, errmodel = myerr) #+ constraintL2(prior, sigma=16)
   } else myobj <- normL2(mydata, g*x*p0)
   if(is.null(assign_obj)){obj <<- myobj} else {cat("Manual assignment not yet provided.")}
   
