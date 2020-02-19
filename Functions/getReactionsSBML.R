@@ -30,7 +30,7 @@ getReactionsSBML <- function(model){
   for (reaction in 0:(N_reactions-1)){
     Reactantstring <- ""
     Productstring <- ""
-    eq <- m$getModel()$getReaction(reaction)
+    eq <- m$getReaction(reaction)
     Reactantnr <- eq$getNumReactants(reaction)
     if(Reactantnr > 0) Reactantstring <- paste0( eq$getReactant(0)$getStoichiometry(), "*", eq$getReactant(0)$getSpecies())
     if(Reactantnr > 1) for (s in 1:(Reactantnr-1)) {
@@ -45,27 +45,13 @@ getReactionsSBML <- function(model){
     }
     rate <- gsub("pow", "", gsub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked  # works for Borghans now
     #rate <- replaceOperation("pow", "**", eq$getKineticLaw()$getFormula())
-    if(FALSE){
-      if(Reactantnr > 0) ReactantCompartment <- compartments$compartment[which(compartments$name==eq$getReactant(0)$getSpecies())]
-        else ReactantCompartment <- "1"
-      if(Productnr > 0) ProductCompartment <- compartments$compartment[which(compartments$name==eq$getProduct(0)$getSpecies())]
-        else ProductCompartment <- "1"
-      if(ReactantCompartment==ProductCompartment) 
-        reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
-      else if(ReactantCompartment=="1"){
-        reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ProductCompartment))
-        } else if (ProductCompartment=="1"){
-          reactions <- reactions %>% addReaction(Reactantstring, Productstring, paste0("(",rate, ")/", ReactantCompartment))
-          } else reactions <- reactions %>% 
-                  addReaction(Reactantstring, "", paste0("(",rate, ")/", ReactantCompartment)) %>% 
-                  addReaction("", Productstring, paste0("(",rate, ")/", ProductCompartment))
-    } else {
-      if(!is.null(compartments)){
+    if(!is.null(compartments)){
+      if(Reduce("|", str_detect(rate, unique(compartments)))){
         pos <- which(strsplit(rate, "")[[1]]=="*")[1]
         rate <- substr(rate,pos+1,length(strsplit(rate, "")[[1]]=="*"))
-      } 
-      reactions <- reactions %>% addReaction(Reactantstring, Productstring, rate)
+      }
     }
+    reactions <- reactions %>% addReaction(Reactantstring, Productstring, rate)
   }
   # import inputs
   N_rules <- m$getNumRules()

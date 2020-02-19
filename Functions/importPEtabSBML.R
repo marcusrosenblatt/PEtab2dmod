@@ -202,7 +202,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   } else myobj <- normL2(mydata, myg*myx*myp0)
   if(is.null(assign_obj)){obj <<- myobj} else {cat("Manual assignment not yet provided.")}
   
-  mytimes <- seq(0,max(mydata[[1]]$time), len=501)
+  mytimes <- seq(0,max(do.call(c, lapply(1:length(mydata), function(i) max(mydata[[i]]$time)))), len=501)
   if(is.null(assign_times)){times <<- mytimes} else {cat("Manual assignment not yet provided.")}
   
   if(!files_loaded){
