@@ -1,3 +1,11 @@
+source("Functions/getConditionsSBML.R")
+source("Functions/getDataSBML.R")
+source("Functions/getInitialsSBML.R")
+source("Functions/getObservablesSBML.R")
+source("Functions/getParametersSBML.R")
+source("Functions/getReactionsSBML.R")
+
+
 #' Import an SBML model and corresponding PEtab objects 
 #' 
 #' @description This function imports an SBML model and corresponding PEtab objects, e.g. from the Benchmark collection.
@@ -62,9 +70,10 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(is.null(assign_observables)){observables <<- myobservables} else {cat("Manual assignment not yet provided.")}
   
   cat("Compiling observable function ...\n")
+  setwd(paste0(mywd,"/CompiledObjects"))
   myg <- Y(myobservables, myreactions, compile=TRUE, modelname=paste0("g_",modelname))
   if(is.null(assign_g)){g <<- myg} else {cat("Manual assignment not yet provided.")}
-  
+  setwd(mywd)
   
   ## Get Data ------------
   
@@ -177,8 +186,8 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   } else myobj <- normL2(mydata, g*x*p0)
   if(is.null(assign_obj)){obj <<- myobj} else {cat("Manual assignment not yet provided.")}
   
-  times <- 0:max(mydata[[1]]$time)
-  if(is.null(assign_times)){times <<- times} else {cat("Manual assignment not yet provided.")}
+  mytimes <- seq(0,max(mydata[[1]]$time), len=501)
+  if(is.null(assign_times)){times <<- mytimes} else {cat("Manual assignment not yet provided.")}
   
   endtime <- Sys.time()
   cat(paste0(modelname, " imported in ",as.character(format(as.numeric(endtime-starttime), digits=3)), " seconds.\n"))
