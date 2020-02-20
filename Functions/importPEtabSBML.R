@@ -212,6 +212,9 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   }
   
   endtime <- Sys.time()
-  cat(paste0(modelname, " imported in ",as.character(format(as.numeric(endtime-starttime), digits=3)), " seconds.\n"))
+  mytimediff <- as.numeric(difftime(endtime, starttime, unit="secs"))
+  if(mytimediff > 3600) cat(paste0(modelname, " imported in ",as.character(format(as.numeric(difftime(endtime, starttime, unit="hours")), digits=3)), " hours.\n")) else
+    if(mytimediff > 60) cat(paste0(modelname, " imported in ",as.character(format(as.numeric(difftime(endtime, starttime, unit="mins")), digits=3)), " minutes.\n")) else
+      cat(paste0(modelname, " imported in ",as.character(format(as.numeric(difftime(endtime, starttime, unit="secs")), digits=3)), " seconds.\n"))
   return(modelname)
 }
