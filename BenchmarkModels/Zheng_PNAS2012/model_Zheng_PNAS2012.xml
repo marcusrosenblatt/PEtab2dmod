@@ -1,6 +1,1473 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
-  <model metaid="arFramework3" id="ModelHistoneZheng">
+  <model id="Zheng_PNAS2012" name="HistoneMethylation">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <pre>PEtab implementation of the model from Zheng et al. (2012), Proc. Natl. Acad. Sci. USA, 109, 13549–13554</pre>
+      </body>
+    </notes>
+    <annotation>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+        <rdf:Description rdf:about="#arFramework3">
+          <dc:creator>
+            <rdf:Bag>
+              <rdf:li rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Zheng</vCard:Family>
+                  <vCard:Given>Yupeng</vCard:Given>
+                </vCard:N>
+              </rdf:li>
+            </rdf:Bag>
+          </dc:creator>
+          <dcterms:created rdf:parseType="Resource">
+            <dcterms:W3CDTF>2019-11-29T09:41:48Z</dcterms:W3CDTF>
+          </dcterms:created>
+          <dcterms:modified rdf:parseType="Resource">
+            <dcterms:W3CDTF>2019-11-29T09:41:48Z</dcterms:W3CDTF>
+          </dcterms:modified>
+          <bqbiol:isDescribedBy>
+            <rdf:Bag>
+              <rdf:li rdf:resource="http://identifiers.org/doi/10.1073/pnas.1201240109"/>
+            </rdf:Bag>
+          </bqbiol:isDescribedBy>
+        </rdf:Description>
+      </rdf:RDF>
+    </annotation>
+    <listOfFunctionDefinitions>
+      <functionDefinition id="Function_for_v_53" name="Function for v_53">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me1 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_23" name="Function for v_23">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k11_21 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me1 </ci>
+                <ci> k11_21 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_33" name="Function for v_33">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k30_31 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me0 </ci>
+                <ci> k30_31 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_5" name="Function for v_5">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k10_11 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me0 </ci>
+                <ci> k10_11 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_31" name="Function for v_31">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k22_32 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me2 </ci>
+                <ci> k22_32 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_42" name="Function for v_42">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k32_31 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me2 </ci>
+                <ci> k32_31 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_6" name="Function for v_6">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k11_10 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me1 </ci>
+                <ci> k11_10 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_34" name="Function for v_34">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k31_30 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me1 </ci>
+                <ci> k31_30 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_16" name="Function for v_16">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k21_20 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me1 </ci>
+                <ci> k21_20 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_1" name="Function for v_1">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k00_01 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me0 </ci>
+                <ci> k00_01 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_40" name="Function for v_40">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k31_21 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me1 </ci>
+                <ci> k31_21 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_3" name="Function for v_3">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k00_10 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me0 </ci>
+                <ci> k00_10 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_11" name="Function for v_11">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k10_20 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me0 </ci>
+                <ci> k10_20 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_8" name="Function for v_8">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k11_01 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me1 </ci>
+                <ci> k11_01 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_54" name="Function for v_54">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me0 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_9" name="Function for v_9">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k01_02 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me1 </ci>
+                <ci> k01_02 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_22" name="Function for v_22">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k12_11 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me2 </ci>
+                <ci> k12_11 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_7" name="Function for v_7">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k01_11 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me1 </ci>
+                <ci> k01_11 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_48" name="Function for v_48">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me2 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_12" name="Function for v_12">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k20_10 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me0 </ci>
+                <ci> k20_10 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_14" name="Function for v_14">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k12_02 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me2 </ci>
+                <ci> k12_02 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_49" name="Function for v_49">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me1 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_17" name="Function for v_17">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k02_03 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me2 </ci>
+                <ci> k02_03 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_18" name="Function for v_18">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k03_02 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me3 </ci>
+                <ci> k03_02 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_19" name="Function for v_19">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k20_30 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me0 </ci>
+                <ci> k20_30 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_36" name="Function for v_36">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k13_03 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me3 </ci>
+                <ci> k13_03 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_37" name="Function for v_37">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k12_13 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me2 </ci>
+                <ci> k12_13 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_46" name="Function for v_46">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me1 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_32" name="Function for v_32">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k32_22 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me2 </ci>
+                <ci> k32_22 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_21" name="Function for v_21">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k11_12 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me1 </ci>
+                <ci> k11_12 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_57" name="Function for v_57">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me1 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_15" name="Function for v_15">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k20_21 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me0 </ci>
+                <ci> k20_21 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_44" name="Function for v_44">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k23_13 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me3 </ci>
+                <ci> k23_13 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_45" name="Function for v_45">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me0 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_47" name="Function for v_47">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me0 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_51" name="Function for v_51">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me3 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_13" name="Function for v_13">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k02_12 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me2 </ci>
+                <ci> k02_12 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_26" name="Function for v_26">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k22_12 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me2 </ci>
+                <ci> k22_12 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_27" name="Function for v_27">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k21_22 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me1 </ci>
+                <ci> k21_22 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_24" name="Function for v_24">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k21_11 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me1 </ci>
+                <ci> k21_11 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_25" name="Function for v_25">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k12_22 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me2 </ci>
+                <ci> k12_22 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_2" name="Function for v_2">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k01_00 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me1 </ci>
+                <ci> k01_00 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_50" name="Function for v_50">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me0 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_4" name="Function for v_4">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k10_00 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me0 </ci>
+                <ci> k10_00 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_41" name="Function for v_41">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k31_32 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me1 </ci>
+                <ci> k31_32 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_10" name="Function for v_10">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k02_01 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me2 </ci>
+                <ci> k02_01 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_52" name="Function for v_52">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me2 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_58" name="Function for v_58">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me3 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_59" name="Function for v_59">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me2 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_0" name="Function for v_0">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <ci> inflow </ci>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_43" name="Function for v_43">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k13_23 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me3 </ci>
+                <ci> k13_23 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_30" name="Function for v_30">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k23_22 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me3 </ci>
+                <ci> k23_22 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_35" name="Function for v_35">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me0K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k03_13 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me0K36me3 </ci>
+                <ci> k03_13 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_38" name="Function for v_38">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k13_12 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me3 </ci>
+                <ci> k13_12 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_39" name="Function for v_39">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me1 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k21_31 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me1 </ci>
+                <ci> k21_31 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_56" name="Function for v_56">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me2 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_28" name="Function for v_28">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k22_21 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me2 </ci>
+                <ci> k22_21 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_29" name="Function for v_29">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me2K36me2 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k22_23 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me2K36me2 </ci>
+                <ci> k22_23 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_20" name="Function for v_20">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me3K36me0 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> k30_20 </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me3K36me0 </ci>
+                <ci> k30_20 </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+      <functionDefinition id="Function_for_v_55" name="Function for v_55">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <lambda>
+            <bvar>
+              <ci> K27me1K36me3 </ci>
+            </bvar>
+            <bvar>
+              <ci> default </ci>
+            </bvar>
+            <bvar>
+              <ci> inflow </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> K27me1K36me3 </ci>
+                <ci> inflow </ci>
+              </apply>
+              <ci> default </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
+    </listOfFunctionDefinitions>
     <listOfUnitDefinitions>
       <unitDefinition id="time" name="time">
         <listOfUnits>
@@ -9,502 +1476,81 @@
       </unitDefinition>
     </listOfUnitDefinitions>
     <listOfCompartments>
-      <compartment id="default" spatialDimensions="3" size="1" constant="true"/>
+      <compartment id="default" name="default" spatialDimensions="3" size="1" constant="true"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species id="K27me0K36me0" name="K27me0K36me0" compartment="default" initialConcentration="0.00417724976345759" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me0K36me1" name="K27me0K36me1" compartment="default" initialConcentration="0.0102104668587641" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me1K36me0" name="K27me1K36me0" compartment="default" initialConcentration="0.00165412810279407" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me0K36me2" name="K27me0K36me2" compartment="default" initialConcentration="0.169690316239546" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me1K36me1" name="K27me1K36me1" compartment="default" initialConcentration="0.0078328187288069" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me2K36me0" name="K27me2K36me0" compartment="default" initialConcentration="0.00632744816295157" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me0K36me3" name="K27me0K36me3" compartment="default" initialConcentration="0.0504935214807544" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me1K36me2" name="K27me1K36me2" compartment="default" initialConcentration="0.594249755169037" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me2K36me1" name="K27me2K36me1" compartment="default" initialConcentration="0.0143896310177379" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me3K36me0" name="K27me3K36me0" compartment="default" initialConcentration="0.00330168411604165" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me1K36me3" name="K27me1K36me3" compartment="default" initialConcentration="0.102748675077958" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me2K36me2" name="K27me2K36me2" compartment="default" initialConcentration="0.0263372634996529" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me3K36me1" name="K27me3K36me1" compartment="default" initialConcentration="0.00250831034920277" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me2K36me3" name="K27me2K36me3" compartment="default" initialConcentration="0.00471831436002134" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="K27me3K36me2" name="K27me3K36me2" compartment="default" initialConcentration="0.00136041631795562" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="K27me0K36me0" name="K27me0K36me0" compartment="default" initialConcentration="0.00417724976345759" boundaryCondition="false" constant="false"/>
+      <species id="K27me0K36me1" name="K27me0K36me1" compartment="default" initialConcentration="0.0102104668587641" boundaryCondition="false" constant="false"/>
+      <species id="K27me1K36me0" name="K27me1K36me0" compartment="default" initialConcentration="0.00165412810279407" boundaryCondition="false" constant="false"/>
+      <species id="K27me0K36me2" name="K27me0K36me2" compartment="default" initialConcentration="0.169690316239546" boundaryCondition="false" constant="false"/>
+      <species id="K27me1K36me1" name="K27me1K36me1" compartment="default" initialConcentration="0.0078328187288069" boundaryCondition="false" constant="false"/>
+      <species id="K27me2K36me0" name="K27me2K36me0" compartment="default" initialConcentration="0.00632744816295157" boundaryCondition="false" constant="false"/>
+      <species id="K27me0K36me3" name="K27me0K36me3" compartment="default" initialConcentration="0.0504935214807544" boundaryCondition="false" constant="false"/>
+      <species id="K27me1K36me2" name="K27me1K36me2" compartment="default" initialConcentration="0.594249755169037" boundaryCondition="false" constant="false"/>
+      <species id="K27me2K36me1" name="K27me2K36me1" compartment="default" initialConcentration="0.0143896310177379" boundaryCondition="false" constant="false"/>
+      <species id="K27me3K36me0" name="K27me3K36me0" compartment="default" initialConcentration="0.00330168411604165" boundaryCondition="false" constant="false"/>
+      <species id="K27me1K36me3" name="K27me1K36me3" compartment="default" initialConcentration="0.102748675077958" boundaryCondition="false" constant="false"/>
+      <species id="K27me2K36me2" name="K27me2K36me2" compartment="default" initialConcentration="0.0263372634996529" boundaryCondition="false" constant="false"/>
+      <species id="K27me3K36me1" name="K27me3K36me1" compartment="default" initialConcentration="0.00250831034920277" boundaryCondition="false" constant="false"/>
+      <species id="K27me2K36me3" name="K27me2K36me3" compartment="default" initialConcentration="0.00471831436002134" boundaryCondition="false" constant="false"/>
+      <species id="K27me3K36me2" name="K27me3K36me2" compartment="default" initialConcentration="0.00136041631795562" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfParameters>
-      <parameter id="inflowp" value="0.0309160767779193" constant="true"/>
-      <parameter id="k00_01" value="3.07977512445142" constant="true"/>
-      <parameter id="k00_10" value="4.29039735572565" constant="true"/>
-      <parameter id="k01_00" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k01_02" value="1.83597321270819" constant="true"/>
-      <parameter id="k01_11" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k02_01" value="0.0365191563528239" constant="true"/>
-      <parameter id="k02_03" value="0.0172219162989543" constant="true"/>
-      <parameter id="k02_12" value="0.0258535237204994" constant="true"/>
-      <parameter id="k03_02" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k03_13" value="0.0269708538387512" constant="true"/>
-      <parameter id="k10_00" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k10_11" value="999.999999501161" constant="true"/>
-      <parameter id="k10_20" value="1.0000000000005e-05" constant="true"/>
-      <parameter id="k11_01" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k11_10" value="208.897614797522" constant="true"/>
-      <parameter id="k11_12" value="7.20477305381394" constant="true"/>
-      <parameter id="k11_21" value="0.333864323977212" constant="true"/>
-      <parameter id="k12_02" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k12_11" value="0.0697010300045283" constant="true"/>
-      <parameter id="k12_13" value="0.0189710284242353" constant="true"/>
-      <parameter id="k12_22" value="0.00371718625668441" constant="true"/>
-      <parameter id="k13_03" value="1.00000000000723e-05" constant="true"/>
-      <parameter id="k13_12" value="0.103481305789201" constant="true"/>
-      <parameter id="k13_23" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k20_10" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k20_21" value="1.00000000000077e-05" constant="true"/>
-      <parameter id="k20_30" value="0.312045380417727" constant="true"/>
-      <parameter id="k21_11" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k21_20" value="0.150813306514596" constant="true"/>
-      <parameter id="k21_22" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k21_31" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k22_12" value="0.0693602284002711" constant="true"/>
-      <parameter id="k22_21" value="1.00000000000005e-05" constant="true"/>
-      <parameter id="k22_23" value="0.0501463279005419" constant="true"/>
-      <parameter id="k22_32" value="1.00000000004307e-05" constant="true"/>
-      <parameter id="k23_13" value="0.249204587936977" constant="true"/>
-      <parameter id="k23_22" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k30_20" value="1.00000000000168e-05" constant="true"/>
-      <parameter id="k30_31" value="0.567094806715041" constant="true"/>
-      <parameter id="k31_21" value="1.00000000000008e-05" constant="true"/>
-      <parameter id="k31_30" value="1.00000000152072e-05" constant="true"/>
-      <parameter id="k31_32" value="0.71559252428414" constant="true"/>
-      <parameter id="k32_22" value="1.28866373067424" constant="true"/>
-      <parameter id="k32_31" value="1.00000009388004e-05" constant="true"/>
-      <parameter id="noise" value="0.00181046840578836" constant="true"/>
-      <parameter id="K27me0K36me0_obs" value="0" constant="false"/>
-      <parameter id="K27me0K36me1_obs" value="0" constant="false"/>
-      <parameter id="K27me1K36me0_obs" value="0" constant="false"/>
-      <parameter id="K27me0K36me2_obs" value="0" constant="false"/>
-      <parameter id="K27me1K36me1_obs" value="0" constant="false"/>
-      <parameter id="K27me2K36me0_obs" value="0" constant="false"/>
-      <parameter id="K27me0K36me3_obs" value="0" constant="false"/>
-      <parameter id="K27me1K36me2_obs" value="0" constant="false"/>
-      <parameter id="K27me2K36me1_obs" value="0" constant="false"/>
-      <parameter id="K27me3K36me0_obs" value="0" constant="false"/>
-      <parameter id="K27me1K36me3_obs" value="0" constant="false"/>
-      <parameter id="K27me2K36me2_obs" value="0" constant="false"/>
-      <parameter id="K27me3K36me1_obs" value="0" constant="false"/>
-      <parameter id="K27me2K36me3_obs" value="0" constant="false"/>
-      <parameter id="K27me3K36me2_obs" value="0" constant="false"/>
-      <parameter id="inflow" value="0.0309160767779193" constant="false"/>
+      <parameter id="inflowp" name="inflowp" value="0.0309160767779193" constant="true"/>
+      <parameter id="k00_01" name="k00_01" value="3.07977512445142" constant="true"/>
+      <parameter id="k00_10" name="k00_10" value="4.29039735572565" constant="true"/>
+      <parameter id="k01_00" name="k01_00" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k01_02" name="k01_02" value="1.83597321270819" constant="true"/>
+      <parameter id="k01_11" name="k01_11" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k02_01" name="k02_01" value="0.0365191563528239" constant="true"/>
+      <parameter id="k02_03" name="k02_03" value="0.0172219162989543" constant="true"/>
+      <parameter id="k02_12" name="k02_12" value="0.0258535237204994" constant="true"/>
+      <parameter id="k03_02" name="k03_02" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k03_13" name="k03_13" value="0.0269708538387512" constant="true"/>
+      <parameter id="k10_00" name="k10_00" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k10_11" name="k10_11" value="999.999999501161" constant="true"/>
+      <parameter id="k10_20" name="k10_20" value="1.0000000000005e-05" constant="true"/>
+      <parameter id="k11_01" name="k11_01" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k11_10" name="k11_10" value="208.897614797522" constant="true"/>
+      <parameter id="k11_12" name="k11_12" value="7.20477305381394" constant="true"/>
+      <parameter id="k11_21" name="k11_21" value="0.333864323977212" constant="true"/>
+      <parameter id="k12_02" name="k12_02" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k12_11" name="k12_11" value="0.0697010300045283" constant="true"/>
+      <parameter id="k12_13" name="k12_13" value="0.0189710284242353" constant="true"/>
+      <parameter id="k12_22" name="k12_22" value="0.00371718625668441" constant="true"/>
+      <parameter id="k13_03" name="k13_03" value="1.00000000000723e-05" constant="true"/>
+      <parameter id="k13_12" name="k13_12" value="0.103481305789201" constant="true"/>
+      <parameter id="k13_23" name="k13_23" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k20_10" name="k20_10" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k20_21" name="k20_21" value="1.00000000000077e-05" constant="true"/>
+      <parameter id="k20_30" name="k20_30" value="0.312045380417727" constant="true"/>
+      <parameter id="k21_11" name="k21_11" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k21_20" name="k21_20" value="0.150813306514596" constant="true"/>
+      <parameter id="k21_22" name="k21_22" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k21_31" name="k21_31" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k22_12" name="k22_12" value="0.0693602284002711" constant="true"/>
+      <parameter id="k22_21" name="k22_21" value="1.00000000000005e-05" constant="true"/>
+      <parameter id="k22_23" name="k22_23" value="0.0501463279005419" constant="true"/>
+      <parameter id="k22_32" name="k22_32" value="1.00000000004307e-05" constant="true"/>
+      <parameter id="k23_13" name="k23_13" value="0.249204587936977" constant="true"/>
+      <parameter id="k23_22" name="k23_22" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k30_20" name="k30_20" value="1.00000000000168e-05" constant="true"/>
+      <parameter id="k30_31" name="k30_31" value="0.567094806715041" constant="true"/>
+      <parameter id="k31_21" name="k31_21" value="1.00000000000008e-05" constant="true"/>
+      <parameter id="k31_30" name="k31_30" value="1.00000000152072e-05" constant="true"/>
+      <parameter id="k31_32" name="k31_32" value="0.71559252428414" constant="true"/>
+      <parameter id="k32_22" name="k32_22" value="1.28866373067424" constant="true"/>
+      <parameter id="k32_31" name="k32_31" value="1.00000009388004e-05" constant="true"/>
+      <parameter id="inflow" name="inflow" value="0" constant="false"/>
+      <parameter id="dilution" name="dilution" value="0" constant="true"/>
     </listOfParameters>
     <listOfRules>
       <assignmentRule variable="inflow">
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <apply>
-            <minus/>
+            <times/>
             <ci> inflowp </ci>
-            <apply>
-              <times/>
-              <ci> inflowp </ci>
-              <piecewise>
-                <piece>
-                  <cn type="integer"> 0 </cn>
-                  <apply>
-                    <lt/>
-                    <csymbol encoding="text" definitionURL="http://www.sbml.org/sbml/symbols/time"> time </csymbol>
-                    <cn type="integer"> 0 </cn>
-                  </apply>
-                </piece>
-                <otherwise>
-                  <cn type="integer"> 1 </cn>
-                </otherwise>
-              </piecewise>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me0K36me0_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me0K36me0 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me0K36me1_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me0K36me1 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me1K36me0_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me1K36me0 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me0K36me2_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me0K36me2 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me1K36me1_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me1K36me1 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me2K36me0_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me2K36me0 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me0K36me3_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me0K36me3 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me1K36me2_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me1K36me2 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me2K36me1_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me2K36me1 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me3K36me0_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me3K36me0 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me1K36me3_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me1K36me3 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me2K36me2_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me2K36me2 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me3K36me1_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me3K36me1 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me2K36me3_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me2K36me3 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
-          </apply>
-        </math>
-      </assignmentRule>
-      <assignmentRule variable="K27me3K36me2_obs">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <apply>
-            <divide/>
-            <ci> K27me3K36me2 </ci>
-            <apply>
-              <plus/>
-              <ci> K27me0K36me0 </ci>
-              <ci> K27me0K36me1 </ci>
-              <ci> K27me0K36me2 </ci>
-              <ci> K27me0K36me3 </ci>
-              <ci> K27me1K36me0 </ci>
-              <ci> K27me1K36me1 </ci>
-              <ci> K27me1K36me2 </ci>
-              <ci> K27me1K36me3 </ci>
-              <ci> K27me2K36me0 </ci>
-              <ci> K27me2K36me1 </ci>
-              <ci> K27me2K36me2 </ci>
-              <ci> K27me2K36me3 </ci>
-              <ci> K27me3K36me0 </ci>
-              <ci> K27me3K36me1 </ci>
-              <ci> K27me3K36me2 </ci>
-            </apply>
+            <ci> dilution </ci>
           </apply>
         </math>
       </assignmentRule>
@@ -516,7 +1562,15 @@
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> inflow </ci>
+            <apply>
+              <times/>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_0 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
+            </apply>
           </math>
         </kineticLaw>
       </reaction>
@@ -531,8 +1585,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me0 </ci>
-              <ci> k00_01 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_1 </ci>
+                <ci> K27me0K36me0 </ci>
+                <ci> default </ci>
+                <ci> k00_01 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -548,8 +1607,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me1 </ci>
-              <ci> k01_00 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_2 </ci>
+                <ci> K27me0K36me1 </ci>
+                <ci> default </ci>
+                <ci> k01_00 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -565,8 +1629,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me0 </ci>
-              <ci> k00_10 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_3 </ci>
+                <ci> K27me0K36me0 </ci>
+                <ci> default </ci>
+                <ci> k00_10 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -582,8 +1651,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me0 </ci>
-              <ci> k10_00 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_4 </ci>
+                <ci> K27me1K36me0 </ci>
+                <ci> default </ci>
+                <ci> k10_00 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -599,8 +1673,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me0 </ci>
-              <ci> k10_11 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_5 </ci>
+                <ci> K27me1K36me0 </ci>
+                <ci> default </ci>
+                <ci> k10_11 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -616,8 +1695,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me1 </ci>
-              <ci> k11_10 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_6 </ci>
+                <ci> K27me1K36me1 </ci>
+                <ci> default </ci>
+                <ci> k11_10 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -633,8 +1717,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me1 </ci>
-              <ci> k01_11 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_7 </ci>
+                <ci> K27me0K36me1 </ci>
+                <ci> default </ci>
+                <ci> k01_11 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -650,8 +1739,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me1 </ci>
-              <ci> k11_01 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_8 </ci>
+                <ci> K27me1K36me1 </ci>
+                <ci> default </ci>
+                <ci> k11_01 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -667,8 +1761,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me1 </ci>
-              <ci> k01_02 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_9 </ci>
+                <ci> K27me0K36me1 </ci>
+                <ci> default </ci>
+                <ci> k01_02 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -684,8 +1783,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me2 </ci>
-              <ci> k02_01 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_10 </ci>
+                <ci> K27me0K36me2 </ci>
+                <ci> default </ci>
+                <ci> k02_01 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -701,8 +1805,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me0 </ci>
-              <ci> k10_20 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_11 </ci>
+                <ci> K27me1K36me0 </ci>
+                <ci> default </ci>
+                <ci> k10_20 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -718,8 +1827,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me0 </ci>
-              <ci> k20_10 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_12 </ci>
+                <ci> K27me2K36me0 </ci>
+                <ci> default </ci>
+                <ci> k20_10 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -735,8 +1849,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me2 </ci>
-              <ci> k02_12 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_13 </ci>
+                <ci> K27me0K36me2 </ci>
+                <ci> default </ci>
+                <ci> k02_12 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -752,8 +1871,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me2 </ci>
-              <ci> k12_02 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_14 </ci>
+                <ci> K27me1K36me2 </ci>
+                <ci> default </ci>
+                <ci> k12_02 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -769,8 +1893,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me0 </ci>
-              <ci> k20_21 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_15 </ci>
+                <ci> K27me2K36me0 </ci>
+                <ci> default </ci>
+                <ci> k20_21 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -786,8 +1915,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me1 </ci>
-              <ci> k21_20 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_16 </ci>
+                <ci> K27me2K36me1 </ci>
+                <ci> default </ci>
+                <ci> k21_20 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -803,8 +1937,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me2 </ci>
-              <ci> k02_03 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_17 </ci>
+                <ci> K27me0K36me2 </ci>
+                <ci> default </ci>
+                <ci> k02_03 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -820,8 +1959,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me3 </ci>
-              <ci> k03_02 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_18 </ci>
+                <ci> K27me0K36me3 </ci>
+                <ci> default </ci>
+                <ci> k03_02 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -837,8 +1981,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me0 </ci>
-              <ci> k20_30 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_19 </ci>
+                <ci> K27me2K36me0 </ci>
+                <ci> default </ci>
+                <ci> k20_30 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -854,8 +2003,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me0 </ci>
-              <ci> k30_20 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_20 </ci>
+                <ci> K27me3K36me0 </ci>
+                <ci> default </ci>
+                <ci> k30_20 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -871,8 +2025,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me1 </ci>
-              <ci> k11_12 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_21 </ci>
+                <ci> K27me1K36me1 </ci>
+                <ci> default </ci>
+                <ci> k11_12 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -888,8 +2047,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me2 </ci>
-              <ci> k12_11 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_22 </ci>
+                <ci> K27me1K36me2 </ci>
+                <ci> default </ci>
+                <ci> k12_11 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -905,8 +2069,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me1 </ci>
-              <ci> k11_21 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_23 </ci>
+                <ci> K27me1K36me1 </ci>
+                <ci> default </ci>
+                <ci> k11_21 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -922,8 +2091,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me1 </ci>
-              <ci> k21_11 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_24 </ci>
+                <ci> K27me2K36me1 </ci>
+                <ci> default </ci>
+                <ci> k21_11 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -939,8 +2113,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me2 </ci>
-              <ci> k12_22 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_25 </ci>
+                <ci> K27me1K36me2 </ci>
+                <ci> default </ci>
+                <ci> k12_22 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -956,8 +2135,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me2 </ci>
-              <ci> k22_12 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_26 </ci>
+                <ci> K27me2K36me2 </ci>
+                <ci> default </ci>
+                <ci> k22_12 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -973,8 +2157,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me1 </ci>
-              <ci> k21_22 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_27 </ci>
+                <ci> K27me2K36me1 </ci>
+                <ci> default </ci>
+                <ci> k21_22 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -990,8 +2179,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me2 </ci>
-              <ci> k22_21 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_28 </ci>
+                <ci> K27me2K36me2 </ci>
+                <ci> default </ci>
+                <ci> k22_21 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1007,8 +2201,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me2 </ci>
-              <ci> k22_23 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_29 </ci>
+                <ci> K27me2K36me2 </ci>
+                <ci> default </ci>
+                <ci> k22_23 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1024,8 +2223,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me3 </ci>
-              <ci> k23_22 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_30 </ci>
+                <ci> K27me2K36me3 </ci>
+                <ci> default </ci>
+                <ci> k23_22 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1041,8 +2245,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me2 </ci>
-              <ci> k22_32 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_31 </ci>
+                <ci> K27me2K36me2 </ci>
+                <ci> default </ci>
+                <ci> k22_32 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1058,8 +2267,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me2 </ci>
-              <ci> k32_22 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_32 </ci>
+                <ci> K27me3K36me2 </ci>
+                <ci> default </ci>
+                <ci> k32_22 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1075,8 +2289,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me0 </ci>
-              <ci> k30_31 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_33 </ci>
+                <ci> K27me3K36me0 </ci>
+                <ci> default </ci>
+                <ci> k30_31 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1092,8 +2311,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me1 </ci>
-              <ci> k31_30 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_34 </ci>
+                <ci> K27me3K36me1 </ci>
+                <ci> default </ci>
+                <ci> k31_30 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1109,8 +2333,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me3 </ci>
-              <ci> k03_13 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_35 </ci>
+                <ci> K27me0K36me3 </ci>
+                <ci> default </ci>
+                <ci> k03_13 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1126,8 +2355,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me3 </ci>
-              <ci> k13_03 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_36 </ci>
+                <ci> K27me1K36me3 </ci>
+                <ci> default </ci>
+                <ci> k13_03 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1143,8 +2377,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me2 </ci>
-              <ci> k12_13 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_37 </ci>
+                <ci> K27me1K36me2 </ci>
+                <ci> default </ci>
+                <ci> k12_13 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1160,8 +2399,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me3 </ci>
-              <ci> k13_12 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_38 </ci>
+                <ci> K27me1K36me3 </ci>
+                <ci> default </ci>
+                <ci> k13_12 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1177,8 +2421,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me1 </ci>
-              <ci> k21_31 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_39 </ci>
+                <ci> K27me2K36me1 </ci>
+                <ci> default </ci>
+                <ci> k21_31 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1194,8 +2443,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me1 </ci>
-              <ci> k31_21 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_40 </ci>
+                <ci> K27me3K36me1 </ci>
+                <ci> default </ci>
+                <ci> k31_21 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1211,8 +2465,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me1 </ci>
-              <ci> k31_32 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_41 </ci>
+                <ci> K27me3K36me1 </ci>
+                <ci> default </ci>
+                <ci> k31_32 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1228,8 +2487,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me2 </ci>
-              <ci> k32_31 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_42 </ci>
+                <ci> K27me3K36me2 </ci>
+                <ci> default </ci>
+                <ci> k32_31 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1245,8 +2509,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me3 </ci>
-              <ci> k13_23 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_43 </ci>
+                <ci> K27me1K36me3 </ci>
+                <ci> default </ci>
+                <ci> k13_23 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1262,8 +2531,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me3 </ci>
-              <ci> k23_13 </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_44 </ci>
+                <ci> K27me2K36me3 </ci>
+                <ci> default </ci>
+                <ci> k23_13 </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1276,8 +2550,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me0 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_45 </ci>
+                <ci> K27me0K36me0 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1290,8 +2569,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me1 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_46 </ci>
+                <ci> K27me0K36me1 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1304,8 +2588,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me0 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_47 </ci>
+                <ci> K27me1K36me0 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1318,8 +2607,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me2 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_48 </ci>
+                <ci> K27me0K36me2 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1332,8 +2626,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me1 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_49 </ci>
+                <ci> K27me1K36me1 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1346,8 +2645,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me0 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_50 </ci>
+                <ci> K27me2K36me0 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1360,8 +2664,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me0K36me3 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_51 </ci>
+                <ci> K27me0K36me3 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1374,8 +2683,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me2 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_52 </ci>
+                <ci> K27me1K36me2 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1388,8 +2702,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me1 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_53 </ci>
+                <ci> K27me2K36me1 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1402,8 +2721,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me0 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_54 </ci>
+                <ci> K27me3K36me0 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1416,8 +2740,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me1K36me3 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_55 </ci>
+                <ci> K27me1K36me3 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1430,8 +2759,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me2 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_56 </ci>
+                <ci> K27me2K36me2 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1444,8 +2778,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me1 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_57 </ci>
+                <ci> K27me3K36me1 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1458,8 +2797,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me2K36me3 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_58 </ci>
+                <ci> K27me2K36me3 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
@@ -1472,8 +2816,13 @@
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
-              <ci> K27me3K36me2 </ci>
-              <ci> inflow </ci>
+              <ci> default </ci>
+              <apply>
+                <ci> Function_for_v_59 </ci>
+                <ci> K27me3K36me2 </ci>
+                <ci> default </ci>
+                <ci> inflow </ci>
+              </apply>
             </apply>
           </math>
         </kineticLaw>
