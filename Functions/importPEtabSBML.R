@@ -202,7 +202,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   } else myobj <- normL2(mydata, myg*myx*myp0)
   if(is.null(assign_obj)){obj <<- myobj} else {cat("Manual assignment not yet provided.")}
   
-  mytimes <- seq(0,max(mydata[[1]]$time), len=501)
+  mytimes <- seq(0,max(do.call(c, lapply(1:length(mydata), function(i) max(mydata[[i]]$time)))), len=501)
   if(is.null(assign_times)){times <<- mytimes} else {cat("Manual assignment not yet provided.")}
   
   if(!files_loaded){
@@ -212,6 +212,9 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   }
   
   endtime <- Sys.time()
-  cat(paste0(modelname, " imported in ",as.character(format(as.numeric(endtime-starttime), digits=3)), " seconds.\n"))
+  mytimediff <- as.numeric(difftime(endtime, starttime, unit="secs"))
+  if(mytimediff > 3600) cat(paste0(modelname, " imported in ",as.character(format(as.numeric(difftime(endtime, starttime, unit="hours")), digits=3)), " hours.\n")) else
+    if(mytimediff > 60) cat(paste0(modelname, " imported in ",as.character(format(as.numeric(difftime(endtime, starttime, unit="mins")), digits=3)), " minutes.\n")) else
+      cat(paste0(modelname, " imported in ",as.character(format(as.numeric(difftime(endtime, starttime, unit="secs")), digits=3)), " seconds.\n"))
   return(modelname)
 }
