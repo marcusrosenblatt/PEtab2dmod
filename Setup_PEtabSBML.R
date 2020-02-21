@@ -24,5 +24,5 @@ source("Functions/plotPEtabSBML.R")
 #8 Crauste_CellSystems2017
 #9 Schwen_PONE2014
 
-importPEtabSBML(modelname = "Lucarelli_CellSystems2018") 
+importPEtabSBML(modelname = "Lucarelli_CellSystems2018", compile = TRUE) 
 plotPEtabSBML(name%in%names(observables))

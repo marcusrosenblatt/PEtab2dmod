@@ -48,6 +48,16 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(!file.exists(parameter_file)){cat(paste0("The file ",mywd,parameter_file, " does not exist. Please check spelling or provide the file name via the parameter_file argument.")); return(NULL)}
   
   
+  ## Load shared objects --------------------
+  
+  setwd(paste0(mywd,"/CompiledObjects/"))
+  files_loaded <- FALSE
+  if(compile == FALSE & file.exists(paste0(modelname,".RData"))){
+    load(paste0(modelname,".RData"))
+    files_loaded <- TRUE
+  } 
+  setwd(mywd)
+  
   ## Model Definition - Equations --------------------
   
   cat("Reading SBML file ...\n")
@@ -63,14 +73,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   myobservables <- getObservablesSBML(observable_file)
   if(is.null(assign_observables)){observables <<- myobservables} else {cat("Manual assignment not yet provided.")}
   
-  setwd(paste0(mywd,"/CompiledObjects/"))
-  files_loaded <- FALSE
-  if(compile == FALSE & file.exists(paste0(modelname,".RData"))){
-    load(paste0(modelname,".RData"))
-    files_loaded <- TRUE
-  } 
-  setwd(mywd)
-  
+
   cat("Compiling observable function ...\n")
   if(!files_loaded) {
     setwd(paste0(mywd,"/CompiledObjects/"))
