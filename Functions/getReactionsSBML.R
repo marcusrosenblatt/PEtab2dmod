@@ -43,7 +43,11 @@ getReactionsSBML <- function(model){
       Productstring <- paste0(Productstring, " + ",
                               paste0(eq$getProduct(s)$getStoichiometry(), "*", eq$getProduct(s)$getSpecies()))
     }
-    rate <- gsub("pow", "", gsub(", ", "**", eq$getKineticLaw()$getFormula())) # to be double checked  # works for Borghans now
+    formula <- eq$getKineticLaw()$getFormula()
+    if(str_detect(formula, "Function"))
+      rate <- formula # to be double checked  # works for Borghans now
+    else 
+      rate <- gsub("pow", "", gsub(", ", "**", formula))
     #rate <- replaceOperation("pow", "**", eq$getKineticLaw()$getFormula())
     if(!is.null(compartments)){
       if(Reduce("|", str_detect(rate, unique(compartments)))){
@@ -53,14 +57,37 @@ getReactionsSBML <- function(model){
     }
     reactions <- reactions %>% addReaction(Reactantstring, Productstring, rate)
   }
+  reactions$rates <- gsub(" ","",reactions$rates)
+  # import functions
+  N_fundefs <- m$getNumFunctionDefinitions()
+  if (N_fundefs > 0){
+    for (fun in 0:(N_fundefs-1)){
+      mymath <- m$getFunctionDefinition(fun)$getMath()
+      # print(fun)
+      string <- function_def_to_string(m$getFunctionDefinition(fun)) %>% gsub(" ","",.)
+      # print(string)
+      first <- strsplit(string, "=")[[1]][1]
+      second <- strsplit(string, "=")[[1]][2]
+      # print(first)
+      # print(second)
+      first <- gsub("\\(", "\\\\\\(", first)
+      second <- gsub("\\(", "\\\\\\(", second)
+      reactions$rates <- gsub(first,
+                              second, reactions$rates)  # substitute m$getRule(0)$getVariable() by m$getRule(0)$getFormula()
+      #print(formulaToL3String(mymath$getChild(mymath$getNumChildren()-1)))
+    }
+  }
+  
   # import inputs
   N_rules <- m$getNumRules()
   if (N_rules > 0){
     for (rule in 0:(N_rules-1)){
+      # substitute m$getRule(0)$getVariable() by m$getRule(0)$getFormula()
       reactions$rates <- replaceSymbols(m$getRule(rule)$getVariable(),
-                                        paste0("(",m$getRule(rule)$getFormula(), ")"), reactions$rates)  # substitute m$getRule(0)$getVariable() by m$getRule(0)$getFormula()
+                                        paste0("(",m$getRule(rule)$getFormula(), ")"), reactions$rates)  
     }
   }
+  
   
   # replace function based inputs by events (done in reactions)
   for(fun in c("piecewise")){
@@ -118,4 +145,39 @@ getReactionsSBML <- function(model){
   return(list(reactions=reactions, events=events))
 }
 
+
+## function from Frank
+function_def_to_string <- function(fun)
+{
+  if (is.null(fun)) return;
+  id <- fun$getId()
+  
+  math <- fun$getMath()
+  if (is.null(math)) return;
+  
+  # the function will be of the form lambda(a, b, formula)
+  # so the last child of the AST_Node is the actual math everything in front of it 
+  # the arguments
+  #
+  # So to generate the desired output function_definition_id(args) = math
+  # we use: 
+  
+  
+  num_children <- math$getNumChildren()
+  
+  result <- paste(id, '(', sep="")
+  for (i in 1:(num_children-1) ) # this leaves out the last one
+  {
+    result <- paste(result, libSBML::formulaToL3String(math$getChild(i-1)), sep="")
+    
+    if (i < (num_children-1))
+      result <- paste(result, ', ', sep="")
+    
+  }
+  
+  result <- paste(result, ') = ', libSBML::formulaToL3String(math$getChild(num_children - 1)), sep="")
+  
+  return (result)
+  
+}
 
