@@ -55,16 +55,21 @@ getConditionsSBML <- function(conditions,data){
     for (obs in observables) 
     {
       col_pars <- NULL
+      #print(obs)
       data_obs <- subset(mydata, observableId == obs)
       for (condition in condis_obs) 
       {
+        #print(condition)
         if(condition %in% data_obs$simulationConditionId){
           noise_par <- subset(data_obs, simulationConditionId == condition)$noiseParameters %>% unique() %>% as.character()
           col_pars <- c(col_pars, noise_par)
+        } else {
+          col_pars <- c(col_pars, NA)
         }
       } 
+      #print(col_pars)
       col_name <- paste0("noiseParameter1_",obs)
-      condition.grid_noise[col_name] <- col_pars %>% unique()
+      condition.grid_noise[col_name] <- col_pars #%>% unique()
     }
     mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")) 
     # avoid warning if not all conditions are observed
