@@ -16,17 +16,19 @@ getDataPEtabSBML <- function(data, observables){
   errors <- NULL
   if(!mydata$noiseParameters %>% is.numeric) {
     # define errors
-    errors <- mydata$noiseParameters %>% levels
+    errors <- myobs$noiseFormula %>% as.character()
     which_err <- c(1:length(obs))
     if(length(errors) != length(obs)) errors <- rep(errors,length(obs))
     names(errors) <- obs[which_err]
     # set fixed sigmas to NA
     mydata$noiseParameters <- NA
   }
-  #rename observables with _obs
+  
+  # rename observables with _obs
   obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
   mydata$observableId <- obs
   if(!is.null(errors)) names(errors) <- paste0(names(errors), "_obs")
+  
   # select necessary data columns
   data <- data.frame(name = mydata$observableId, time = mydata$time, 
                      value = mydata$measurement, sigma = mydata$noiseParameters,

@@ -25,5 +25,5 @@ source("Functions/plotPEtabSBML.R")
 #9 Schwen_PONE2014
 #10 Raia_CancerResearch2011
 
-importPEtabSBML(modelname = "Zheng_PNAS2012", compile = TRUE) 
+importPEtabSBML(modelname = "Raia_CancerResearch2011", compile = TRUE) 
 plotPEtabSBML(name%in%names(observables))

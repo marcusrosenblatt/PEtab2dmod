@@ -20,9 +20,11 @@ getConditionsSBML <- function(conditions,data){
   # replace "" by NA
   mydata$observableParameters <- mydata$observableParameters %>% as.character()
   mydata <- mydata %>% mutate(observableParameters = ifelse(observableParameters == "",NA,observableParameters))
+  mydata$noiseParameters <- mydata$noiseParameters %>% as.character()
+  mydata <- mydata %>% mutate(noiseParameters = ifelse(noiseParameters == "",NA,noiseParameters))
   
   # generate columns for observableParameters
-  if(!is.numeric(mydata$observableParameters) & !Reduce("&",is.na(mydata$observableParameters))) 
+  if(!is.numeric(mydata$observableParameters)) 
     {
     condition.grid_obs <- data.frame(conditionId = condis_obs)
     for (obs in observables) 
