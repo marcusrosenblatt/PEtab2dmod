@@ -48,7 +48,7 @@ getConditionsSBML <- function(conditions,data){
   }
   
   # generate columns for noiseParameters
-  if(!mydata$noiseParameters %>% is.numeric  & !Reduce("&",is.na(mydata$noiseParameters))) 
+  if(!is.numeric(mydata$noiseParameters)  & !Reduce("&",is.na(mydata$noiseParameters))) 
   {
     if(exists("mycondition.grid")) {condition.grid_orig <- mycondition.grid}
     condition.grid_noise <- data.frame(conditionId = condis_obs)
@@ -62,14 +62,20 @@ getConditionsSBML <- function(conditions,data){
         #print(condition)
         if(condition %in% data_obs$simulationConditionId){
           noise_par <- subset(data_obs, simulationConditionId == condition)$noiseParameters %>% unique() %>% as.character()
-          col_pars <- c(col_pars, noise_par)
-        } else {
-          col_pars <- c(col_pars, NA)
+          
+          # one or more noise parameters?
+          if(str_detect(noise_par,";")){
+            myobspars <- strsplit(noise_par,";")[[1]]
+            for(i in 1:length(myobspars)) {
+              col_pars <- c(col_pars, myobspars[i])
+            }
+          } else col_pars <- c(col_pars, noise_par)
         }
       } 
-      #print(col_pars)
-      col_name <- paste0("noiseParameter1_",obs)
-      condition.grid_noise[col_name] <- col_pars #%>% unique()
+      for (par in 1:length(col_pars)) {
+        col_name <- paste0("noiseParameter",par,"_",obs)
+        condition.grid_noise[col_name] <- col_pars[par]
+      }
     }
     mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_noise, by = "conditionId")) 
     # avoid warning if not all conditions are observed

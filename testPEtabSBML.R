@@ -45,3 +45,5 @@ testPEtabSBML <- function(timelimit = 100,
       } else cat(blue("Time limit for",model, "exceeded."))
   }
 }
+
+testPEtabSBML()
