@@ -17,6 +17,10 @@ getConditionsSBML <- function(conditions,data){
   # check which observables exist
   observables <- mydata$observableId %>% unique()
   
+  # replace "" by NA
+  mydata$observableParameters <- mydata$observableParameters %>% as.character()
+  mydata <- mydata %>% mutate(observableParameters = ifelse(observableParameters == "",NA,observableParameters))
+  
   # generate columns for observableParameters
   if(!is.numeric(mydata$observableParameters) & !Reduce("&",is.na(mydata$observableParameters))) 
     {
@@ -29,13 +33,15 @@ getConditionsSBML <- function(conditions,data){
         {
         if(condition %in% data_obs$simulationConditionId){
           obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
-          # one or more observable parameters?
-          if(str_detect(obs_par,";")){
-            myobspars <- strsplit(obs_par,";")[[1]]
-            for(i in 1:length(myobspars)) {
-              col_pars <- c(col_pars, myobspars[i])
-            }
-          } else col_pars <- c(col_pars, obs_par)
+          if(!is.na(obs_par)){
+            # one or more observable parameters?
+            if(str_detect(obs_par,";")){
+              myobspars <- strsplit(obs_par,";")[[1]]
+              for(i in 1:length(myobspars)) {
+                col_pars <- c(col_pars, myobspars[i])
+              }
+            } else col_pars <- c(col_pars, obs_par)
+          }
         }
       } 
       for (par in 1:length(col_pars)) {
