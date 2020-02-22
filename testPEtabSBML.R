@@ -29,21 +29,47 @@ try_with_time_limit <- function(expr, cpu = Inf, elapsed = Inf){
   if(inherits(y, "try-error")) NULL else y 
 }
 
-testPEtabSBML <- function(timelimit = 100, 
-                          models=c("Boehm_JProteomeRes2014", "Fujita_SciSignal2010", "Zheng_PNAS2012")){
+
+testPEtabSBML <- function(timelimit = 1000, 
+                          models=c("Boehm_JProteomeRes2014",
+                                   "Fujita_SciSignal2010",
+                                   "Borghans_BiophysChem1997",
+                                   "Elowitz_Nature2000",
+                                   "Sneyd_PNAS2002",
+                                   "Crauste_CellSystems2017",
+                                   "Schwen_PONE2014",
+                                   "Raia_CancerResearch2011",
+                                   "Zheng_PNAS2012"
+                                   #"Lucarelli_CellSystems2018",
+                          )){
+  cat(green("Start test function..."))
+  teststarttime <- Sys.time()
   for(model in models){
+    cat(green(paste0("Testing ", model, "\n")))
     fgh <- try_with_time_limit(
       {test <- try(importPEtabSBML(model, compile=T), silent = T)
       if(inherits(test, "try-error")) "import error" else test}
       , timelimit)
-    if(fgh=="import error") cat(blue("Import error in", model)) else
-      if(!is.null(fgh)){
-        pdf(file = paste0("Test/plot_",model,".pdf"))
+    if(fgh=="import error") cat(orange("Import error or time limit exceeded for", model)) else {
+        testobj <- obj(pouter)
+        if(is.numeric(testobj$value)) cat(green("Calculation of objective function successful.\n")) else cat(red("Warning: obj(pouter) is not numeric.\n"))
+        pdf(file = paste0("Test/",model,"_plotAll.pdf"))
         plotPEtabSBML()
         dev.off()
-        cat(green("Import and plot test for ",fgh, " successful!\n"))
-      } else cat(blue("Time limit for",model, "exceeded."))
+        pdf(file = paste0("Test/",model,"_plotTargetsObserved.pdf"))
+        plotPEtabSBML(name%in%names(observables))
+        dev.off()
+        pdf(file = paste0("Test/",model,"_plotConditionsObserved.pdf"))
+        plotPEtabSBML(condition%in%names(mydata))
+        dev.off()
+        cat(green("Import and plot test for ",fgh, " successful!\n\n\n"))
+    }
   }
+  testendtime <- Sys.time()
+  mytimediff <- as.numeric(difftime(testendtime, teststarttime, unit="secs"))
+  if(mytimediff > 3600) cat(green(paste0("Import done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="hours")), digits=3)), " hours.\n"))) else
+    if(mytimediff > 60) cat(green(paste0("Import done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="mins")), digits=3)), " minutes.\n"))) else
+      cat(green(paste0(modelname, "Import done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="secs")), digits=3)), " seconds.\n")))
 }
 
 testPEtabSBML()
