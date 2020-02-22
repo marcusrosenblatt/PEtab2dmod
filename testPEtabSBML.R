@@ -39,7 +39,8 @@ testPEtabSBML <- function(timelimit = 1000,
                                    "Crauste_CellSystems2017",
                                    "Schwen_PONE2014",
                                    "Raia_CancerResearch2011",
-                                   "Zheng_PNAS2012"
+                                   "Zheng_PNAS2012",
+                                   "Bachmann_MSB2011"
                                    #"Lucarelli_CellSystems2018",
                           )){
   cat(green("Start test function..."))
