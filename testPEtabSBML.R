@@ -43,7 +43,7 @@ testPEtabSBML <- function(timelimit = 1000,
                                    "Bachmann_MSB2011"
                                    #"Lucarelli_CellSystems2018",
                           )){
-  cat(green("Start test function..."))
+  cat(green("Start test function...\n"))
   teststarttime <- Sys.time()
   for(model in models){
     cat(green(paste0("Testing ", model, "\n")))
@@ -51,7 +51,7 @@ testPEtabSBML <- function(timelimit = 1000,
       {test <- try(importPEtabSBML(model, compile=T), silent = T)
       if(inherits(test, "try-error")) "import error" else test}
       , timelimit)
-    if(fgh=="import error") cat(orange("Import error or time limit exceeded for", model)) else {
+    if(fgh=="import error") cat(magenta("Import error or time limit exceeded for", model, "\n")) else {
         testobj <- obj(pouter)
         if(is.numeric(testobj$value)) cat(green("Calculation of objective function successful.\n")) else cat(red("Warning: obj(pouter) is not numeric.\n"))
         pdf(file = paste0("Test/",model,"_plotAll.pdf"))

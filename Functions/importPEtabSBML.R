@@ -50,6 +50,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   ## Load shared objects --------------------
   
+  dir.create(paste0(mywd,"/CompiledObjects/"), showWarnings = FALSE)
   setwd(paste0(mywd,"/CompiledObjects/"))
   files_loaded <- FALSE
   if(compile == FALSE & file.exists(paste0(modelname,".RData"))){
