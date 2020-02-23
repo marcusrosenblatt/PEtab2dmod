@@ -13,6 +13,7 @@ source("Functions/getDataPEtabSBML.R")
 source("Functions/getInitialsSBML.R")
 source("Functions/importPEtabSBML.R")
 source("Functions/plotPEtabSBML.R")
+source("Functions/fitModelPEtabSBML.R")
 
 ## Import model--------------------
 #1 Boehm_JProteomeRes2014 
@@ -56,7 +57,7 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
         if(testFit){
           myframe <- fitModelPEtabSBML()
           if(is.parframe(myframe) & nrow(myframe) > 0)
-            if(is.numeric(obj(myframe[1,]))) cat(green("Fit test successful.\n")) else cat(red("Warning: obj(myframe) is not numeric.\n"))
+            if(is.numeric(obj(myframe[1,])$value)) cat(green("Fit test successful.\n")) else cat(red("Warning: obj(myframe) is not numeric.\n"))
         }
         pdf(file = paste0("Test/",model,"_plotAll.pdf"))
         plotPEtabSBML()
