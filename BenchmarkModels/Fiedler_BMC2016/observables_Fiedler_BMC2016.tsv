@@ -1,0 +1,3 @@
+observableId	observableName	observableFormula	noiseFormula	observableTransformation	noiseDistribution
+pErk		pERK * observableParameter1_pErk	noiseParameter1_pErk	lin	normal
+pMek		pMEK * observableParameter1_pMek	noiseParameter1_pMek	lin	normal
