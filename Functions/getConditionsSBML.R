@@ -29,27 +29,28 @@ getConditionsSBML <- function(conditions,data){
     condition.grid_obs <- data.frame(conditionId = condis_obs)
     for (obs in observables) 
       {
-      col_pars <- NULL
       data_obs <- subset(mydata, observableId == obs)
       for (condition in condis_obs) 
         {
         if(condition %in% data_obs$simulationConditionId){
+          row_pars <- NULL
           obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
           if(!is.na(obs_par)){
             # one or more observable parameters?
             if(str_detect(obs_par,";")){
               myobspars <- strsplit(obs_par,";")[[1]]
               for(i in 1:length(myobspars)) {
-                col_pars <- c(col_pars, myobspars[i])
+                row_pars <- c(row_pars, myobspars[i])
               }
-            } else col_pars <- c(col_pars, obs_par)
+            } else row_pars <- c(row_pars, obs_par)
+          }
+          if(!is.null(row_pars)) for (par in 1:length(row_pars)) {
+            col_name <- paste0("observableParameter",par,"_",obs)
+            condition.grid_obs[which(condition.grid_obs$conditionId==condition),col_name] <- row_pars[par]
           }
         }
       } 
-      for (par in 1:length(col_pars)) {
-        col_name <- paste0("observableParameter",par,"_",obs)
-        condition.grid_obs[col_name] <- col_pars[par]
-      }
+      
     }
     mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId"))
     # avoid warning if not all conditions are observed
@@ -95,6 +96,12 @@ getConditionsSBML <- function(conditions,data){
   
   # check if all conditions are observed
   if(nrow(mycondition.grid) < nrow(condition.grid_orig)) print("There exist non-observed conditions!")
+  
+  for(i in 1:nrow(mycondition.grid)){
+    for(j in 1:ncol(mycondition.grid)){
+      if(is.na(mycondition.grid[i,j])) mycondition.grid[i,j] <- "1"
+    }
+  }
 
   return(mycondition.grid)
 }

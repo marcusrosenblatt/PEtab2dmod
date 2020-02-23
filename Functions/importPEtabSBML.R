@@ -144,20 +144,20 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   trafo <- replaceSymbols(names(myconstraints), myconstraints, trafo)
   
   # Generate condition.grid
-  condition.grid <- getConditionsSBML(conditions = condition_file, data = data_file) 
-  condi_pars <- names(condition.grid)[!names(condition.grid) %in% c("conditionName")]
-  if(is.null(assign_condition.grid)){condition.grid <<- condition.grid} else {cat("Manual assignment not yet provided.")}
+  mycondition.grid <- getConditionsSBML(conditions = condition_file, data = data_file) 
+  condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName")]
+  if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
   
   # branch trafo for different conditions
   # set event initial to 0
-  mytrafoL <- branch(trafo, table=condition.grid)
+  mytrafoL <- branch(trafo, table=mycondition.grid)
   mytrafoL <- repar("x~0", mytrafoL , x = unique(myevents$var))  
   
   # condition-specific assignment of parameters from condition grid
   if(length(condi_pars) > 0){
     for (j in 1:length(names(mytrafoL))) {
       for (i in 1:length(condi_pars)) {
-        mytrafoL[[j]] <- repar(x~y, mytrafoL[[j]], x=condi_pars[i], y=condition.grid[j,i+1])
+        mytrafoL[[j]] <- repar(x~y, mytrafoL[[j]], x=condi_pars[i], y=mycondition.grid[j,i+1])
       }
     }
   }
@@ -198,9 +198,9 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   common <- intersect(names(mypouter),names(myfit_values))
   mypouter[common] <- myfit_values[common]
-  attr(mypouter, "parscales") <- parscales
-  attr(mypouter, "lowerBound") <- attr(myfit_values,"lowerBound")
-  attr(mypouter, "upperBound") <- attr(myfit_values,"upperBound")
+  attr(mypouter, "parscales") <- parscales[which(names(myfit_values)%in%names(mypouter))]
+  attr(mypouter, "lowerBound") <- attr(myfit_values,"lowerBound")[which(names(myfit_values)%in%names(mypouter))]
+  attr(mypouter, "upperBound") <- attr(myfit_values,"upperBound")[which(names(myfit_values)%in%names(mypouter))]
   if(is.null(assign_pouter)){pouter <<- mypouter} else {cat("Manual assignment not yet provided.")}
   
   

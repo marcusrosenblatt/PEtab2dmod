@@ -58,6 +58,7 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
           myframe <- fitModelPEtabSBML()
           if(is.parframe(myframe) & nrow(myframe) > 0)
             if(is.numeric(obj(myframe[1,])$value)) cat(green("Fit test successful.\n")) else cat(red("Warning: obj(myframe) is not numeric.\n"))
+          else cat(red("Warning: Fit test not successful..\n"))
         }
         pdf(file = paste0("Test/",model,"_plotAll.pdf"))
         plotPEtabSBML()
