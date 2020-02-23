@@ -5,7 +5,7 @@
 #' @param data PEtab data file as .tsv
 #' @param observables observables as eqnvec
 #'   
-#' @return data as data list and errors (if required) as a named vector.
+#' @return data as data list and errors (if required) as eqnvec.
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
 #'   
@@ -20,14 +20,15 @@ getDataPEtabSBML <- function(data, observables){
     which_err <- c(1:length(obs))
     if(length(errors) != length(obs)) errors <- rep(errors,length(obs))
     names(errors) <- obs[which_err]
+    errors <- as.eqnvec(errors)
     # set fixed sigmas to NA
     mydata$noiseParameters <- NA
   }
   
-  # rename observables with _obs
-  obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
-  mydata$observableId <- obs
-  if(!is.null(errors)) names(errors) <- paste0(names(errors), "_obs")
+  # # rename observables with _obs
+  # obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
+  # mydata$observableId <- obs
+  # if(!is.null(errors)) names(errors) <- paste0(names(errors), "_obs")
   
   # select necessary data columns
   data <- data.frame(name = mydata$observableId, time = mydata$time, 
