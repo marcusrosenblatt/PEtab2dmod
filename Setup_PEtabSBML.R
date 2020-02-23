@@ -12,6 +12,7 @@ source("Functions/getDataPEtabSBML.R")
 source("Functions/getInitialsSBML.R")
 source("Functions/importPEtabSBML.R")
 source("Functions/plotPEtabSBML.R")
+source("Functions/fitModelPEtabSBML.R")
 
 ## Import model--------------------
 #1 Boehm_JProteomeRes2014 

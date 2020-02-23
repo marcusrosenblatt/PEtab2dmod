@@ -46,12 +46,12 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
   cat(green("Start test function...\n"))
   teststarttime <- Sys.time()
   for(model in models){
-    cat(green(paste0("Testing ", model, "\n")))
+    cat(blue(paste0("Testing ", model, "\n")))
     fgh <- try_with_time_limit(
       {test <- try(importPEtabSBML(model, compile=T), silent = T)
       if(inherits(test, "try-error")) "import error" else test}
       , timelimit)
-    if(fgh=="import error") cat(magenta("Import error or time limit exceeded for", model, "\n")) else {
+    if(fgh=="import error") cat(yellow("Import error or time limit exceeded for", model, "\n")) else {
         testobj <- obj(pouter)
         if(is.numeric(testobj$value)) cat(green("Calculation of objective function successful.\n")) else cat(red("Warning: obj(pouter) is not numeric.\n"))
         if(testFit){

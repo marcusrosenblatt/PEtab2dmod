@@ -221,7 +221,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     setwd(mywd)
   }
   
-  modelname <<- modelname
+  model_name <<- modelname
   
   endtime <- Sys.time()
   mytimediff <- as.numeric(difftime(endtime, starttime, unit="secs"))
