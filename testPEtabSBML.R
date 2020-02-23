@@ -30,8 +30,7 @@ try_with_time_limit <- function(expr, cpu = Inf, elapsed = Inf){
 }
 
 
-testPEtabSBML <- function(timelimit = 1000, 
-                          models=c("Boehm_JProteomeRes2014",
+testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
                                    "Fujita_SciSignal2010",
                                    "Borghans_BiophysChem1997",
                                    "Elowitz_Nature2000",
@@ -39,10 +38,10 @@ testPEtabSBML <- function(timelimit = 1000,
                                    "Crauste_CellSystems2017",
                                    "Schwen_PONE2014",
                                    "Raia_CancerResearch2011",
-                                   "Zheng_PNAS2012",
-                                   "Bachmann_MSB2011"
+                                   "Zheng_PNAS2012"#,
+                                   #"Bachmann_MSB2011"
                                    #"Lucarelli_CellSystems2018",
-                          )){
+), testFit = TRUE, timelimit = 1000){
   cat(green("Start test function...\n"))
   teststarttime <- Sys.time()
   for(model in models){
@@ -54,6 +53,11 @@ testPEtabSBML <- function(timelimit = 1000,
     if(fgh=="import error") cat(magenta("Import error or time limit exceeded for", model, "\n")) else {
         testobj <- obj(pouter)
         if(is.numeric(testobj$value)) cat(green("Calculation of objective function successful.\n")) else cat(red("Warning: obj(pouter) is not numeric.\n"))
+        if(testFit){
+          myframe <- fitModelPEtabSBML()
+          if(is.parframe(myframe) & nrow(myframe) > 0)
+            if(is.numeric(obj(myframe[1,]))) cat(green("Fit test successful.\n")) else cat(red("Warning: obj(myframe) is not numeric.\n"))
+        }
         pdf(file = paste0("Test/",model,"_plotAll.pdf"))
         plotPEtabSBML()
         dev.off()

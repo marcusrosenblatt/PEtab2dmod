@@ -7,7 +7,7 @@
 #' @param parameters PEtab parameter file as .tsv
 #' @param parameters PEtab parameter file as .tsv
 #'   
-#' @return NULL
+#' @return name of imported model
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
 importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
@@ -207,6 +207,9 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   common <- intersect(names(mypouter),names(myfit_values))
   mypouter[common] <- myfit_values[common]
+  attr(mypouter, "parscales") <- parscales
+  attr(mypouter, "lowerBound") <- attr(myfit_values,"lowerBound")
+  attr(mypouter, "upperBound") <- attr(myfit_values,"upperBound")
   if(is.null(assign_pouter)){pouter <<- mypouter} else {cat("Manual assignment not yet provided.")}
   
   
@@ -226,6 +229,8 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     save(list = c("myg","myodemodel","myerr"),file = paste0(modelname,".RData"))
     setwd(mywd)
   }
+  
+  modelname <<- modelname
   
   endtime <- Sys.time()
   mytimediff <- as.numeric(difftime(endtime, starttime, unit="secs"))

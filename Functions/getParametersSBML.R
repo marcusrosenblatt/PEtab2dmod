@@ -30,21 +30,38 @@ getParametersSBML <- function(parameters){
   }
   estimated <- mypars %>% filter(estimate == 1)
   pouter <- NULL
+  parlower <- NULL
+  parupper <- NULL
   if(nrow(estimated)>0){
     for(i in 1:length(estimated$parameterScale)) {
       parscale <- estimated$parameterScale[i]
       par <- estimated$parameterId[i] %>% as.character()
       value <- estimated$nominalValue[i]
-      if(parscale == "lin") pouter <- c(pouter, value)
-      if(parscale == "log10") pouter <- c(pouter, log10(value))
-      if(parscale == "log") pouter <- c(pouter, log(value))
-      else paste("This type of parameterScale is not supported.")
+      lowervalue <- estimated$lowerBound[i]
+      uppervalue <- estimated$upperBound[i]
+      if(parscale == "lin"){
+        pouter <- c(pouter, value)
+        parlower <- c(parlower, lowervalue)
+        parupper <- c(parupper, uppervalue)
+      } else if(parscale == "log10"){
+        pouter <- c(pouter, log10(value))
+        parlower <- c(parlower, log10(lowervalue))
+        parupper <- c(parupper, log10(uppervalue))
+      } else if(parscale == "log"){
+        pouter <- c(pouter, log(value))
+        parlower <- c(parlower, log(lowervalue))
+        parupper <- c(parupper, log(uppervalue))
+      } else paste("This type of parameterScale is not supported.")
       names(pouter)[i] <- par
+      names(parlower)[i] <- par
+      names(parupper)[i] <- par
     } 
     parscales <- estimated$parameterScale %>% as.character()
     pars <- estimated$parameterId %>% as.character()
     names(parscales) <- pars
     attr(pouter,"parscale") <- parscales
+    attr(pouter,"lowerBound") <- parlower
+    attr(pouter,"upperBound") <- parupper
   }
   return(list(constraints=constraints,pouter=pouter))
 }
