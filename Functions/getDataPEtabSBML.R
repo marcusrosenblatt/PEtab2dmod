@@ -24,10 +24,10 @@ getDataPEtabSBML <- function(data, observables){
     mydata$noiseParameters <- NA
   }
   
-  # rename observables with _obs
-  obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
-  mydata$observableId <- obs
-  if(!is.null(errors)) names(errors) <- paste0(names(errors), "_obs")
+  # # rename observables with _obs
+  # obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
+  # mydata$observableId <- obs
+  # if(!is.null(errors)) names(errors) <- paste0(names(errors), "_obs")
   
   # select necessary data columns
   data <- data.frame(name = mydata$observableId, time = mydata$time, 

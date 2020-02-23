@@ -14,8 +14,8 @@ getObservablesSBML <- function(observables){
   myobs <- read.csv(file = observables, sep = "\t") %>% as.data.frame()
   obsNames <- myobs$observableId %>% as.character()
   
-  # rename observables with _obs
-  obsNames <- paste0(obsNames,"_obs")
+  # # rename observables with _obs
+  # obsNames <- paste0(obsNames,"_obs")
   
   obsFormula <- myobs$observableFormula %>% as.character()
   names(obsFormula) <- obsNames

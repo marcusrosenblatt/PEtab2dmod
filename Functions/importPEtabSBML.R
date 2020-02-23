@@ -120,16 +120,16 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   cat("Check and compile error model ...\n")
   myerrors <- mydataSBML$errors
   
-  ### hopefully not needed anymore soon (see mail to Leonard)
-  if(modelname == "Raia_CancerResearch2011"){
-    main <- c("CD274mRNA","IL13_cell","RecSurf","SOCS3","SOCS3mRNA","pIL4Ra","pJAK2","pSTAT5")
-    for (i in 1:length(myerrors)) {
-      for(obs in main){
-        myerrors[i] <- str_replace(myerrors[i], paste0("observable_",main[i]), paste0(main[i],"_obs"))
-      }
-    }
-  }
-  ###
+  # ### hopefully not needed anymore soon (see mail to Leonard)
+  # if(modelname == "Raia_CancerResearch2011"){
+  #   main <- c("CD274mRNA","IL13_cell","RecSurf","SOCS3","SOCS3mRNA","pIL4Ra","pJAK2","pSTAT5")
+  #   for (i in 1:length(myerrors)) {
+  #     for(obs in main){
+  #       myerrors[i] <- str_replace(myerrors[i], paste0("observable_",main[i]), paste0(main[i],"_obs"))
+  #     }
+  #   }
+  # }
+  # ###
   
   myerr <- NULL
   if(!files_loaded) {
