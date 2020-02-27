@@ -97,4 +97,4 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
   return(output)
 }
 
-testPEtabSBML()
+out <- testPEtabSBML()
