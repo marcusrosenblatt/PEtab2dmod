@@ -16,12 +16,12 @@ fitModelPEtabSBML <- function(objfun=obj, nrfits=4, nrcores=4, useBounds=TRUE){
   names(prior) <- names(pouter)
   mywd <- getwd()
   dir.create(paste0(mywd,"/Test/mstrust/"), showWarnings = FALSE)
-  if(useBounds) out <- mstrust(objfun=objfun, center=prior, studyname=model_name, rinit = 0.1, rmax = 10,
+  if(useBounds) out <- mstrust(objfun=objfun, center=msParframe(prior, n = nrfits+1, seed=47)[-1,], studyname=model_name, rinit = 0.1, rmax = 10,
           fits = nrfits, cores = nrcores, samplefun = "rnorm", resultPath = "Test/mstrust/",
           parlower = attr(pouter, "lowerBound"), parupper=attr(pouter, "upperBound"),
           stats = FALSE, narrowing = NULL, iterlim=400, sd = 3)
-  else out <- mstrust(objfun=objfun, center=prior, studyname=model_name, rinit = 0.1, rmax = 10,
+  else out <- mstrust(objfun=objfun, center=msParframe(prior, n = nrfits, seed=47), studyname=model_name, rinit = 0.1, rmax = 10,
                fits = nrfits, cores = nrcores, samplefun = "rnorm", resultPath = "Test/mstrust/",
                stats = FALSE, narrowing = NULL, iterlim=400, sd = 3)
-  as.parframe(out)
+    if(any(lapply(out, function(fgh) fgh$converged)==TRUE)) return(as.parframe(out)) else {cat("No fit converged."); return(NULL)}
 }

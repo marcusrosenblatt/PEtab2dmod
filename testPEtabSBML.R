@@ -56,7 +56,7 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
         if(is.numeric(testobj$value)) cat(green("Calculation of objective function successful.\n")) else cat(red("Warning: obj(pouter) is not numeric.\n"))
         if(testFit){
           myframe <- fitModelPEtabSBML()
-          if(is.parframe(myframe) & nrow(myframe) > 0)
+          if(is.parframe(myframe) & !is.null(myframe))
             if(is.numeric(obj(myframe[1,])$value)) cat(green("Fit test successful.\n")) else cat(red("Warning: obj(myframe) is not numeric.\n"))
           else cat(red("Warning: Fit test not successful..\n"))
         }
