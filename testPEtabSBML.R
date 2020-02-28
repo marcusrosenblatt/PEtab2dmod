@@ -33,16 +33,16 @@ try_with_time_limit <- function(expr, cpu = Inf, elapsed = Inf){
 
 testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
                                    "Fujita_SciSignal2010",
-                                   "Borghans_BiophysChem1997"#,
-                                   # "Elowitz_Nature2000",
-                                   # "Sneyd_PNAS2002",
-                                   # "Crauste_CellSystems2017",
-                                   # "Schwen_PONE2014",
-                                   # "Raia_CancerResearch2011"#,
-                                   #"Zheng_PNAS2012"#,
+                                   "Borghans_BiophysChem1997",
+                                   "Elowitz_Nature2000",
+                                   "Sneyd_PNAS2002",
+                                   "Crauste_CellSystems2017",
+                                   "Schwen_PONE2014",
+                                   "Raia_CancerResearch2011",
+                                   "Zheng_PNAS2012"#,
                                    #"Bachmann_MSB2011"
                                    #"Lucarelli_CellSystems2018",
-), testFit = TRUE, timelimit = 1000){
+), testFit = TRUE, timelimit = 5000){
   cat(green("Start test function...\n"))
   teststarttime <- Sys.time()
   output <- NULL 
@@ -60,7 +60,7 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
         if(is.numeric(testobj$value)) cat(green("Calculation of objective function successful.\n")) else cat(red("Warning: obj(pouter) is not numeric.\n"))
         if(testFit){
           fitstarttime <- Sys.time()
-          myframe <- fitModelPEtabSBML()
+          myframe <- fitModelPEtabSBML(nrfits=20)
           fitendtime <- Sys.time()
           if(is.parframe(myframe) & !is.null(myframe))
             if(is.numeric(obj(myframe[1,])$value)){
@@ -87,7 +87,9 @@ testPEtabSBML <- function(models=c("Boehm_JProteomeRes2014",
         plottest <- T
         cat(green("Import and plot test for ",fgh, " successful!\n\n\n"))
     }
-    output <- rbind(output, data.frame(modelname = model, import = importtest, plot=plottest, objective_value = testobj$value, bestfit=bestfit))
+    output <- rbind(output, data.frame(modelname = model, import = importtest, 
+                                       fitting_time=format(as.numeric(difftime(fitendtime, fitstarttime, unit="mins")), digits=3),
+                                       plot=plottest, objective_value = testobj$value, bestfit=bestfit, difference=bestfit-testobj$value))
   }
   testendtime <- Sys.time()
   mytimediff <- as.numeric(difftime(testendtime, teststarttime, unit="secs"))

@@ -34,7 +34,10 @@ getDataPEtabSBML <- function(data, observables){
   data <- data.frame(name = mydata$observableId, time = mydata$time, 
                      value = mydata$measurement, sigma = mydata$noiseParameters,
                      condition = mydata$simulationConditionId) 
-  if(unique(myobs$observableTransformation) == "log10") data$value <- log10(data$value)
+  obs2log <- myobs$observableId[which(myobs$observableTransformation=="log")]
+  data$value[which(data$name%in%obs2log)] <- log(data$value[which(data$name%in%obs2log)])
+  obs2log10 <- myobs$observableId[which(myobs$observableTransformation=="log10")]
+  data$value[which(data$name%in%obs2log10)] <- log10(data$value[which(data$name%in%obs2log10)])
   data <- data %>% as.datalist()
   
   return(list(data=data,errors=errors))

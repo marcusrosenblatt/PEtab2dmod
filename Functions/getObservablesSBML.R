@@ -18,6 +18,8 @@ getObservablesSBML <- function(observables){
   # obsNames <- paste0(obsNames,"_obs")
   
   obsFormula <- myobs$observableFormula %>% as.character()
+  obsFormula[which(myobs$observableTransformation=="log")] <- paste0("log(", obsFormula[which(myobs$observableTransformation=="log10")], ")")
+  obsFormula[which(myobs$observableTransformation=="log10")] <- paste0("log10(", obsFormula[which(myobs$observableTransformation=="log10")], ")")
   names(obsFormula) <- obsNames
   observables <- obsFormula %>% as.eqnvec()
   return(observables)
