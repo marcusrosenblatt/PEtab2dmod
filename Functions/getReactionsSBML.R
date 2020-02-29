@@ -88,13 +88,21 @@ getReactionsSBML <- function(model){
     }
   }
   
+  reactions$rates <- gsub(" ","",reactions$rates)
   
   # replace function based inputs by events (done in reactions)
   for(fun in c("piecewise")){
     for(reaction in reactions$rates){
       if(str_detect(reaction, fun)){
         split <- str_split(reaction, fun)[[1]][2]
-        pos <- which(strsplit(split, "")[[1]]==")")[2]
+        count_bracket <- 0
+        done <- F
+        for(z in 1:nchar(split)){
+          if(substr(split, z, z)=="(") count_bracket <- count_bracket+1
+          if(substr(split, z, z)==")") count_bracket <- count_bracket-1
+          if(count_bracket==0 & !done) {done <- T; pos <- z}
+        }
+        #pos <- which(strsplit(split, "")[[1]]==")")[2]
         event <- paste0(fun, substr(split, 1, pos))
         events <- c(events, event)
       }
@@ -103,6 +111,8 @@ getReactionsSBML <- function(model){
   events <- unique(events)
   if(!is.null(events)) for(i in 1:length(events)){
     replace <- gsub("\\(", "\\\\\\(", events[i])
+    replace <- gsub("\\*", "\\\\\\*", replace)
+    replace <- gsub("\\+", "\\\\\\+", replace)
     #replace <- gsub("\\)", "\\\\\\)", replace)
     reactions$rates <- gsub(replace, paste0("event", i), reactions$rates)
     reactions <- reactions %>% addReaction("", paste0("event", i), "0")
