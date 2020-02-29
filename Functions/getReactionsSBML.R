@@ -118,26 +118,32 @@ getReactionsSBML <- function(model){
     reactions <- reactions %>% addReaction("", paste0("event", i), "0")
   }
   
+  # replace mathematical expressions 
+  reactions$rates <- replaceSymbols(c("t", "TIME", "T"), "time", reactions$rates)
+  
   TransformEvents <- function(events){
     if(!is.null(events)){
       do.call(rbind, lapply(1:length(events), function(i){
         myevent <- events[i]
         if(str_detect(myevent, "piecewise") & (str_detect(myevent, "leq") | str_detect(myevent, "lt"))){
-          timepoint <- strsplit(strsplit(myevent, ",")[[1]][3], ")")[[1]][1]
+          expr1 <- strsplit(myevent, ",")[[1]][2]
+          expr1 <- gsub(paste0(strsplit(expr1, "\\(")[[1]][1],"\\("), "", expr1)
+          expr2 <- strsplit(strsplit(myevent, ",")[[1]][3], ")")[[1]][1]
+          if(expr1=="time") timepoint <- expr2 else 
+            if(str_detect(expr1, "time-")) timepoint <- gsub("time-", "", expr1) else cat("Warning: Event not yet supported.")
           first <- strsplit(strsplit(myevent, "\\(")[[1]][2], ",")[[1]][1]
           second <- strsplit(strsplit(myevent, ",")[[1]][4], ")")[[1]][1]
           if(!is.na(suppressWarnings(as.numeric(timepoint)))) timepoint <- as.numeric(timepoint) # avoid warning if variable is not numeric
           if(!is.na(suppressWarnings(as.numeric(first)))) first <- as.numeric(first)
           if(!is.na(suppressWarnings(as.numeric(second)))) second <- as.numeric(second)
           return(data.frame(var=paste0("event",i), time=c(0,timepoint), value=c(first, second), method="replace"))
-        } else {print("Warning. Event not yet supported"); return(myevent)}
+        } else {cat("Warning: Event not yet supported"); return(myevent)}
       }))
     } else return(NULL)
   }
   events <- TransformEvents(events)
   
-  # replace mathematical expressions 
-  reactions$rates <- replaceSymbols(c("t", "TIME", "T"), "time", reactions$rates)
+  
 
   # for(i in 1:length(reactions$rates)){
   #   reaction <- reactions$rates[i]
