@@ -12,6 +12,8 @@
 #' @author Marcus Rosenblatt and Svenja Kemmer
 importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                             path2BC = "BenchmarkModels/",
+                            path2TestCases = "PEtabTests/",
+                            TestCases = FALSE,
                             compile = FALSE,
                             SBML_file = NULL,
                             observable_file = NULL,
@@ -36,11 +38,19 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   ## Define path to SBML and PEtab files --------------------
   
   starttime <- Sys.time()
-  if(is.null(SBML_file))       SBML_file <- paste0(path2BC, modelname, "/model_", modelname, ".xml")
-  if(is.null(observable_file)) observable_file <- paste0(path2BC, modelname, "/observables_", modelname, ".tsv")
-  if(is.null(condition_file))  condition_file <- paste0(path2BC, modelname, "/experimentalCondition_", modelname, ".tsv")
-  if(is.null(data_file))       data_file <- paste0(path2BC, modelname, "/measurementData_", modelname, ".tsv")
-  if(is.null(parameter_file))  parameter_file <- paste0(path2BC, modelname, "/parameters_", modelname, ".tsv")
+  if(TestCases == FALSE){
+    if(is.null(SBML_file))       SBML_file <- paste0(path2BC, modelname, "/model_", modelname, ".xml")
+    if(is.null(observable_file)) observable_file <- paste0(path2BC, modelname, "/observables_", modelname, ".tsv")
+    if(is.null(condition_file))  condition_file <- paste0(path2BC, modelname, "/experimentalCondition_", modelname, ".tsv")
+    if(is.null(data_file))       data_file <- paste0(path2BC, modelname, "/measurementData_", modelname, ".tsv")
+    if(is.null(parameter_file))  parameter_file <- paste0(path2BC, modelname, "/parameters_", modelname, ".tsv")
+  } else{
+    SBML_file <- paste0(path2TestCases, modelname, "/_model.xml")
+    observable_file <- paste0(path2TestCases, modelname, "/_observables.tsv")
+    condition_file <- paste0(path2TestCases, modelname, "/_conditions.tsv")
+    data_file <- paste0(path2TestCases, modelname, "/_measurements.tsv")
+    parameter_file <- paste0(path2TestCases, modelname, "/_parameters.tsv")
+  }
   mywd <- getwd()
   if(!file.exists(SBML_file)){cat(paste0("The file ",mywd,SBML_file, " does not exist. Please check spelling or provide the file name via the SBML_file argument.")); return(NULL)}
   if(!file.exists(observable_file)){cat(paste0("The file ",mywd,observable_file, " does not exist. Please check spelling or provide the file name via the observable_file argument.")); return(NULL)}
@@ -124,13 +134,13 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   myerr <- NULL
   if(!files_loaded) {
-    if(!is.null(myerrors)){
+    if(!is_empty(getSymbols(myerrors))){
       setwd(paste0(mywd,"/CompiledObjects/"))
       myerr <- Y(myerrors, f = c(as.eqnvec(myreactions), myobservables), states = names(myobservables), attach.input = FALSE, compile = TRUE, modelname = paste0("errfn_", modelname))
       setwd(mywd)
     }
-    if(is.null(assign_err)){err <<- myerr} else {cat("Manual assignment not yet provided.")}
   }
+  if(is.null(assign_err)){err <<- myerr} else {cat("Manual assignment not yet provided.")}
   
   
   ## Parameter transformations -----------
@@ -145,7 +155,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   
   # Generate condition.grid
   mycondition.grid <- getConditionsSBML(conditions = condition_file, data = data_file) 
-  condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName")]
+  condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName","conditionId")]
   if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
   
   # branch trafo for different conditions

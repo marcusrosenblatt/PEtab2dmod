@@ -18,13 +18,16 @@ getConditionsSBML <- function(conditions,data){
   observables <- mydata$observableId %>% unique()
   
   # replace "" by NA
-  mydata$observableParameters <- mydata$observableParameters %>% as.character()
-  mydata <- mydata %>% mutate(observableParameters = ifelse(observableParameters == "",NA,observableParameters))
+  if(!is.null(mydata$observableParameters)){
+    mydata$observableParameters <- mydata$observableParameters %>% as.character()
+    mydata <- mydata %>% mutate(observableParameters = ifelse(observableParameters == "",NA,observableParameters))
+  }
+  if(!is.null(mydata$noiseParameters)){
   mydata$noiseParameters <- mydata$noiseParameters %>% as.character()
   mydata <- mydata %>% mutate(noiseParameters = ifelse(noiseParameters == "",NA,noiseParameters))
-  
+  }
   # generate columns for observableParameters
-  if(!is.numeric(mydata$observableParameters)) 
+  if(!is.numeric(mydata$observableParameters) & !is.null(mydata$observableParameters)) 
     {
     condition.grid_obs <- data.frame(conditionId = condis_obs)
     for (obs in observables) 
@@ -57,7 +60,7 @@ getConditionsSBML <- function(conditions,data){
   }
   
   # generate columns for noiseParameters
-  if(!is.numeric(mydata$noiseParameters)) 
+  if(!is.numeric(mydata$noiseParameters) & !is.null(mydata$noiseParameters)) 
   {
     if(exists("mycondition.grid")) {condition.grid_orig <- mycondition.grid}
     condition.grid_noise <- data.frame(conditionId = condis_obs)
@@ -92,7 +95,7 @@ getConditionsSBML <- function(conditions,data){
   
   if(!exists("mycondition.grid")) mycondition.grid <- condition.grid_orig
   rownames(mycondition.grid) <- mycondition.grid$conditionId
-  mycondition.grid$conditionId <- NULL
+  # mycondition.grid$conditionId <- NULL ## we need this column in cases with just one condition!
   
   # check if all conditions are observed
   if(nrow(mycondition.grid) < nrow(condition.grid_orig)) print("There exist non-observed conditions!")

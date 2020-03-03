@@ -41,16 +41,24 @@ testPEtabSBML <- function(models=c(
   # "Schwen_PONE2014",
   # "Raia_CancerResearch2011",
   # "Zheng_PNAS2012",
-  "Beer_MolBioSystems2014",
-  "Brannmark_JBC2010",
-  "Bruno_JExpBio2016",
+  # "Beer_MolBioSystems2014",
+  # "Brannmark_JBC2010",
+  # "Bruno_JExpBio2016",
   #"Chen_MSB2009",
-  "Fiedler_BMC2016",
-  "Weber_BMC2015",
-  "Swameye_PNAS2003"
+  # "Fiedler_BMC2016",
+  # "Weber_BMC2015",
+  # "Swameye_PNAS2003"
   #"Bachmann_MSB2011"
   #"Lucarelli_CellSystems2018",
-), testFit = TRUE, timelimit = 5000){
+  # "0001",
+  # "0002",
+  # "0003",
+  "0004",
+  "0005",
+  "0006",
+  "0007",
+  "0008"
+), testFit = TRUE, timelimit = 5000, tests = FALSE){
   cat(green("Start test function...\n"))
   mywd <- getwd()
   teststarttime <- Sys.time()
@@ -62,7 +70,7 @@ testPEtabSBML <- function(models=c(
     bestfit <- NA
     cat(blue(paste0("Testing ", model, "\n")))
     fgh <- try_with_time_limit(
-      {test <- try(importPEtabSBML(model, compile=T), silent = T)
+      {test <- try(importPEtabSBML(model, compile=T, TestCases = tests), silent = T)
       if(inherits(test, "try-error")) "import error" else test}
       , timelimit)
     if(fgh=="import error"){
@@ -123,4 +131,4 @@ testPEtabSBML <- function(models=c(
   return(output)
 }
 
-out <- testPEtabSBML()
+out <- testPEtabSBML(tests = T)

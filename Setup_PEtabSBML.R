@@ -27,5 +27,5 @@ source("Functions/fitModelPEtabSBML.R")
 #10 Raia_CancerResearch2011
 #11 Fiedler_BMC2016
 
-importPEtabSBML(modelname = "Raia_CancerResearch2011", compile = TRUE) 
+importPEtabSBML(modelname = "0001", TestCases = T, compile = TRUE) 
 plotPEtabSBML(name%in%names(observables))

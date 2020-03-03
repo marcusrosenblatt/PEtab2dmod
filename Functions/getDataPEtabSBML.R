@@ -14,6 +14,8 @@ getDataPEtabSBML <- function(data, observables){
   myobs <- read.csv(file = observables, sep = "\t") %>% as.data.frame()
   obs <- myobs$observableId %>% as.character()
   errors <- NULL
+  
+  if(!is.null(mydata$noiseParameters) & !is.null(myobs$noiseFormula)) cat(red("Warning: errors specified in data and observable file.\n"))
   if(!mydata$noiseParameters %>% is.numeric) {
     # define errors
     errors <- myobs$noiseFormula %>% as.character()
@@ -21,8 +23,10 @@ getDataPEtabSBML <- function(data, observables){
     if(length(errors) != length(obs)) errors <- rep(errors,length(obs))
     names(errors) <- obs[which_err]
     errors <- as.eqnvec(errors)
-    # set fixed sigmas to NA
-    mydata$noiseParameters <- NA
+    # set fixed sigmas 
+    if(is.null(mydata$noiseParameters)){
+      mydata$noiseParameters <- errors %>% as.numeric()
+    } else mydata$noiseParameters <- NA
   }
   
   # # rename observables with _obs
