@@ -5,6 +5,7 @@ library(tidyverse)
 library(dMod)
 library(stringr)
 library(crayon)
+library(yaml)
 source("Functions/getReactionsSBML.R")
 source("Functions/getObservablesSBML.R")
 source("Functions/getParametersSBML.R")
@@ -32,9 +33,9 @@ try_with_time_limit <- function(expr, cpu = Inf, elapsed = Inf){
 
 
 testPEtabSBML <- function(models=c(
-  # "Boehm_JProteomeRes2014",
-  # "Fujita_SciSignal2010",
-  # "Borghans_BiophysChem1997",
+   # "Boehm_JProteomeRes2014",
+   # "Fujita_SciSignal2010",
+   # "Borghans_BiophysChem1997",
   # "Elowitz_Nature2000",
   # "Sneyd_PNAS2002",
   # "Crauste_CellSystems2017",
@@ -50,14 +51,14 @@ testPEtabSBML <- function(models=c(
   # "Swameye_PNAS2003"
   #"Bachmann_MSB2011"
   #"Lucarelli_CellSystems2018",
-  # "0001",
-  # "0002",
-  # "0003",
-  "0004",
-  "0005",
-  "0006",
-  "0007",
-  "0008"
+   "0001",
+   "0002",
+   "0003",
+   "0004",
+   "0005",
+   "0006",
+   "0007",
+   "0008"
 ), testFit = TRUE, timelimit = 5000, tests = FALSE){
   cat(green("Start test function...\n"))
   mywd <- getwd()
@@ -122,12 +123,25 @@ testPEtabSBML <- function(models=c(
         }
           
     }
+    
   }
+  if(tests){
+    output <- cbind(output, obj_solution=NA, tol_solution=NA)
+    for(model in models){
+      mysolution <- read_yaml(paste0("PEtabTests/",model,"/_",model,"_solution.yaml"))
+      output[which(output$modelname==model),"obj_solution"] <- mysolution$chi2
+      output[which(output$modelname==model),"tol_solution"] <- mysolution$tol_chi2
+    }
+  }
+  
+  if(tests){}
   testendtime <- Sys.time()
   mytimediff <- as.numeric(difftime(testendtime, teststarttime, unit="secs"))
   if(mytimediff > 3600) cat(green(paste0("Test done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="hours")), digits=3)), " hours.\n"))) else
     if(mytimediff > 60) cat(green(paste0("Test done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="mins")), digits=3)), " minutes.\n"))) else
       cat(green(paste0("Test done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="secs")), digits=3)), " seconds.\n")))
+  
+  if(tests){output <- cbind(output, Passed=abs(output$objective_value-output$obj_solution) < output$tol_solution)}
   return(output)
 }
 
