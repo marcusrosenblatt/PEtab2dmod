@@ -33,6 +33,20 @@ getDataPEtabSBML <- function(data, observables){
   # obs <- mydata$observableId %>% as.character() %>% paste0("_obs")
   # mydata$observableId <- obs
   # if(!is.null(errors)) names(errors) <- paste0(names(errors), "_obs")
+  mydata$simulationConditionId <- as.character(mydata$simulationConditionId)
+  if(!is.null(mydata$observableParameters)){
+    for (observable in unique(mydata$observableId)){
+      for(condition in unique(mydata$simulationConditionId)){
+        sub <- subset(mydata, simulationConditionId==condition & observableId==observable)
+        if(nrow(sub) > 0){
+          if(length(unique(sub$observableParameters)) > 1){
+            index <- which(mydata$simulationConditionId==condition & mydata$observableId==observable)
+            mydata$simulationConditionId[index] <- paste0(mydata$simulationConditionId[index], "_",mydata$observableParameters[index])
+          }
+        }
+      }
+    }
+  }
   
   # select necessary data columns
   data <- data.frame(name = mydata$observableId, time = mydata$time, 

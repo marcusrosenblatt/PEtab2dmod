@@ -27,33 +27,45 @@ getConditionsSBML <- function(conditions,data){
   mydata <- mydata %>% mutate(noiseParameters = ifelse(noiseParameters == "",NA,noiseParameters))
   }
   # generate columns for observableParameters
-  if(!is.numeric(mydata$observableParameters) & !is.null(mydata$observableParameters)) 
-    {
+  if(!is.numeric(mydata$observableParameters) & !is.null(mydata$observableParameters)){
     condition.grid_obs <- data.frame(conditionId = condis_obs)
-    for (obs in observables) 
-      {
+    for (obs in observables){
       data_obs <- subset(mydata, observableId == obs)
-      for (condition in condis_obs) 
-        {
+      for (condition in condis_obs){
         if(condition %in% data_obs$simulationConditionId){
-          row_pars <- NULL
-          obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
-          if(!is.na(obs_par)){
-            # one or more observable parameters?
-            if(str_detect(obs_par,";")){
-              myobspars <- strsplit(obs_par,";")[[1]]
-              for(i in 1:length(myobspars)) {
-                row_pars <- c(row_pars, myobspars[i])
+              row_pars <- NULL
+              obs_par <- subset(data_obs, simulationConditionId == condition)$observableParameters %>% unique() %>% as.character()
+              if(length(obs_par)==1){
+                if(!is.na(obs_par)){
+                  # one or more observable parameters?
+                  if(str_detect(obs_par,";")){
+                    myobspars <- strsplit(obs_par,";")[[1]]
+                    for(i in 1:length(myobspars)) {
+                      row_pars <- c(row_pars, myobspars[i])
+                    }
+                  } else row_pars <- c(row_pars, obs_par)
+                }
+                if(!is.null(row_pars)) for (par in 1:length(row_pars)) {
+                  col_name <- paste0("observableParameter",par,"_",obs)
+                  condition.grid_obs[which(condition.grid_obs$conditionId==condition),col_name] <- row_pars[par]
+                }
+              } else {
+                col_name <- paste0("observableParameter1_",obs)
+                add <- NULL
+                for(j in 2:length(obs_par)){
+                  add <- rbind(add, subset(condition.grid_obs, conditionId==condition))
+                }
+                condition.grid_obs <- rbind(condition.grid_obs, add)
+                condition.grid_obs[which(condition.grid_obs$conditionId==condition),col_name] <- obs_par
+                condition.grid_obs$conditionId <- as.character(condition.grid_obs$conditionId)
+                condition.grid_obs$conditionId[which(condition.grid_obs$conditionId==condition)] <- paste0(condition,"_", obs_par)
+                
+                condition.grid_orig <- rbind(condition.grid_orig, add)
+                condition.grid_orig$conditionId <- as.character(condition.grid_orig$conditionId)
+                condition.grid_orig$conditionId[which(condition.grid_orig$conditionId==condition)] <- paste0(condition,"_", obs_par)
               }
-            } else row_pars <- c(row_pars, obs_par)
-          }
-          if(!is.null(row_pars)) for (par in 1:length(row_pars)) {
-            col_name <- paste0("observableParameter",par,"_",obs)
-            condition.grid_obs[which(condition.grid_obs$conditionId==condition),col_name] <- row_pars[par]
-          }
         }
       } 
-      
     }
     mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId"))
     # avoid warning if not all conditions are observed
