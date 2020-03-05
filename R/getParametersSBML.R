@@ -8,6 +8,8 @@
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
 #'   
+#' @export
+#' 
 getParametersSBML <- function(parameters){
   mypars <- read.csv(file = parameters, sep = "\t")
   fixed <- mypars %>% filter(estimate == 0)

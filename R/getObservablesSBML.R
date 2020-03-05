@@ -8,7 +8,8 @@
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
 #'   
-
+#' @export
+#' 
 getObservablesSBML <- function(observables){
   ## Load observables
   myobs <- read.csv(file = observables, sep = "\t") %>% as.data.frame()

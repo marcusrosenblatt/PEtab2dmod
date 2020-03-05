@@ -8,6 +8,8 @@
 #'   
 #' @author Marcus Rosenblatt, Svenja Kemmer and Frank Bergmann
 #'   
+#' @export
+#' 
 getInitialsSBML <- function(model){
   
   model = readSBML(model)$getModel()

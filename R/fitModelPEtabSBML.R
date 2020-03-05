@@ -10,6 +10,8 @@
 #' @return parframe with the parameter estimated of the multi-start optimization
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
+#' 
+#' @export
 #'   
 fitModelPEtabSBML <- function(objfun=obj, nrfits=4, nrcores=4, useBounds=TRUE){
   prior <- structure(rep(0,length(pouter)))

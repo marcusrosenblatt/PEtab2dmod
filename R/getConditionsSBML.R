@@ -8,6 +8,8 @@
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
 #'   
+#' @export
+#' 
 getConditionsSBML <- function(conditions,data){
   condition.grid_orig <- read.csv(file = conditions, sep = "\t")
   mydata <- read.csv(file = data, sep = "\t")

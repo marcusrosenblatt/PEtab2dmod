@@ -1,3 +1,11 @@
+#' Calculate LL of model
+#' 
+#' @description This function calculates the likelihood of a model.
+#'   
+#' @author Marcus Rosenblatt and Svenja Kemmer
+#'   
+#' @export
+#' 
 mynormL2 <- function(data, x, errmodel = NULL, times = NULL, attr.name = "data", outputLL = FALSE) {
   
   timesD <- sort(unique(c(0, do.call(c, lapply(data, function(d) d$time)))))

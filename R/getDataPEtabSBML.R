@@ -8,7 +8,9 @@
 #' @return data as data list and errors (if required) as eqnvec.
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
-#'   
+#'
+#' @export
+#' 
 getDataPEtabSBML <- function(data, observables){
   mydata <- read.csv(file = data, sep = "\t")
   myobs <- read.csv(file = observables, sep = "\t") %>% as.data.frame()

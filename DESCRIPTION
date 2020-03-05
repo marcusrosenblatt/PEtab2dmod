@@ -1,0 +1,19 @@
+Package: PEtab2dmod
+Type: Package
+Title: Import Model and Data from PEtab Files
+Version: 0.1
+Date: 2020-03-05
+Author: Marcus Rosenblatt and Svenja Kemmer
+Maintainer: Marcus Rosenblatt <marcus.rosenblatt@gmail.com> and Svenja Kemmer <svenja.kemmer@fdm.uni-freiburg.de>
+Description: PEtab is a data format for specifying parameter estimation problems in systems biology. 
+    This package provides an import for PEtab files, including the model defined in SBML along with 
+    respective tab-separated values (TSV) files specifying measurement data, model conditions,
+    observables and parameters.
+Depends:
+    dMod,
+    libSBML,
+    tidyverse,
+    stringr
+LazyData: TRUE
+Encoding: UTF-8
+RoxygenNote: 7.0.2

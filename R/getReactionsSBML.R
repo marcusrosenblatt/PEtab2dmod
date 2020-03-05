@@ -9,6 +9,8 @@
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
 #'   
+#' @export
+#' 
 getReactionsSBML <- function(model){
   m = readSBML(model)$getModel()
   

@@ -14,6 +14,9 @@
 #' @return NULL
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
+#' 
+#' @export
+#' 
 plotPEtabSBML <- function(..., g1 = g,
                           x1 = x,
                           p1 = p0,

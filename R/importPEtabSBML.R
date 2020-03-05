@@ -10,6 +10,9 @@
 #' @return name of imported model
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
+#' 
+#' @export
+#' 
 importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                             path2BC = "BenchmarkModels/",
                             path2TestCases = "PEtabTests/",
