@@ -69,7 +69,7 @@ getConditionsSBML <- function(conditions,data){
     }
     mycondition.grid <- suppressWarnings(inner_join(condition.grid_orig,condition.grid_obs, by = "conditionId"))
     # avoid warning if not all conditions are observed
-  }
+  } else mycondition.grid <- condition.grid_orig
   
   # generate columns for noiseParameters
   if(!is.numeric(mydata$noiseParameters) & !is.null(mydata$noiseParameters)) 
