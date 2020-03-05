@@ -156,7 +156,6 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   # Generate condition.grid
   mycondition.grid <- getConditionsSBML(conditions = condition_file, data = data_file) 
   condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName","conditionId")]
-  mycondition.grid.replace <- mycondition.grid[,which(!names(mycondition.grid) %in% c("conditionName","conditionId"))]
   if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
   
   # branch trafo for different conditions
@@ -168,7 +167,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(length(condi_pars) > 0){
     for (j in 1:length(names(mytrafoL))) {
       for (i in 1:length(condi_pars)) {
-        mytrafoL[[j]] <- repar(x~y, mytrafoL[[j]], x=condi_pars[i], y=mycondition.grid.replace[j,i])
+        mytrafoL[[j]] <- repar(x~y, mytrafoL[[j]], x=condi_pars[i], y=mycondition.grid[j,condi_pars[i]])
       }
     }
   }
