@@ -167,7 +167,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(length(condi_pars) > 0){
     for (j in 1:length(names(mytrafoL))) {
       for (i in 1:length(condi_pars)) {
-        mytrafoL[[j]] <- repar(x~y, mytrafoL[[j]], x=condi_pars[i], y=mycondition.grid[j,i+1])
+        mytrafoL[[j]] <- repar(x~y, mytrafoL[[j]], x=condi_pars[i], y=mycondition.grid[j,condi_pars[i]])
       }
     }
   }
