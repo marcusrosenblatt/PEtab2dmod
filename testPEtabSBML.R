@@ -15,6 +15,7 @@ source("Functions/getInitialsSBML.R")
 source("Functions/importPEtabSBML.R")
 source("Functions/plotPEtabSBML.R")
 source("Functions/fitModelPEtabSBML.R")
+source("Functions/mynormL2.R")
 
 ## Import model--------------------
 #1 Boehm_JProteomeRes2014 
@@ -77,18 +78,21 @@ testPEtabSBML <- function(models=c(
     if(fgh=="import error"){
         cat(yellow("Import error or time limit exceeded for", model, "\n\n\n"))
       output <- rbind(output, data.frame(modelname = model, import = importtest, 
-                                         fitting_time=NA, plot=plottest, objective_value = NA, bestfit=NA, difference=NA))
+                                         fitting_time=NA, plot=plottest, chi2 = NA, LL=NA, bestfit=NA, difference=NA))
     } else {
         importtest <- T
         testobj <- try(obj(pouter))
         if(inherits(testobj, "try-error")){
           cat(red("Warning: Error in calculation of objective function.\n"))
           output <- rbind(output, data.frame(modelname = model, import = importtest, 
-                                             fitting_time=NA, plot=plottest, objective_value = NA, bestfit=NA, difference=NA))
+                                             fitting_time=NA, plot=plottest, chi2 = NA, LL=NA, bestfit=NA, difference=NA))
         } else {
           if(is.numeric(testobj$value))
             cat(green("Calculation of objective function successful.\n")) 
           else cat(red("Warning: obj(pouter) is not numeric.\n"))
+          objLL <- mynormL2(mydata, g*x*p0, outputLL = T)
+          testLL <- try(-0.5*objLL(pouter)$value)
+          if(inherits(testLL, "try-error")) testLL <- NA
           if(testFit){
             fitstarttime <- Sys.time()
             myframe <- fitModelPEtabSBML(nrfits=20)
@@ -119,29 +123,32 @@ testPEtabSBML <- function(models=c(
           
           output <- rbind(output, data.frame(modelname = model, import = importtest, 
                                              fitting_time=format(as.numeric(difftime(fitendtime, fitstarttime, unit="mins")), digits=3),
-                                             plot=plottest, objective_value = testobj$value, bestfit=bestfit, difference=bestfit-testobj$value))
+                                             plot=plottest, chi2 = testobj$value, LL=testLL, bestfit=bestfit, difference=bestfit-testobj$value))
         }
           
     }
     
   }
   if(tests){
-    output <- cbind(output, obj_solution=NA, tol_solution=NA)
+    output <- cbind(output, chi2_sol=NA, tol_chi2_sol=NA, LL_sol=NA, tol_LL_sol=NA)
     for(model in models){
       mysolution <- read_yaml(paste0("PEtabTests/",model,"/_",model,"_solution.yaml"))
-      output[which(output$modelname==model),"obj_solution"] <- mysolution$chi2
-      output[which(output$modelname==model),"tol_solution"] <- mysolution$tol_chi2
+      output[which(output$modelname==model),"chi2_sol"] <- mysolution$chi2
+      output[which(output$modelname==model),"tol_chi2_sol"] <- mysolution$tol_chi2
+      output[which(output$modelname==model),"LL_sol"] <- mysolution$llh
+      output[which(output$modelname==model),"tol_LL_sol"] <- mysolution$tol_llh
     }
   }
   
-  if(tests){}
   testendtime <- Sys.time()
   mytimediff <- as.numeric(difftime(testendtime, teststarttime, unit="secs"))
   if(mytimediff > 3600) cat(green(paste0("Test done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="hours")), digits=3)), " hours.\n"))) else
     if(mytimediff > 60) cat(green(paste0("Test done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="mins")), digits=3)), " minutes.\n"))) else
       cat(green(paste0("Test done in ",as.character(format(as.numeric(difftime(testendtime, teststarttime, unit="secs")), digits=3)), " seconds.\n")))
   
-  if(tests){output <- cbind(output, Passed=abs(output$objective_value-output$obj_solution) < output$tol_solution)}
+  if(tests){output <- cbind(output, 
+                            Passed=(abs(output$chi2-output$chi2_sol) < output$tol_chi2_sol) &
+                                   (abs(output$LL-output$LL_sol) < output$tol_LL_sol))}
   return(output)
 }
 
