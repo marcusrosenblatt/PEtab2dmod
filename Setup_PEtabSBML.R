@@ -15,8 +15,10 @@ library(PEtab2dmod)
 #10 Raia_CancerResearch2011
 #11 Fiedler_BMC2016
 
-importPEtabSBML(modelname = "Borghans_BiophysChem1997", compile = TRUE) 
+importPEtabSBML(modelname = "Boehm_JProteomeRes2014", compile = TRUE) 
 plotPEtabSBML(name%in%names(observables))
+
+testPEtabSBML(models = c("Elowitz_Nature2000"))
 
 testPEtabSBML(models = c("0001",
                          "0002",
@@ -39,7 +41,7 @@ mywd <- getwd()
 files_loaded <- FALSE
 
 
-modelname = "Borghans_BiophysChem1997"
+modelname = "Boehm_JProteomeRes2014"
 path2BC = "BenchmarkModels/"
 SBML_file <- paste0(path2BC, modelname, "/model_", modelname, ".xml")
 observable_file <- paste0(path2BC, modelname, "/observables_", modelname, ".tsv")

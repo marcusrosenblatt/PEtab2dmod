@@ -73,7 +73,7 @@ getParametersSBML <- function(parameters, model){
   count <- 1
   for (i in 0:(n_pars-1)) {
     mypar <- model$getParameter(i)$getId()
-    if(!mypar %in% names(pouter)){
+    if(!mypar %in% names(pouter) & !mypar %in% names(constraints)){
       value <- model$getParameter(i)$getValue()
       SBMLfixedpars <- c(SBMLfixedpars, value)
       names(SBMLfixedpars)[count] <- mypar

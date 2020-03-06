@@ -163,14 +163,13 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   names(myinnerpars) <- myinnerpars
   trafo <- as.eqnvec(myinnerpars, names = myinnerpars)
   trafo <- replaceSymbols(names(mycompartments), mycompartments, trafo)
-  trafo <- replaceSymbols(names(myconstraints), myconstraints, trafo)
-  
   # only overwrite intial if it's not defined in condition.grid
   for (i in 1:length(myinitials)) {
     if(!names(myinitials)[i] %in% names(mycondition.grid)){
       trafo <- replaceSymbols(names(myinitials)[i], myinitials[i], trafo)
     }
   }
+  trafo <- replaceSymbols(names(myconstraints), myconstraints, trafo)
   
   # branch trafo for different conditions
   # set event initial to 0
