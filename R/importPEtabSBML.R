@@ -88,7 +88,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   myobservables <- getObservablesSBML(observable_file)
   if(is.null(assign_observables)){observables <<- myobservables} else {cat("Manual assignment not yet provided.")}
   
-
+  
   cat("Compiling observable function ...\n")
   if(!files_loaded) {
     setwd(paste0(mywd,"/CompiledObjects/"))
@@ -116,17 +116,6 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     setwd(mywd)
   }
   if(is.null(assign_ODEmodel)){ODEmodel <<- myodemodel} else {cat("Manual assignment not yet provided.")}
-
-  
-  ## Define constraints, initials, parameters and compartments --------------
-  
-  cat("Reading parameters and initials ...\n")
-  myparameters <- getParametersSBML(parameter_file)
-  myconstraints <- myparameters$constraints
-  myfit_values <- myparameters$pouter
-  myinitialsSBML <- getInitialsSBML(SBML_file)
-  mycompartments <- myinitialsSBML$compartments
-  myinitials <- myinitialsSBML$initials
   
   
   ## Check and define error model ------------ 
@@ -145,21 +134,43 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   }
   if(is.null(assign_err)){err <<- myerr} else {cat("Manual assignment not yet provided.")}
   
+  ## Define constraints, initials, parameters and compartments --------------
+  
+  cat("Reading parameters and initials ...\n")
+  myparameters <- getParametersSBML(parameter_file, SBML_file)
+  myconstraints <- myparameters$constraints
+  SBMLfixedpars <- myparameters$SBMLfixedpars
+  myfit_values <- myparameters$pouter
+  myinitialsSBML <- getInitialsSBML(SBML_file, condition_file)
+  mycompartments <- myinitialsSBML$compartments
+  myinitials <- myinitialsSBML$initials
   
   ## Parameter transformations -----------
   
+  # Generate condition.grid
+  mycondition.grid <- getConditionsSBML(conditions = condition_file, data = data_file) 
+  
+  if(!is.null(SBMLfixedpars)){
+    for (i in 1:length(SBMLfixedpars)) {
+      if(!names(SBMLfixedpars)[i] %in% names(mycondition.grid))  mycondition.grid[names(SBMLfixedpars)[i]] <- SBMLfixedpars[i]
+    } 
+  }
+  condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName","conditionId")]
+  if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
+  
   cat("Generate parameter transformations ...\n")
-  myinnerpars <- unique(c(getParameters(myodemodel), getSymbols(myobservables), setdiff(getSymbols(myerrors),names(observables))))
+  myinnerpars <- unique(c(getParameters(myodemodel), getParameters(myreactions), getSymbols(myobservables), setdiff(getSymbols(myerrors),names(myobservables))))
   names(myinnerpars) <- myinnerpars
   trafo <- as.eqnvec(myinnerpars, names = myinnerpars)
-  trafo <- replaceSymbols(names(myinitials), myinitials, trafo)
   trafo <- replaceSymbols(names(mycompartments), mycompartments, trafo)
   trafo <- replaceSymbols(names(myconstraints), myconstraints, trafo)
   
-  # Generate condition.grid
-  mycondition.grid <- getConditionsSBML(conditions = condition_file, data = data_file) 
-  condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName","conditionId")]
-  if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
+  # only overwrite intial if it's not defined in condition.grid
+  for (i in 1:length(myinitials)) {
+    if(!names(myinitials)[i] %in% names(mycondition.grid)){
+      trafo <- replaceSymbols(names(myinitials)[i], myinitials[i], trafo)
+    }
+  }
   
   # branch trafo for different conditions
   # set event initial to 0
@@ -195,11 +206,11 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   cat("Generate prediction function ...\n")
   tolerances <- 1e-7
   myp0 <- myx <- NULL
-  for (C in names(trafoL)) {
-    myp0 <- myp0 + P(trafoL[[C]], condition = C)
+  for (C in names(mytrafoL)) {
+    myp0 <- myp0 + P(mytrafoL[[C]], condition = C)
     myx <- myx + Xs(myodemodel, optionsOde = list(method = "lsoda", rtol = tolerances, atol = tolerances, maxsteps = 5000),
-                optionsSens = list(method = "lsodes", lrw=200000, rtol = tolerances, atol = tolerances),
-                condition = C)
+                    optionsSens = list(method = "lsodes", lrw=200000, rtol = tolerances, atol = tolerances),
+                    condition = C)
   }
   if(is.null(assign_p)){p0 <<- myp0} else {cat("Manual assignment not yet provided.")}
   if(is.null(assign_x)){x <<- myx} else {cat("Manual assignment not yet provided.")}

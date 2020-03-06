@@ -10,8 +10,9 @@
 #'   
 #' @export
 #' 
-getInitialsSBML <- function(model){
+getInitialsSBML <- function(model, conditions){
   
+  condition.grid <- read.csv(file = conditions, sep = "\t")
   model = readSBML(model)$getModel()
   initials <- NULL
   species <- NULL
@@ -117,7 +118,9 @@ getInitialsSBML <- function(model){
       {
       # get compartment name and size
       which <- model$getCompartment(i)$getId()
-      size <- model$getCompartment(i)$getSize()
+      if(which %in% names(condition.grid)){
+        size <- condition.grid[which] %>% as.numeric()
+      } else size <- model$getCompartment(i)$getSize()
       
       comp_name <- c(comp_name,which)
       comp_size <- c(comp_size,size)

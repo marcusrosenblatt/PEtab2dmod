@@ -10,7 +10,7 @@
 #'   
 #' @export
 #' 
-getParametersSBML <- function(parameters){
+getParametersSBML <- function(parameters, model){
   mypars <- read.csv(file = parameters, sep = "\t")
   fixed <- mypars %>% filter(estimate == 0)
   constraints <- NULL
@@ -65,5 +65,21 @@ getParametersSBML <- function(parameters){
     attr(pouter,"lowerBound") <- parlower
     attr(pouter,"upperBound") <- parupper
   }
-  return(list(constraints=constraints,pouter=pouter))
+  
+  # check if additional parameters exist in SBML file
+  model = readSBML(model)$getModel()
+  n_pars <- model$getNumParameters()
+  SBMLfixedpars <- NULL
+  count <- 1
+  for (i in 0:(n_pars-1)) {
+    mypar <- model$getParameter(i)$getId()
+    if(!mypar %in% names(pouter)){
+      value <- model$getParameter(i)$getValue()
+      SBMLfixedpars <- c(SBMLfixedpars, value)
+      names(SBMLfixedpars)[count] <- mypar
+      count <- count + 1
+    }
+  }
+  
+  return(list(constraints=constraints, pouter=pouter, SBMLfixedpars = SBMLfixedpars))
 }

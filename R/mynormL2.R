@@ -50,11 +50,11 @@ mynormL2 <- function(data, x, errmodel = NULL, times = NULL, attr.name = "data",
       err <- NULL
       if ((!is.null(errmodel) & is.null(e.conditions)) | (!is.null(e.conditions) && (cn %in% e.conditions))) {
         err <- errmodel(out = prediction[[cn]], pars = getParameters(prediction[[cn]]), conditions = cn)
-        mywrss <- nll(res(data[[cn]], prediction[[cn]], err[[cn]]))
+        mywrss <- nll(res(data[[cn]], prediction[[cn]], err[[cn]])) #, pars = pouter, deriv = deriv
       } else {
         if(outputLL) 
-          mywrss <- nll(res(data[[cn]], prediction[[cn]]))
-        else mywrss <- wrss(res(data[[cn]], prediction[[cn]]))  
+          mywrss <- nll(res(data[[cn]], prediction[[cn]])) #,pars = pouter, deriv = deriv
+        else mywrss <- wrss(res(data[[cn]], prediction[[cn]]))  #, pars = pouter, deriv = deriv
       }
       available <- intersect(pars_out, names(mywrss$gradient))
       result <- template

@@ -11,7 +11,7 @@
 #'   
 #' @export
 #' 
-getReactionsSBML <- function(model){
+getReactionsSBML <- function(model, compartments){
   m = readSBML(model)$getModel()
   
   # Initialization
@@ -25,7 +25,7 @@ getReactionsSBML <- function(model){
   names_compartments <- do.call(c, lapply(0:(N_species-1), function(i){ m$getSpecies(i)$getId() }))
   names(compartments) <- names_compartments
   
-  if(unique(compartments)[1]=="default") compartments <- NULL
+  # if(unique(compartments)[1]=="default") compartments <- NULL
   
   # import reactions and adjust by means of compartments
   N_reactions <- m$getNumReactions()

@@ -17,7 +17,7 @@ getDataPEtabSBML <- function(data, observables){
   obs <- myobs$observableId %>% as.character()
   errors <- NULL
   
-  if(!is.null(mydata$noiseParameters) & !is.null(myobs$noiseFormula)) cat(red("Warning: errors specified in data and observable file.\n"))
+  # if(!is.null(mydata$noiseParameters) & !is.null(myobs$noiseFormula)) cat(red("Warning: errors specified in data and observable file.\n"))
   if(!mydata$noiseParameters %>% is.numeric) {
     # define errors
     errors <- myobs$noiseFormula %>% as.character()
