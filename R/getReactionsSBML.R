@@ -11,7 +11,7 @@
 #'   
 #' @export
 #' 
-getReactionsSBML <- function(model, compartments){
+getReactionsSBML <- function(model, conditions){
   m = readSBML(model)$getModel()
   
   # Initialization
@@ -146,6 +146,32 @@ getReactionsSBML <- function(model, compartments){
   events <- TransformEvents(events)
   
   
+  ## check for preequilibration conditions and handle them via events
+  preeqEvents <- NULL
+  myconditions <- read.csv(file = conditions, sep = "\t")
+  myCons <- myconditions$conditionId
+  mypreeqCons <- NULL
+  attrib <- NULL
+  for (con in myCons){if(paste0("preeq_", con)%in%myCons) mypreeqCons <- c(mypreeqCons, con)}
+  if(!is.null(mypreeqCons)){
+    for (con in mypreeqCons){
+      mycongrid <- filter(myconditions, conditionId==con | conditionId==paste0("preeq_", con))
+      if(ncol(mycongrid)>1){
+        for(i in 2:ncol(mycongrid)){
+          preeqEvents <- addEvent(preeqEvents, var=names(mycongrid)[i], time=0, value=mycongrid[[which(mycongrid$conditionId==con),i]], method="replace")
+          attrib <- c(attrib, mycongrid[[which(mycongrid$conditionId==paste0("preeq_",con)),i]])
+        }
+      }
+    }
+  }
+  mystates <- reactions$states
+  reactions_orig <- reactions
+  attr(preeqEvents, "initials") <- attrib
+  if(!is.null(preeqEvents)) for(i in 1:nrow(preeqEvents)){
+    events <- rbind(events, preeqEvents[i,])
+    reactions <- reactions %>% addReaction("", preeqEvents[[i,"var"]], "0")
+  }
+  
 
   # for(i in 1:length(reactions$rates)){
   #   reaction <- reactions$rates[i]
@@ -160,7 +186,7 @@ getReactionsSBML <- function(model, compartments){
   mydata <- as.data.frame(reactions)
   reactions <- as.eqnlist(mydata, compartments)
   
-  return(list(reactions=reactions, events=events))
+  return(list(reactions=reactions, events=events, reactions_orig=reactions_orig, preeqEvents=preeqEvents, mystates=mystates))
 }
 
 

@@ -14,6 +14,13 @@ getConditionsSBML <- function(conditions,data){
   condition.grid_orig <- read.csv(file = conditions, sep = "\t")
   mydata <- read.csv(file = data, sep = "\t")
   
+  # handle preequilibration conditions
+  myCons <- condition.grid_orig$conditionId
+  mypreeqCons <- NULL
+  for (con in myCons){if(paste0("preeq_", con)%in%myCons) mypreeqCons <- c(mypreeqCons, con)}
+  condition.grid_orig <- filter(condition.grid_orig, !conditionId%in%mypreeqCons)
+  condition.grid_orig$conditionId <- sub("preeq_", "", condition.grid_orig$conditionId)
+  
   # check which conditions are observed
   condis_obs <- mydata$simulationConditionId %>% unique()
   # check which observables exist
@@ -120,5 +127,5 @@ getConditionsSBML <- function(conditions,data){
     }
   }
 
-  return(mycondition.grid)
+  return(list(condition_grid=mycondition.grid, preeqCons=mypreeqCons))
 }
