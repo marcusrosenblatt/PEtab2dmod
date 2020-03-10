@@ -82,9 +82,9 @@ testPEtabSBML <- function(models = c(
         } else {
           cat(red("Warning: obj(pouter) is not numeric.\n"))
         }
-        objLL <- mynormL2(mydata, g * x * p0, outputLL = T)
-        testLL <- try(-0.5 * objLL(pouter)$value)
-        if (inherits(testLL, "try-error")) testLL <- NA
+        # objLL <- mynormL2(mydata, g * x * p0, outputLL = T)
+        # testLL <- try(-0.5 * objLL(pouter)$value)
+        # if (inherits(testLL, "try-error")) testLL <- NA
         if (testFit) {
           fitstarttime <- Sys.time()
           myframe <- fitModelPEtabSBML(nrfits = 20)
@@ -124,7 +124,7 @@ testPEtabSBML <- function(models = c(
         output <- rbind(output, data.frame(
           modelname = model, import = importtest,
           fitting_time = format(as.numeric(difftime(fitendtime, fitstarttime, unit = "mins")), digits = 3),
-          plot = plottest, chi2 = testobj$value, LL = testLL, bestfit = bestfit, difference = bestfit - testobj$value
+          plot = plottest, chi2 = attr(testobj,"chisquare"), LL = -0.5*testobj$value, bestfit = bestfit, difference = bestfit - testobj$value
         ))
       }
     }

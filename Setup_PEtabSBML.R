@@ -18,17 +18,16 @@ library(PEtab2dmod)
 importPEtabSBML(modelname = "Boehm_JProteomeRes2014", compile = TRUE) 
 plotPEtabSBML(name%in%names(observables))
 
-testPEtabSBML(models = c("Elowitz_Nature2000"))
+testPEtabSBML(models = c("Boehm_JProteomeRes2014"))
 
-testPEtabSBML(models = c("0001",
-                         "0002",
-                         "0003",
-                         "0004",
-                         "0005",
-                         "0006",
-                         "0007",
-                         "0008",
-                         "0011"),tests = T)
+testPEtabSBML(models = c("0009",
+                         "0010",
+                         "0011",
+                         "0012",
+                         "0013"
+                         # "0014",
+                         # "0015"
+                         ),tests = T)
 
 modelname = "0002"
 path2TestCases = "PEtabTests/"
