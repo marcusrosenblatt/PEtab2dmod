@@ -42,7 +42,8 @@ testPEtabSBML <- function(models = c(
                             "0011",
                             "0012",
                             "0013",
-                            "0014"
+                            "0014",
+                            "0015"
                           ), testFit = TRUE, timelimit = 5000, tests = FALSE) {
   cat(green("Start test function...\n"))
   mywd <- getwd()
