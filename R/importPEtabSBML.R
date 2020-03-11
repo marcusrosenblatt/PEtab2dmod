@@ -221,7 +221,9 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
         myf[getSymbols(cq)[1]] <- paste0(as.character(conservedQuantities(myreactions_orig$smatrix)[1,]),"-1")
       }
     }
+    setwd(paste0(mywd,"/CompiledObjects/"))
     pSS <- P(myf, condition = "c0", method = "implicit", compile = TRUE, modelname = paste0("preeq_", modelname))
+    setwd(mywd)
   } else pSS <- NULL
   
   cat("Generate prediction function ...\n")
