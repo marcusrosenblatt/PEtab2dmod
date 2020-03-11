@@ -179,8 +179,10 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   # branch trafo for different conditions
   mytrafoL <- branch(trafo, table=mycondition.grid)
   # set preequilibration event initials to corresponding values
-  mypreeqEvents2replace <- filter(mypreeqEvents, !var%in%mystates)
-  mytrafoL <- repar("x~y", mytrafoL , x = unique(mypreeqEvents2replace$var), y = attr(mypreeqEvents2replace, "initials")) 
+  if(!is.null(mypreeqEvents)){
+    mypreeqEvents2replace <- filter(mypreeqEvents, !var%in%mystates)
+    mytrafoL <- repar("x~y", mytrafoL , x = unique(mypreeqEvents2replace$var), y = attr(mypreeqEvents2replace, "initials"))
+  }
   # set remaining event initial to 0
   mytrafoL <- repar("x~0", mytrafoL , x = setdiff(unique(myevents$var), unique(mypreeqEvents$var)))  
   
@@ -211,14 +213,17 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   ## Specify prediction functions ------
   
   # Get numeric steady state for preequilibration conditions
-  myf <- as.eqnvec(myreactions_orig)[mystates]
-  cq <- conservedQuantities(myreactions_orig$smatrix)
-  if(!is.null(cq)){
-    for(i in 1:nrow(cq)){
-      myf[getSymbols(cq)[1]] <- paste0(as.character(conservedQuantities(myreactions_orig$smatrix)[1,]),"-1")
+  if(!is.null(mypreeqCons)){
+    myf <- as.eqnvec(myreactions_orig)[mystates]
+    cq <- conservedQuantities(myreactions_orig$smatrix)
+    if(!is.null(cq)){
+      for(i in 1:nrow(cq)){
+        myf[getSymbols(cq)[1]] <- paste0(as.character(conservedQuantities(myreactions_orig$smatrix)[1,]),"-1")
+      }
     }
-  }
-  pSS <<- P(myf, condition = "c0", method = "implicit", compile = TRUE, modelname = paste0("preeq_", modelname))
+    pSS <- P(myf, condition = "c0", method = "implicit", compile = TRUE, modelname = paste0("preeq_", modelname))
+  } else pSS <- NULL
+  
   cat("Generate prediction function ...\n")
   tolerances <- 1e-7
   myp0 <- myx <- NULL

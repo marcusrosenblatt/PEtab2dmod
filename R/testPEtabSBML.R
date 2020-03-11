@@ -11,7 +11,7 @@
 #' @export
 #'
 testPEtabSBML <- function(models = c(
-                            "Boehm_JProteomeRes2014"
+                            #"Boehm_JProteomeRes2014"
                             # "Fujita_SciSignal2010",
                             # "Borghans_BiophysChem1997",
                             # "Elowitz_Nature2000",
@@ -29,20 +29,20 @@ testPEtabSBML <- function(models = c(
                             # "Swameye_PNAS2003"
                             # "Bachmann_MSB2011"
                             # "Lucarelli_CellSystems2018",
-                            # "0001",
-                            # "0002",
-                            # "0003",
-                            # "0004",
-                            # "0005",
-                            # "0006",
-                            # "0007",
-                            # "0008"
-                            # "0009",
-                            # "0010",
-                            # "0011",
-                            # "0012",
-                            # "0013",
-                            # "0014"
+                            "0001",
+                            "0002",
+                            "0003",
+                            "0004",
+                            "0005",
+                            "0006",
+                            "0007",
+                            "0008",
+                            "0009",
+                            "0010",
+                            "0011",
+                            "0012",
+                            "0013",
+                            "0014"
                           ), testFit = TRUE, timelimit = 5000, tests = FALSE) {
   cat(green("Start test function...\n"))
   mywd <- getwd()
