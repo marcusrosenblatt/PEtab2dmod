@@ -49,6 +49,7 @@ testPEtabSBML <- function(models = c(
   mywd <- getwd()
   teststarttime <- Sys.time()
   output <- NULL
+  predictions <- NULL
   for (model in models) {
     setwd(mywd)
     importtest <- F
@@ -80,6 +81,11 @@ testPEtabSBML <- function(models = c(
       } else {
         if (is.numeric(testobj$value)) {
           cat(green("Calculation of objective function successful.\n"))
+          # calculate predictions for trajectory comparison
+          prediction <- (g*x*p0)(c(0,10), pouter)
+          predictions <- rbind(predictions, data.frame(
+            modelname = model, pred = prediction
+          ))
         } else {
           cat(red("Warning: obj(pouter) is not numeric.\n"))
         }
@@ -125,12 +131,14 @@ testPEtabSBML <- function(models = c(
         output <- rbind(output, data.frame(
           modelname = model, import = importtest,
           fitting_time = format(as.numeric(difftime(fitendtime, fitstarttime, unit = "mins")), digits = 3),
-          plot = plottest, chi2 = attr(testobj,"chisquare"), LL = -0.5*testobj$value, bestfit = bestfit, difference = bestfit - testobj$value
+          plot = plottest, chi2 = attr(testobj,"chisquare"), LL = -0.5*testobj$value
+          # , bestfit = bestfit, difference = bestfit - testobj$value
         ))
       }
     }
   }
   if (tests) {
+    simu_output <- output[1]
     output <- cbind(output, chi2_sol = NA, tol_chi2_sol = NA, LL_sol = NA, tol_LL_sol = NA)
     for (model in models) {
       mysolution <- read_yaml(paste0("PEtabTests/", model, "/_", model, "_solution.yaml"))
@@ -138,6 +146,22 @@ testPEtabSBML <- function(models = c(
       output[which(output$modelname == model), "tol_chi2_sol"] <- mysolution$tol_chi2
       output[which(output$modelname == model), "LL_sol"] <- mysolution$llh
       output[which(output$modelname == model), "tol_LL_sol"] <- mysolution$tol_llh
+      
+      # extract simulation values
+      mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
+      prediction <- subset(predictions, modelname == model)
+      myobs <- unique(mysimulations$observableId) %>% as.character()
+      mycondis <- unique(mysimulations$simulationConditionId) %>% as.character()
+      simu_values <- NULL
+      for (i in 1:length(mycondis)) {
+        mysimus <- subset(prediction, pred.condition == mycondis[i] & pred.name %in% myobs)$pred.value
+        simu_values <- c(simu_values,mysimus)
+      }
+      for (i in 1:length(mysimulations$simulation)) {
+        simu_output[which(simu_output$modelname == model), paste0("simu_", i)] <- simu_values[i]
+        simu_output[which(simu_output$modelname == model), paste0("simu_", i,"_sol")] <- mysimulations$simulation[i]
+      }
+      simu_output[which(simu_output$modelname == model), "tol_simus_sol"] <- mysolution$tol_simulations
     }
   }
 
@@ -153,12 +177,28 @@ testPEtabSBML <- function(models = c(
   }
 
   if (tests) {
+    
+    # check simulations
+    for (model in models) {
+      correctORnot <- NULL
+      modelrow <- subset(simu_output, modelname == model)
+      modelrow_woNA <- modelrow[colSums(!is.na(modelrow)) > 0]
+      for (ncol in seq(2,((ncol(modelrow)-1)/2),2)) {
+        simuCompare <- abs(modelrow_woNA[[ncol]]-modelrow_woNA[[ncol+1]]) < modelrow_woNA$tol_simus_sol
+        correctORnot <- c(correctORnot, simuCompare)
+      }
+      if(length(unique(correctORnot)) == 1){
+        SimuPassed <- unique(correctORnot)
+      } else SimuPassed <- FALSE
+      simu_output[which(simu_output$modelname == model), "Passed"] <- SimuPassed
+    }
+
     output <- cbind(output,
       Passed = (abs(output$chi2 - output$chi2_sol) < output$tol_chi2_sol) &
         (abs(output$LL - output$LL_sol) < output$tol_LL_sol)
     )
   }
-  return(output)
+  return(list(output = output,simu_output = simu_output))
 }
 
 
