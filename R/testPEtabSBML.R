@@ -81,8 +81,11 @@ testPEtabSBML <- function(models = c(
       } else {
         if (is.numeric(testobj$value)) {
           cat(green("Calculation of objective function successful.\n"))
+          
           # calculate predictions for trajectory comparison
-          prediction <- (g*x*p0)(c(0,10), pouter)
+          mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
+          simu_time <- unique(mysimulations$time)
+          prediction <- (g*x*p0)(simu_time, pouter)
           predictions <- rbind(predictions, data.frame(
             modelname = model, pred = prediction
           ))
@@ -148,20 +151,27 @@ testPEtabSBML <- function(models = c(
       output[which(output$modelname == model), "tol_LL_sol"] <- mysolution$tol_llh
       
       # extract simulation values
-      mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
-      prediction <- subset(predictions, modelname == model)
-      myobs <- unique(mysimulations$observableId) %>% as.character()
-      mycondis <- unique(mysimulations$simulationConditionId) %>% as.character()
-      simu_values <- NULL
-      for (i in 1:length(mycondis)) {
-        mysimus <- subset(prediction, pred.condition == mycondis[i] & pred.name %in% myobs)$pred.value
-        simu_values <- c(simu_values,mysimus)
-      }
-      for (i in 1:length(mysimulations$simulation)) {
-        simu_output[which(simu_output$modelname == model), paste0("simu_", i)] <- simu_values[i]
-        simu_output[which(simu_output$modelname == model), paste0("simu_", i,"_sol")] <- mysimulations$simulation[i]
-      }
       simu_output[which(simu_output$modelname == model), "tol_simus_sol"] <- mysolution$tol_simulations
+      mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
+      simu_prediction <- subset(predictions, modelname == model)
+      # iterate through simulation points
+      
+      for (nrow in 1:nrow(mysimulations)) {
+        simu_row <- mysimulations[nrow,]
+        simu_time <- simu_row$time
+        simu_obs <- simu_row$observableId %>% as.character()
+        simu_condi <- simu_row$simulationConditionId %>% as.character()
+        simu_obspars <- simu_row$observableParameters
+        
+        if(!is.null(simu_obspars) & length(unique(simu_prediction$pred.condition)) > 1){
+          simu_condi <- paste0(simu_condi, "_", simu_obspars)
+        }
+        
+        simu_value <- subset(simu_prediction, pred.time == simu_time & pred.name == simu_obs & pred.condition == simu_condi)$pred.value
+
+        simu_output[which(simu_output$modelname == model), paste0("simu_", nrow)] <- simu_value
+        simu_output[which(simu_output$modelname == model), paste0("simu_", nrow,"_sol")] <- mysimulations$simulation[nrow]
+      }
     }
   }
 
@@ -183,7 +193,7 @@ testPEtabSBML <- function(models = c(
       correctORnot <- NULL
       modelrow <- subset(simu_output, modelname == model)
       modelrow_woNA <- modelrow[colSums(!is.na(modelrow)) > 0]
-      for (ncol in seq(2,((ncol(modelrow)-1)/2),2)) {
+      for (ncol in seq(3,(ncol(modelrow_woNA)),2)) {
         simuCompare <- abs(modelrow_woNA[[ncol]]-modelrow_woNA[[ncol+1]]) < modelrow_woNA$tol_simus_sol
         correctORnot <- c(correctORnot, simuCompare)
       }
