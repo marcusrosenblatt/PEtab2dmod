@@ -81,14 +81,15 @@ testPEtabSBML <- function(models = c(
       } else {
         if (is.numeric(testobj$value)) {
           cat(green("Calculation of objective function successful.\n"))
-          
-          # calculate predictions for trajectory comparison
-          mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
-          simu_time <- unique(mysimulations$time)
-          prediction <- (g*x*p0)(simu_time, pouter)
-          predictions <- rbind(predictions, data.frame(
-            modelname = model, pred = prediction
-          ))
+          if (tests){
+            # calculate predictions for trajectory comparison
+            mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
+            simu_time <- unique(mysimulations$time)
+            prediction <- (g*x*p0)(simu_time, pouter)
+            predictions <- rbind(predictions, data.frame(
+              modelname = model, pred = prediction
+            ))
+          }
         } else {
           cat(red("Warning: obj(pouter) is not numeric.\n"))
         }
@@ -154,8 +155,8 @@ testPEtabSBML <- function(models = c(
       simu_output[which(simu_output$modelname == model), "tol_simus_sol"] <- mysolution$tol_simulations
       mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
       simu_prediction <- subset(predictions, modelname == model)
-      # iterate through simulation points
       
+      # iterate through simulation points
       for (nrow in 1:nrow(mysimulations)) {
         simu_row <- mysimulations[nrow,]
         simu_time <- simu_row$time
@@ -208,6 +209,8 @@ testPEtabSBML <- function(models = c(
         (abs(output$LL - output$LL_sol) < output$tol_LL_sol)
     )
   }
+  
+  if (!tests) simu_output <- NULL
   return(list(output = output,simu_output = simu_output))
 }
 
