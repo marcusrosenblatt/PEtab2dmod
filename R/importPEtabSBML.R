@@ -164,7 +164,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
   
   cat("Generate parameter transformations ...\n")
-  myinnerpars <- unique(c(getParameters(myodemodel), getParameters(myreactions), getSymbols(myobservables), setdiff(getSymbols(myerrors),names(myobservables))))
+  myinnerpars <- unique(c(getParameters(myodemodel), getParameters(myg), getSymbols(myerrors)))
   names(myinnerpars) <- myinnerpars
   trafo <- as.eqnvec(myinnerpars, names = myinnerpars)
   trafo <- replaceSymbols(names(mycompartments), mycompartments, trafo)
