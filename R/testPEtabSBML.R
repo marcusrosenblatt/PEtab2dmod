@@ -44,7 +44,7 @@ testPEtabSBML <- function(models = c(
                              "0013",
                              "0014",
                              "0015"
-                          ), testFit = TRUE, timelimit = 5000, tests = FALSE) {
+                          ), testFit = TRUE, timelimit = 5000, testCases = TRUE) {
   cat(green("Start test function...\n"))
   mywd <- getwd()
   teststarttime <- Sys.time()
@@ -58,7 +58,7 @@ testPEtabSBML <- function(models = c(
     cat(blue(paste0("Testing ", model, "\n")))
     fgh <- try_with_time_limit(
       {
-        test <- try(importPEtabSBML(model, compile = T, TestCases = tests), silent = T)
+        test <- try(importPEtabSBML(model, compile = T, TestCases = testCases), silent = T)
         if (inherits(test, "try-error")) "import error" else test
       },
       timelimit
@@ -81,14 +81,19 @@ testPEtabSBML <- function(models = c(
       } else {
         if (is.numeric(testobj$value)) {
           cat(green("Calculation of objective function successful.\n"))
-          if (tests){
+          if (testCases){
             # calculate predictions for trajectory comparison
             mysimulations <- read.csv(paste0("PEtabTests/", model, "/_simulations.tsv"), sep = "\t")
             simu_time <- unique(mysimulations$time)
             prediction <- (g*x*p0)(simu_time, pouter)
             predictions <- rbind(predictions, data.frame(
-              modelname = model, pred = prediction
+              modelname = model, pred = prediction, obs.transformation = NA
             ))
+            # append observable scale to predictions
+            for (i in 1:length(observables)) {
+              scale <- attr(observables, "obsscales")[i]
+              predictions <- predictions %>% mutate(obs.transformation = ifelse(modelname == model & pred.name == names(observables)[i], scale, obs.transformation))
+            }
           }
         } else {
           cat(red("Warning: obj(pouter) is not numeric.\n"))
@@ -141,7 +146,7 @@ testPEtabSBML <- function(models = c(
       }
     }
   }
-  if (tests) {
+  if (testCases) {
     simu_output <- output[1]
     output <- cbind(output, chi2_sol = NA, tol_chi2_sol = NA, LL_sol = NA, tol_LL_sol = NA)
     for (model in models) {
@@ -167,8 +172,11 @@ testPEtabSBML <- function(models = c(
         if(!is.null(simu_obspars) & length(unique(simu_prediction$pred.condition)) > 1){
           simu_condi <- paste0(simu_condi, "_", simu_obspars)
         }
-        
-        simu_value <- subset(simu_prediction, pred.time == simu_time & pred.name == simu_obs & pred.condition == simu_condi)$pred.value
+        pred_row <- subset(simu_prediction, pred.time == simu_time & pred.name == simu_obs & pred.condition == simu_condi)
+        # retransform simulation value according to observable transformation
+        if(pred_row$obs.transformation == "log10") pred_row$pred.value <- 10**pred_row$pred.value
+        if(pred_row$obs.transformation == "log") pred_row$pred.value <- exp(pred_row$pred.value)
+        simu_value <- pred_row$pred.value
 
         simu_output[which(simu_output$modelname == model), paste0("simu_", nrow)] <- simu_value
         simu_output[which(simu_output$modelname == model), paste0("simu_", nrow,"_sol")] <- mysimulations$simulation[nrow]
@@ -187,7 +195,7 @@ testPEtabSBML <- function(models = c(
     cat(green(paste0("Test done in ", as.character(format(as.numeric(difftime(testendtime, teststarttime, unit = "secs")), digits = 3)), " seconds.\n")))
   }
 
-  if (tests) {
+  if (testCases) {
     
     # check simulations
     for (model in models) {
@@ -205,12 +213,12 @@ testPEtabSBML <- function(models = c(
     }
 
     output <- cbind(output,
-      Passed = (abs(output$chi2 - output$chi2_sol) < output$tol_chi2_sol) &
-        (abs(output$LL - output$LL_sol) < output$tol_LL_sol)
+                    X2Passed = (abs(output$chi2 - output$chi2_sol) < output$tol_chi2_sol),
+                    LLPassed = (abs(output$LL - output$LL_sol) < output$tol_LL_sol)
     )
   }
   
-  if (!tests) simu_output <- NULL
+  if (!testCases) simu_output <- NULL
   return(list(output = output,simu_output = simu_output))
 }
 

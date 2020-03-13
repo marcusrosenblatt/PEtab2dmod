@@ -23,5 +23,12 @@ getObservablesSBML <- function(observables){
   obsFormula[which(myobs$observableTransformation=="log10")] <- paste0("log10(", obsFormula[which(myobs$observableTransformation=="log10")], ")")
   names(obsFormula) <- obsNames
   observables <- obsFormula %>% as.eqnvec()
+  
+  # collect observable transformations as attribute
+  if(!is.null(myobs$observableTransformation)){
+    obsscales <- myobs$observableTransformation %>% as.character()
+  } else obsscales <- rep("lin", length(obsNames))
+  
+  attr(observables,"obsscales") <- obsscales
   return(observables)
 }
