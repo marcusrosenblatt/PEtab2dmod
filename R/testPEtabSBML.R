@@ -43,8 +43,9 @@ testPEtabSBML <- function(models = c(
                              "0012",
                              "0013",
                              "0014",
-                             "0015"
-                          ), testFit = TRUE, timelimit = 5000, testCases = TRUE) {
+                             "0015",
+                             "0016"
+                          ), testFit = TRUE, timelimit = 5000, testCases = FALSE) {
   cat(green("Start test function...\n"))
   mywd <- getwd()
   teststarttime <- Sys.time()
@@ -139,7 +140,7 @@ testPEtabSBML <- function(models = c(
 
         output <- rbind(output, data.frame(
           modelname = model, import = importtest,
-          fitting_time = format(as.numeric(difftime(fitendtime, fitstarttime, unit = "mins")), digits = 3),
+          # fitting_time = format(as.numeric(difftime(fitendtime, fitstarttime, unit = "mins")), digits = 3),
           plot = plottest, chi2 = attr(testobj,"chisquare"), LL = -0.5*testobj$value
           # , bestfit = bestfit, difference = bestfit - testobj$value
         ))
