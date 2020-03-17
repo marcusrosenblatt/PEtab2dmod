@@ -1,92 +1,153 @@
 ---
-title: "RNAsense"
-output: 
-  html_vignette:
-    toc: true
-vignette: >
-  %\VignetteIndexEntry{Put the title of your vignette here}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+title: "PEtab2dMod"
+author: "Svenja Kemmer and Marcus Rosenblatt"
+date: "March 2020"
+output:
+  pdf_document: default
+  html_document: default
 ---
-## Introduction
-RNAsense is a tool to facilitate interpretation of time-resolved RNA-seq data. Typically it compares gene expression time curves for two different experimental conditions, e.g. wild-type and mutant. The aim is to provide basic functions to easily create plots of stage-specific gene sets like in Figure 1C of https://www.ncbi.nlm.nih.gov/pubmed/20212526.
 
-Following the method of the paper, genes are sorted into different groups in two ways. First, wild-type and mutant condition are compared at each time point to get groups of differentially expressed transcripts that are up- or downregulated in the mutant. This is achieved by the function `getFC` whose usage is described below. Second, the expression profiles of one experimental condition (typically wild-type) are tested for significant growth or decay. Similar to the idea in https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920252/, a one-step and a zero-step (in fact the mean) function are fitted to the time-resolved data and compared by means of likelihood-ratio test. Thus, genes are sorted into non-overlapping groups by the time point of switch up or down. This step is achieved by the function `getStep`. 
+PEtab(link) is a data format thought for the exchange of models with regard to parameter estimation. It covors SBML models along with their data, parameter and condition specifications. **PEtab2dMod** is a tool to import such PEtab files in dMod. Basic functions are provided for import, visualization and further processing. 
 
-Finally, the function `plotSSGS` analyzes correlations between the outputs of `getFC` and `getStep` by means of Fisher's exact test and plots the result in form of a heat map, with time profiles and differential expression groups at y- and x-axis, respectively.
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 7, fig.height = 3.5)
+
 ```
+
 ## Installation
-```{r installation, eval=FALSE}
-if(!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("RNAsense")
-```
+
+The use of PEtab2dMod requires libSBML. The libSBML R source package can be downloaded as tar.gz file from https://sourceforge.net/projects/sbml/files/libsbml/5.18.0/stable/R%20interface/ and installed as R package.
+PEtab2Mod is delivered along with the current version of dMod?! 
+
 ## Step-by-step Tutorial
-First of all, data has to be provided in the right format. We made use of the S4-class `SummarizedExperiment` that gives the possibility to provide additional information for example on covariates for the measurements that themselves are given as a numeric matrix. Here is an example how your data should look like:
-```{r load data, message=TRUE}
-library(RNAsense)
-data("MZsox") # load MZsox.RData in variable mydata
-print(MZsox)
-mydata <- MZsox
-```
-`SummarizedExperiment` provides a constructor to easily bring your data into this format. When constructing your object, make sure to provide genenames in the `rowData` argument and information on condition, time point and, if available, replicate identifier, in the `colData` argument.
 
-Next, the conditions that should be analyzed are specified and a threshold is provided which is used to exclude genes with expression levels below this threshold for all conditions. This can be useful, if expression levels are in the range of your detection limit. Since `RNAseq` makes use of the `parallel` package, you may specify a number of cores in order to speed up your computation time.
-```{r initialization, message=FALSE, eval=TRUE}
-analyzeConditions <- c("WT", "MZsox")
-thCount <- 100
-nrcores <- 1
-library(SummarizedExperiment)
-#if(Sys.info()[[1]]=="Windows"){nrcores <- 1} # use parallelization only on Linux and Mac
-mydata <- mydata[seq(1,nrow(mydata), by=4),]
-vec2Keep <- which(vapply(1:dim(mydata)[1],function(i)
-  !Reduce("&",assays(mydata)[[1]][i,]<thCount), c(TRUE)))
-mydata <- mydata[vec2Keep,] # threshold is applied
-times <- unique(sort(as.numeric(colData(mydata)$time))) # get measurement times from input data
-```
-After data preparation, fold change detection can be performed. The function `getFC` internally calles functions from the `NBPSeq` package to perform fold change analysis for each gene and at each time point. The result is saved in a `data.frame` with corresponding p-values.
-```{r fc_analysis, message=TRUE, eval=TRUE}
-resultFC <- getFC(dataset = mydata, 
-                  myanalyzeConditions = analyzeConditions, 
-                  cores = nrcores, 
-                  mytimes = times)
-head(resultFC)
-```
-Note that each gene appears in the data frame as often as the number of time points. The result of the fold change analysis can be visualized as a vulcano plot:
-```{r vulcano, message=FALSE, eval=TRUE, fig.height = 4.5, fig.width = 7}
-library(ggplot2)
-ggplot(subset(resultFC, FCdetect!="none"), 
-       aes(x=logFoldChange, y=-log10(pValue), color=FCdetect)) + 
-       xlab("log2(Fold Change)") + geom_point(shape=20)
+```{r, message=FALSE}
+library(dMod)
+library(PEtab2dmod) # hopefully not necessary anymore
 ```
 
-Next, the gene expression profiles are analyzed for switches. A switch appears if the profile shows a statistically significant up- or downregulation at a specific time point. If up- or downregulation is detected at multiple time points, the time point with the best likelihood value (for the one-step model) is chosen. The result is saved in a `data.frame` with information on whether a switch has been detected, at which time point and with which p-value based on the likelihood ratio test.
-```{r switch_analysis, message=FALSE, eval=TRUE}
-resultSwitch <- getSwitch(dataset = mydata,
-                          experimentStepDetection = "WT",
-                          cores = nrcores,
-                          mytimes = times)
-head(resultSwitch)
-```
-After fold change and switch analysis have been performed, results shall be collected in one and the same data.frame using the `combineResults` function. This function basically prepares the results to be handed over to `plotSSGS`.
-```{r combination, message=FALSE, eval=TRUE}
-resultCombined <- combineResults(resultSwitch, resultFC)
-head(resultCombined)
-```
-Finally, the `plotSSGS` function performs Fisher's exact test for each combination of fold change time point and switch time point. Results are plotted as a heat map highlighting combinations with a high significance.
-```{r plot, message = FALSE, eval = TRUE, fig.height = 5, fig.width = 7}
-plotSSGS(resultCombined, times[-length(times)])
+## Setting up the model
+
+The model is an exponential decay model. The decay is just initialized after some time `t_event > 0`. We want to estimate the decay rate `decay` and the event time `t_event`. The reactions for the system read as follows:
+
+
+```{r}
+
+reactions <- eqnlist() %>% 
+  addReaction("A", "0", "decay*A", "Exponential decay") %>% 
+  addReaction("0", "decay", "0", "Flexible decay rate")
+
+
 ```
 
-In order to document the result of the analysis, the function `outputGeneTables` provides a possibility to automatically output switch and fold change information into table files (.txt).
-```{r output, message=FALSE, eval=TRUE}
-outputGeneTables(resultCombined)
-```
-The function `outputGeneTables` generates five .txt files. Two of them (geneNamelist) contain gene lists with gene name for genes that switch up and down respectively. The other two (genelist) contain exactly the same output but with gene identifiers instead of gene names depending on what you prefer for further analysis. Each column corresponds to a combination of switch time point, fold change direction and time point of fold change. All genes for which fold change was detected at the indicated time point and switch was detected at the indicated time point are listed in the corresponding column. Note that a single gene may appear multiple times. The fifth .txt file (switchList) contains information on detected switches in a different format. The output consists of table with six columns with each row corresponding to one gene. Detected switches are indicated by 1, -1 and 0 for switch up, switch down and no switch, respectively. If a switch was detected, the column timepoint indicated the corresponding time point of switch detection.
+Similar to reactions, events can be created in a consecutive way. The eventlist expects arguments `var` (the name of the affected state), `time` (event time, numeric or character which becomes an inner parameter), `value` (event value, numeric or character), `method` (character, either "replace" (default), "add" or "multiply"). In our example, the state variable `decay` changes from its current value to `decay_event` at time `t_event`.
 
-## Session Info
-```{r session}
-sessionInfo()
+
+```{r, highlight=TRUE}
+events <- eventlist() %>% 
+  addEvent(var = "decay", time = "t_event", value = "decay_event")
+
 ```
+
+Finally, reactions and events are handed over to the `odemodel()` function and a prediction function is generated.
+
+
+```{r}
+
+# Create the prediction function
+x <- reactions %>% 
+  odemodel(events = events, modelname = "eventmodel") %>% 
+  Xs()
+
+```
+
+
+## Simulation of data
+
+We work with simulated data. The simulation is performed for two conditions. In the first condition, denoted by `early`, the decay is switched on at an earlier time point than in the `late` condition. The value of the `decay` parameter is the same for both conditions.
+
+```{r}
+
+# Define parameters and simulation times
+pars_early <- c(A = 10, decay = 0, decay_event = 1, t_event = pi)
+pars_late <- c(A = 10, decay = 0, decay_event = 1, t_event = 2*pi)
+times <- seq(0, 10, .1)
+
+data <- 
+  # Simulate with pars_early and pars_late
+  c(
+    x(times, pars_early, conditions = "early"),
+    x(times, pars_late, conditions = "late")
+  ) %>%
+  # Convert to data frame
+  as.data.frame() %>% 
+  # We observe A at a few time points
+  filter(time %in% 1:10 & name %in% "A") %>% 
+  # Add a sigma column and add noise
+  mutate(sigma = pmax(0.1*value, 0.05)) %>% 
+  mutate(value = value + rnorm(length(value), 0, sd = sigma)) %>% 
+  # Convert to datalist
+  as.datalist()
+
+plot(data)
+
+```
+
+## Estimation
+
+For estimation, we define the appropriate parameterization for the two experimental conditions.
+
+```{r}
+
+p <- eqnvec() %>% 
+  # Start with identity transformation
+  define("x~x", x = getParameters(x)) %>% 
+  # Initialize decay rate by 0
+  define("decay~0") %>% 
+  # Switch to log scale for all parameters currently found in the transformation
+  define("x~exp(x)", x = .currentSymbols) %>% 
+  # Create branches for each condition
+  branch(conditions = names(data)) %>%
+  # Specify t_event per condition
+  insert("x~x_C", x = "t_event", C = condition) %>% 
+  # Convert transformation into function
+  P()
+
+pouter <- c(A = 0, decay_event = 2, t_event_early = 1.5, t_event_late = 1)
+
+(x*p)(times, pouter) %>% plot(data)
+
+
+```
+
+The plot illustrates that the initial guess is quite far from the data. To estimate the parameters, the objective function is defined and the the fit is performed.
+
+```{r}
+
+obj <- normL2(data, x*p)
+myfit <- trust(obj, pouter, rinit = .1, rmax = 10)
+
+(x*p)(times, myfit$argument) %>% plot(data)
+
+```
+
+## Evaluation
+
+Let's evaluate if the parameters are identifiable. The profile likelihood is computed for all parameters. To compare the estimated parameters with the true ones, we add vertical lines representing the parameter values used for simulation to the profiles.
+
+```{r, fig.height = 5}
+
+myprof <- profile(obj, myfit$argument, whichPar = names(pouter))
+ptrue <- log(c(A = 10, decay_event = 1, t_event_early = pi, t_event_late = 2*pi))
+
+plotProfile(myprof) +
+  geom_vline(aes(xintercept = value), 
+             data = data.frame(name = names(ptrue), value = ptrue),
+             color = "firebrick2",
+             lty = 2)
+
+
+```
+
+**Happy event estimation!!**
