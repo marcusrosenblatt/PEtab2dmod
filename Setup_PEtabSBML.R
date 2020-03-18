@@ -15,7 +15,7 @@ library(PEtab2dmod)
 #10 Raia_CancerResearch2011
 #11 Fiedler_BMC2016
 
-importPEtabSBML(modelname = "Boehm_JProteomeRes2014", compile = TRUE) 
+importPEtabSBML(modelname = "Boehm_JProteomeRes2014") 
 plotPEtabSBML(name%in%names(observables))
 
 testPEtabSBML(models = c("Raia_CancerResearch2011"), testCases = F)
