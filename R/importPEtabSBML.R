@@ -6,7 +6,7 @@
 #' @param path2model path to model folder
 #' @param TestCases TRUE to load feature test cases
 #' @param path2TestCases path to feature test case folder
-#' @param compile if FALSE g, ODEmodel and err are loaded from .RData if present and compilation time is saved
+#' @param compile if FALSE, g, ODEmodel and err are loaded from .RData (if present) and compilation time is saved
 #' @param SBML_file SBML model as .xml
 #' @param observable_file PEtab observable file as .tsv
 #' @param condition_file PEtab condition file as .tsv

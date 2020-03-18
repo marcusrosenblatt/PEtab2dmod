@@ -6,41 +6,48 @@
 \usage{
 importPEtabSBML(
   modelname = "Boehm_JProteomeRes2014",
-  path2BC = "BenchmarkModels/",
-  path2TestCases = "PEtabTests/",
+  path2model = "BenchmarkModels/",
   TestCases = FALSE,
-  compile = FALSE,
+  path2TestCases = "PEtabTests/",
+  compile = TRUE,
   SBML_file = NULL,
   observable_file = NULL,
   condition_file = NULL,
   data_file = NULL,
-  parameter_file = NULL,
-  assign_reactions = NULL,
-  assign_observables = NULL,
-  assign_g = NULL,
-  assign_data = NULL,
-  assign_ODEmodel = NULL,
-  assign_condition.grid = NULL,
-  assign_trafo = NULL,
-  assign_p = NULL,
-  assign_x = NULL,
-  assign_pouter = NULL,
-  assign_obj = NULL,
-  assign_times = NULL,
-  assign_err = NULL,
-  assign_errors = NULL
+  parameter_file = NULL
 )
 }
 \arguments{
-\item{parameters}{PEtab parameter file as .tsv}
+\item{modelname}{name of folder containing all PEtab files of the model to be imported. NULL if file paths are defined separately (see below).}
+
+\item{path2model}{path to model folder}
+
+\item{TestCases}{TRUE to load feature test cases}
+
+\item{path2TestCases}{path to feature test case folder}
+
+\item{compile}{if FALSE, g, ODEmodel and err are loaded from .RData (if present) and compilation time is saved}
+
+\item{SBML_file}{SBML model as .xml}
+
+\item{observable_file}{PEtab observable file as .tsv}
+
+\item{condition_file}{PEtab condition file as .tsv}
+
+\item{data_file}{PEtab data file as .tsv}
+
+\item{parameter_file}{PEtab parameter file as .tsv}
 }
 \value{
 name of imported model
 }
 \description{
-This function imports an SBML model and corresponding PEtab objects, e.g. from the Benchmark collection.
-Note: Objects such as model equations, parameters or data are automatically assigned to standard variables (reactions, observables, g, x, p0) and written to your current working directory (via <<-).
-You can obtain your common variable names by the additional assign arguments.
+This function imports an SBML model and corresponding PEtab files, e.g. from the Benchmark collection.
+}
+\details{
+Objects such as model equations, parameters or data are automatically assigned to the following standard variables and written to your current working directory (via <<-):
+reactions, observables, errors, g, x, p0, err, obj, mydata, ODEmodel, condition.grid, trafoL, pouter, times.
+Compiled objects (g, ODEmodel and err) are saved in .RData.
 }
 \author{
 Marcus Rosenblatt and Svenja Kemmer

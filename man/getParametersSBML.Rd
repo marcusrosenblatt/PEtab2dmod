@@ -4,7 +4,7 @@
 \alias{getParametersSBML}
 \title{Import Parameters from PEtab}
 \usage{
-getParametersSBML(parameters)
+getParametersSBML(parameters, model)
 }
 \arguments{
 \item{parameters}{PEtab parameter file as .tsv}

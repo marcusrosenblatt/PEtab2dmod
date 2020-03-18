@@ -4,7 +4,7 @@
 \alias{getInitialsSBML}
 \title{Import initials from SBML.}
 \usage{
-getInitialsSBML(model)
+getInitialsSBML(model, conditions)
 }
 \arguments{
 \item{model}{SBML file as .xml}
