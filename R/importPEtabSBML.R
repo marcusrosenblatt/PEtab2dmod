@@ -1,12 +1,22 @@
 #' Import an SBML model and corresponding PEtab objects 
 #' 
-#' @description This function imports an SBML model and corresponding PEtab objects, e.g. from the Benchmark collection.
-#' Note: Objects such as model equations, parameters or data are automatically assigned to standard variables (reactions, observables, g, x, p0) and written to your current working directory (via <<-).
-#' You can obtain your common variable names by the additional assign arguments.
+#' @description This function imports an SBML model and corresponding PEtab files, e.g. from the Benchmark collection.
 #'  
-#' @param parameters PEtab parameter file as .tsv
-#' @param parameters PEtab parameter file as .tsv
-#'   
+#' @param modelname name of folder containing all PEtab files of the model to be imported. NULL if file paths are defined separately (see below).
+#' @param path2model path to model folder
+#' @param TestCases TRUE to load feature test cases
+#' @param path2TestCases path to feature test case folder
+#' @param compile if FALSE g, ODEmodel and err are loaded from .RData if present and compilation time is saved
+#' @param SBML_file SBML model as .xml
+#' @param observable_file PEtab observable file as .tsv
+#' @param condition_file PEtab condition file as .tsv
+#' @param data_file PEtab data file as .tsv
+#' @param parameter_file PEtab parameter file as .tsv
+#'
+#' @details Objects such as model equations, parameters or data are automatically assigned to the following standard variables and written to your current working directory (via <<-):
+#' reactions, observables, errors, g, x, p0, err, obj, mydata, ODEmodel, condition.grid, trafoL, pouter, times.
+#' Compiled objects (g, ODEmodel and err) are saved in .RData.
+#' 
 #' @return name of imported model
 #'   
 #' @author Marcus Rosenblatt and Svenja Kemmer
@@ -14,26 +24,27 @@
 #' @export
 #' 
 importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
-                            path2BC = "BenchmarkModels/",
-                            path2TestCases = "PEtabTests/",
+                            path2model = "BenchmarkModels/",
                             TestCases = FALSE,
+                            path2TestCases = "PEtabTests/",
                             compile = TRUE,
                             SBML_file = NULL,
                             observable_file = NULL,
                             condition_file = NULL,
                             data_file = NULL,
                             parameter_file = NULL
-                            ){
+                            )
+  {
   
   ## Define path to SBML and PEtab files --------------------
   
   starttime <- Sys.time()
   if(TestCases == FALSE){
-    if(is.null(SBML_file))       SBML_file <- paste0(path2BC, modelname, "/model_", modelname, ".xml")
-    if(is.null(observable_file)) observable_file <- paste0(path2BC, modelname, "/observables_", modelname, ".tsv")
-    if(is.null(condition_file))  condition_file <- paste0(path2BC, modelname, "/experimentalCondition_", modelname, ".tsv")
-    if(is.null(data_file))       data_file <- paste0(path2BC, modelname, "/measurementData_", modelname, ".tsv")
-    if(is.null(parameter_file))  parameter_file <- paste0(path2BC, modelname, "/parameters_", modelname, ".tsv")
+    if(is.null(SBML_file))       SBML_file <- paste0(path2model, modelname, "/model_", modelname, ".xml")
+    if(is.null(observable_file)) observable_file <- paste0(path2model, modelname, "/observables_", modelname, ".tsv")
+    if(is.null(condition_file))  condition_file <- paste0(path2model, modelname, "/experimentalCondition_", modelname, ".tsv")
+    if(is.null(data_file))       data_file <- paste0(path2model, modelname, "/measurementData_", modelname, ".tsv")
+    if(is.null(parameter_file))  parameter_file <- paste0(path2model, modelname, "/parameters_", modelname, ".tsv")
   } else{
     SBML_file <- paste0(path2TestCases, modelname, "/_model.xml")
     observable_file <- paste0(path2TestCases, modelname, "/_observables.tsv")
@@ -48,7 +59,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(!file.exists(data_file)){cat(paste0("The file ",mywd,data_file, " does not exist. Please check spelling or provide the file name via the data_file argument.")); return(NULL)}
   if(!file.exists(parameter_file)){cat(paste0("The file ",mywd,parameter_file, " does not exist. Please check spelling or provide the file name via the parameter_file argument.")); return(NULL)}
   
-  
+  if(is.null(modelname)) modelname <- "mymodel"
   ## Load shared objects --------------------
   
   dir.create(paste0(mywd,"/CompiledObjects/"), showWarnings = FALSE)
