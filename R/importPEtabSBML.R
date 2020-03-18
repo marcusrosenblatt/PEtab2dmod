@@ -17,26 +17,13 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                             path2BC = "BenchmarkModels/",
                             path2TestCases = "PEtabTests/",
                             TestCases = FALSE,
-                            compile = FALSE,
+                            compile = TRUE,
                             SBML_file = NULL,
                             observable_file = NULL,
                             condition_file = NULL,
                             data_file = NULL,
-                            parameter_file = NULL,
-                            assign_reactions = NULL,
-                            assign_observables = NULL,
-                            assign_g = NULL,
-                            assign_data = NULL,
-                            assign_ODEmodel = NULL,
-                            assign_condition.grid = NULL,
-                            assign_trafo = NULL,
-                            assign_p = NULL,
-                            assign_x = NULL,
-                            assign_pouter = NULL,
-                            assign_obj = NULL,
-                            assign_times = NULL,
-                            assign_err = NULL,
-                            assign_errors = NULL){
+                            parameter_file = NULL
+                            ){
   
   ## Define path to SBML and PEtab files --------------------
   
@@ -82,14 +69,14 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   myevents <- mylist$events
   mypreeqEvents <- mylist$preeqEvents
   mystates <- mylist$mystates
-  if(is.null(assign_reactions)){reactions <<- myreactions} else {cat("Manual assignment not yet provided.")}
+  reactions <<- myreactions
   
   
   ## Model Definition - Observables --------------------
   
   cat("Reading observables ...\n")
   myobservables <- getObservablesSBML(observable_file)
-  if(is.null(assign_observables)){observables <<- myobservables} else {cat("Manual assignment not yet provided.")}
+  observables <<- myobservables
   
   
   cat("Compiling observable function ...\n")
@@ -98,7 +85,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     myg <- Y(myobservables, myreactions, compile=TRUE, modelname=paste0("g_",modelname))
     setwd(mywd)
   }
-  if(is.null(assign_g)){g <<- myg} else {cat("Manual assignment not yet provided.")}
+  g <<- myg
   
   
   ## Get Data ------------
@@ -106,7 +93,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   cat("Reading data file ...\n")
   mydataSBML <- getDataPEtabSBML(data_file, observable_file)
   mydata <- mydataSBML$data
-  if(is.null(assign_data)){mydata <<- mydata} else {cat("Manual assignment not yet provided.")}
+  mydata <<- mydata
   
   
   ## Model Generation ---------------------
@@ -118,14 +105,14 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     myodemodel <- odemodel(myreactions, forcings = NULL, events = myevents, fixed=NULL, modelname = paste0("odemodel_", modelname), jacobian = "inz.lsodes", compile = TRUE)
     setwd(mywd)
   }
-  if(is.null(assign_ODEmodel)){ODEmodel <<- myodemodel} else {cat("Manual assignment not yet provided.")}
+  ODEmodel <<- myodemodel
   
   
   ## Check and define error model ------------ 
   
   cat("Check and compile error model ...\n")
   myerrors <- mydataSBML$errors
-  if(is.null(assign_errors)){errors <<- myerrors} else {cat("Manual assignment not yet provided.")}
+  errors <<- myerrors
   
   myerr <- NULL
   if(!files_loaded) {
@@ -135,7 +122,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
       setwd(mywd)
     }
   }
-  if(is.null(assign_err)){err <<- myerr} else {cat("Manual assignment not yet provided.")}
+  err <<- myerr
   
   ## Define constraints, initials, parameters and compartments --------------
   
@@ -161,7 +148,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     } 
   }
   condi_pars <- names(mycondition.grid)[!names(mycondition.grid) %in% c("conditionName","conditionId")]
-  if(is.null(assign_condition.grid)){condition.grid <<- mycondition.grid} else {cat("Manual assignment not yet provided.")}
+  condition.grid <<- mycondition.grid
   
   cat("Generate parameter transformations ...\n")
   myinnerpars <- unique(c(getParameters(myodemodel), getParameters(myg), getSymbols(myerrors)))
@@ -207,7 +194,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
     parameter <- mynames[i]
     mytrafoL <- repar(paste0("x~",par,"(x)"), mytrafoL, x = parameter)
   }
-  if(is.null(assign_trafo)){trafoL <<- mytrafoL} else {cat("Manual assignment not yet provided.")}
+  trafoL <<- mytrafoL
   
   
   ## Specify prediction functions ------
@@ -240,8 +227,8 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                     condition = C)
   }
   
-  if(is.null(assign_p)){p0 <<- myp0} else {cat("Manual assignment not yet provided.")}
-  if(is.null(assign_x)){x <<- myx} else {cat("Manual assignment not yet provided.")}
+  p0 <<- myp0
+  x <<- myx
   
   ## Generate objective function and initial parameter set -------
   
@@ -253,7 +240,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   attr(mypouter, "parscales") <- parscales[which(names(myfit_values)%in%names(mypouter))]
   attr(mypouter, "lowerBound") <- attr(myfit_values,"lowerBound")[which(names(myfit_values)%in%names(mypouter))]
   attr(mypouter, "upperBound") <- attr(myfit_values,"upperBound")[which(names(myfit_values)%in%names(mypouter))]
-  if(is.null(assign_pouter)){pouter <<- mypouter} else {cat("Manual assignment not yet provided.")}
+  pouter <<- mypouter
   
   
   ## Define objective function -------
@@ -262,10 +249,10 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   if(!is.null(myerrors)){
     myobj <- normL2(mydata, myg*myx*myp0, errmodel = myerr) #+ constraintL2(prior, sigma=16)
   } else myobj <- normL2(mydata, myg*myx*myp0)
-  if(is.null(assign_obj)){obj <<- myobj} else {cat("Manual assignment not yet provided.")}
+  obj <<- myobj
   
   mytimes <- seq(0,max(do.call(c, lapply(1:length(mydata), function(i) max(mydata[[i]]$time)))), len=501)
-  if(is.null(assign_times)){times <<- mytimes} else {cat("Manual assignment not yet provided.")}
+  times <<- mytimes
   
   if(!files_loaded){
     setwd(paste0(mywd,"/CompiledObjects/"))
