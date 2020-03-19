@@ -146,6 +146,16 @@ testPEtabSBML <- function(models = c(
         ))
       }
     }
+    if (testCases){
+      sharedObjects <- paste0("CompiledObjects/",
+                              c(paste0("g_",model,".so"),
+                         paste0("g_",model,"_deriv.so"),
+                         paste0("odemodel_",model,".so"),
+                         paste0("odemodel_",model,"_s.so"),
+                         paste0("errfn_",model,".so"),
+                         paste0("errfn_",model,"_s.so")))
+     for (file in sharedObjects) if(file.exists(file)) try(dyn.unload(file))
+    }
   }
   if (testCases) {
     simu_output <- output[1]
