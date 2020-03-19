@@ -25,7 +25,7 @@
 #' 
 importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
                             path2model = "BenchmarkModels/",
-                            TestCases = FALSE,
+                            testCases = FALSE,
                             path2TestCases = "PEtabTests/",
                             compile = TRUE,
                             SBML_file = NULL,
@@ -39,7 +39,7 @@ importPEtabSBML <- function(modelname = "Boehm_JProteomeRes2014",
   ## Define path to SBML and PEtab files --------------------
   
   starttime <- Sys.time()
-  if(TestCases == FALSE){
+  if(testCases == FALSE){
     if(is.null(SBML_file))       SBML_file <- paste0(path2model, modelname, "/model_", modelname, ".xml")
     if(is.null(observable_file)) observable_file <- paste0(path2model, modelname, "/observables_", modelname, ".tsv")
     if(is.null(condition_file))  condition_file <- paste0(path2model, modelname, "/experimentalCondition_", modelname, ".tsv")

@@ -59,7 +59,7 @@ testPEtabSBML <- function(models = c(
     cat(blue(paste0("Testing ", model, "\n")))
     fgh <- try_with_time_limit(
       {
-        test <- try(importPEtabSBML(model, compile = T, TestCases = testCases), silent = T)
+        test <- try(importPEtabSBML(model, compile = T, testCases = testCases), silent = T)
         if (inherits(test, "try-error")) "import error" else test
       },
       timelimit
