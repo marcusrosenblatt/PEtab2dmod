@@ -3,11 +3,11 @@ title: "PEtab2dMod"
 author: "Svenja Kemmer and Marcus Rosenblatt"
 date: "March 2020"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
-[PEtab](https://github.com/PEtab-dev/PEtab/) is a data format thought for the straight forward exchange of models between tools with regard to parameter estimation. It covors SBML models along with their data, observable, parameter and condition specifications. **PEtab2dMod** is a tool to import such PEtab files in dMod. Basic functions are provided for import, visualization and further processing. 
+[PEtab](https://github.com/PEtab-dev/PEtab/) is a data format thought for the straight forward exchange of models between tools with regard to parameter estimation. It covers SBML models along with their data, observable, parameter and condition specifications. **PEtab2dMod** is a tool to import such PEtab files in dMod. Basic functions are provided for import, visualization and further processing. 
 
 
 ```{r setup, include=FALSE}
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 10, fig.height = 3.5)
 
 ## Installation
 
-The use of PEtab2dMod requires libSBML. The libSBML R source package can be downloaded as tar.gz file as provided by [SBML](https://sourceforge.net/projects/sbml/files/libsbml/5.18.0/stable/R%20interface/) and installed as R package. PEtab2Mod is delivered along with the current version of dMod?! 
+The usage of PEtab2dMod requires libSBML. The libSBML R source package can be downloaded as tar.gz file provided by [SBML](https://sourceforge.net/projects/sbml/files/libsbml/5.18.0/stable/R%20interface/) and installed as R package. PEtab2Mod is delivered along with the current version of dMod?! 
 
 ## Loading a model
 
@@ -33,7 +33,7 @@ library(PEtab2dmod) # hopefully not necessary anymore
 
 ```
 
-Now import and plotting functions are availible. As an example we will import and plot [Boehm_JProteomeRes2014](https://pubs.acs.org/doi/abs/10.1021/pr5006923), which is a STAT5 activation model in BaF3-EpoR cells.
+Now import and plotting functions are available. As an example we will import and plot [Boehm_JProteomeRes2014](https://pubs.acs.org/doi/abs/10.1021/pr5006923), which is a STAT5 activation model in BaF3-EpoR cells.
 
 
 ```{r, eval=TRUE}
